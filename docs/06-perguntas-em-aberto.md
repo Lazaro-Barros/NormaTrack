@@ -12,7 +12,7 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | T2 | Riverpod para estado/DI está ok, ou há preferência por outra lib (Bloc, Provider)? | 🔴 Fase 0 | |
 | T3 | Usar `freezed` + code generation ou manter entidades escritas à mão? | 🟡 Fase 0 | |
 | T4 | Versão mínima do Android (minSdk)? | 🟡 Fase 0 | |
-| T5 | Nome do pacote / `applicationId` (ex.: `br.com.normatrack.app`)? | 🔴 Fase 0 | |
+| T5 | Nome do pacote / `applicationId` (ex.: `br.com.normatrack.app`)? | 🔴 Fase 0 | 2026-09-23: `br.com.normatrack.app` ([D006](decisoes.md#d006--applicationid-e-distribuição-por-apk)) |
 | T6 | Quem mais vai desenvolver? (define o nível de convenção e documentação) | ⚪ | |
 
 ## Para a cliente (negócio)

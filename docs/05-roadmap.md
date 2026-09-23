@@ -4,7 +4,7 @@ As fases seguem a lógica dos [três padrões](01-visao-geral.md#os-três-padrõ
 
 ## Fase 0 — Fundação
 
-- [ ] Projeto Flutter criado no repo, alvo Android, `applicationId` definido
+- [x] Projeto Flutter criado no repo, alvo Android, `applicationId` definido
 - [ ] Lints (`flutter_lints` ou `very_good_analysis`) e formatação
 - [ ] Estrutura de pastas conforme a [arquitetura](04-arquitetura.md)
 - [ ] `AppDatabase` (drift) com migração inicial e testes de banco em memória

@@ -36,3 +36,11 @@ E-mail exige servidor. Até a API existir, os alertas serão notificações loca
 **Status:** proposta · 2026-09
 
 As entidades centrais serão tipadas. Medições (ruído, ETE/ETA, laudos de análise) usarão a estrutura genérica parâmetro + valor. Reavaliar ao fim da Fase 2.
+
+## D006 — applicationId e distribuição por APK
+
+**Status:** aceita · 2026-09
+
+O `applicationId` é `br.com.normatrack.app`. Por enquanto o app não será publicado na Play Store: será distribuído como APK instalado manualmente.
+
+- *Atenção:* para um APK novo atualizar o já instalado sem perder dados, o `applicationId` e a chave de assinatura precisam ser os mesmos. Antes de distribuir, criar uma keystore de release e guardá-la fora do repositório.

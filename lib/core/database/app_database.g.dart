@@ -4,7 +4,7 @@ part of 'app_database.dart';
 
 // ignore_for_file: type=lint
 class $CompaniesTable extends Companies
-    with TableInfo<$CompaniesTable, Company> {
+    with TableInfo<$CompaniesTable, CompanyRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -278,7 +278,7 @@ class $CompaniesTable extends Companies
   static const String $name = 'companies';
   @override
   VerificationContext validateIntegrity(
-    Insertable<Company> instance, {
+    Insertable<CompanyRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -462,9 +462,9 @@ class $CompaniesTable extends Companies
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Company map(Map<String, dynamic> data, {String? tablePrefix}) {
+  CompanyRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Company(
+    return CompanyRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}id'],
@@ -562,7 +562,7 @@ class $CompaniesTable extends Companies
   }
 }
 
-class Company extends DataClass implements Insertable<Company> {
+class CompanyRow extends DataClass implements Insertable<CompanyRow> {
   final String id;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -587,7 +587,7 @@ class Company extends DataClass implements Insertable<Company> {
   final String? legalRepPhone;
   final String? legalRepEmail;
   final DateTime? archivedAt;
-  const Company({
+  const CompanyRow({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
@@ -736,12 +736,12 @@ class Company extends DataClass implements Insertable<Company> {
     );
   }
 
-  factory Company.fromJson(
+  factory CompanyRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Company(
+    return CompanyRow(
       id: serializer.fromJson<String>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -801,7 +801,7 @@ class Company extends DataClass implements Insertable<Company> {
     };
   }
 
-  Company copyWith({
+  CompanyRow copyWith({
     String? id,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -824,7 +824,7 @@ class Company extends DataClass implements Insertable<Company> {
     Value<String?> legalRepPhone = const Value.absent(),
     Value<String?> legalRepEmail = const Value.absent(),
     Value<DateTime?> archivedAt = const Value.absent(),
-  }) => Company(
+  }) => CompanyRow(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -864,8 +864,8 @@ class Company extends DataClass implements Insertable<Company> {
         : this.legalRepEmail,
     archivedAt: archivedAt.present ? archivedAt.value : this.archivedAt,
   );
-  Company copyWithCompanion(CompaniesCompanion data) {
-    return Company(
+  CompanyRow copyWithCompanion(CompaniesCompanion data) {
+    return CompanyRow(
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -919,7 +919,7 @@ class Company extends DataClass implements Insertable<Company> {
 
   @override
   String toString() {
-    return (StringBuffer('Company(')
+    return (StringBuffer('CompanyRow(')
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -974,7 +974,7 @@ class Company extends DataClass implements Insertable<Company> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Company &&
+      (other is CompanyRow &&
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
@@ -999,7 +999,7 @@ class Company extends DataClass implements Insertable<Company> {
           other.archivedAt == this.archivedAt);
 }
 
-class CompaniesCompanion extends UpdateCompanion<Company> {
+class CompaniesCompanion extends UpdateCompanion<CompanyRow> {
   final Value<String> id;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -1076,7 +1076,7 @@ class CompaniesCompanion extends UpdateCompanion<Company> {
        createdAt = Value(createdAt),
        updatedAt = Value(updatedAt),
        legalName = Value(legalName);
-  static Insertable<Company> custom({
+  static Insertable<CompanyRow> custom({
     Expression<String>? id,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -1287,7 +1287,7 @@ class CompaniesCompanion extends UpdateCompanion<Company> {
 }
 
 class $CompanyModulesTable extends CompanyModules
-    with TableInfo<$CompanyModulesTable, CompanyModule> {
+    with TableInfo<$CompanyModulesTable, CompanyModuleRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1390,7 +1390,7 @@ class $CompanyModulesTable extends CompanyModules
   static const String $name = 'company_modules';
   @override
   VerificationContext validateIntegrity(
-    Insertable<CompanyModule> instance, {
+    Insertable<CompanyModuleRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -1456,9 +1456,9 @@ class $CompanyModulesTable extends CompanyModules
     {companyId, moduleType},
   ];
   @override
-  CompanyModule map(Map<String, dynamic> data, {String? tablePrefix}) {
+  CompanyModuleRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return CompanyModule(
+    return CompanyModuleRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}id'],
@@ -1496,7 +1496,8 @@ class $CompanyModulesTable extends CompanyModules
   }
 }
 
-class CompanyModule extends DataClass implements Insertable<CompanyModule> {
+class CompanyModuleRow extends DataClass
+    implements Insertable<CompanyModuleRow> {
   final String id;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -1506,7 +1507,7 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
   /// `ModuleType.code`.
   final String moduleType;
   final bool enabled;
-  const CompanyModule({
+  const CompanyModuleRow({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
@@ -1544,12 +1545,12 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
     );
   }
 
-  factory CompanyModule.fromJson(
+  factory CompanyModuleRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CompanyModule(
+    return CompanyModuleRow(
       id: serializer.fromJson<String>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -1573,7 +1574,7 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
     };
   }
 
-  CompanyModule copyWith({
+  CompanyModuleRow copyWith({
     String? id,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -1581,7 +1582,7 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
     String? companyId,
     String? moduleType,
     bool? enabled,
-  }) => CompanyModule(
+  }) => CompanyModuleRow(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -1590,8 +1591,8 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
     moduleType: moduleType ?? this.moduleType,
     enabled: enabled ?? this.enabled,
   );
-  CompanyModule copyWithCompanion(CompanyModulesCompanion data) {
-    return CompanyModule(
+  CompanyModuleRow copyWithCompanion(CompanyModulesCompanion data) {
+    return CompanyModuleRow(
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -1606,7 +1607,7 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
 
   @override
   String toString() {
-    return (StringBuffer('CompanyModule(')
+    return (StringBuffer('CompanyModuleRow(')
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -1631,7 +1632,7 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CompanyModule &&
+      (other is CompanyModuleRow &&
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
@@ -1641,7 +1642,7 @@ class CompanyModule extends DataClass implements Insertable<CompanyModule> {
           other.enabled == this.enabled);
 }
 
-class CompanyModulesCompanion extends UpdateCompanion<CompanyModule> {
+class CompanyModulesCompanion extends UpdateCompanion<CompanyModuleRow> {
   final Value<String> id;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -1675,7 +1676,7 @@ class CompanyModulesCompanion extends UpdateCompanion<CompanyModule> {
        companyId = Value(companyId),
        moduleType = Value(moduleType),
        enabled = Value(enabled);
-  static Insertable<CompanyModule> custom({
+  static Insertable<CompanyModuleRow> custom({
     Expression<String>? id,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -1766,7 +1767,7 @@ class CompanyModulesCompanion extends UpdateCompanion<CompanyModule> {
 }
 
 class $CompanyAuthoritiesTable extends CompanyAuthorities
-    with TableInfo<$CompanyAuthoritiesTable, CompanyAuthority> {
+    with TableInfo<$CompanyAuthoritiesTable, CompanyAuthorityRow> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1898,7 +1899,7 @@ class $CompanyAuthoritiesTable extends CompanyAuthorities
   static const String $name = 'company_authorities';
   @override
   VerificationContext validateIntegrity(
-    Insertable<CompanyAuthority> instance, {
+    Insertable<CompanyAuthorityRow> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -1979,9 +1980,9 @@ class $CompanyAuthoritiesTable extends CompanyAuthorities
     {companyId, authority},
   ];
   @override
-  CompanyAuthority map(Map<String, dynamic> data, {String? tablePrefix}) {
+  CompanyAuthorityRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return CompanyAuthority(
+    return CompanyAuthorityRow(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}id'],
@@ -2038,8 +2039,8 @@ class $CompanyAuthoritiesTable extends CompanyAuthorities
       NullAwareTypeConverter.wrap($convertervalidUntil);
 }
 
-class CompanyAuthority extends DataClass
-    implements Insertable<CompanyAuthority> {
+class CompanyAuthorityRow extends DataClass
+    implements Insertable<CompanyAuthorityRow> {
   final String id;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -2054,7 +2055,7 @@ class CompanyAuthority extends DataClass
   final String? registrationNumber;
   final DateTime? validUntil;
   final String? notes;
-  const CompanyAuthority({
+  const CompanyAuthorityRow({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
@@ -2115,12 +2116,12 @@ class CompanyAuthority extends DataClass
     );
   }
 
-  factory CompanyAuthority.fromJson(
+  factory CompanyAuthorityRow.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CompanyAuthority(
+    return CompanyAuthorityRow(
       id: serializer.fromJson<String>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
@@ -2152,7 +2153,7 @@ class CompanyAuthority extends DataClass
     };
   }
 
-  CompanyAuthority copyWith({
+  CompanyAuthorityRow copyWith({
     String? id,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -2163,7 +2164,7 @@ class CompanyAuthority extends DataClass
     Value<String?> registrationNumber = const Value.absent(),
     Value<DateTime?> validUntil = const Value.absent(),
     Value<String?> notes = const Value.absent(),
-  }) => CompanyAuthority(
+  }) => CompanyAuthorityRow(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
@@ -2177,8 +2178,8 @@ class CompanyAuthority extends DataClass
     validUntil: validUntil.present ? validUntil.value : this.validUntil,
     notes: notes.present ? notes.value : this.notes,
   );
-  CompanyAuthority copyWithCompanion(CompanyAuthoritiesCompanion data) {
-    return CompanyAuthority(
+  CompanyAuthorityRow copyWithCompanion(CompanyAuthoritiesCompanion data) {
+    return CompanyAuthorityRow(
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
@@ -2198,7 +2199,7 @@ class CompanyAuthority extends DataClass
 
   @override
   String toString() {
-    return (StringBuffer('CompanyAuthority(')
+    return (StringBuffer('CompanyAuthorityRow(')
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -2229,7 +2230,7 @@ class CompanyAuthority extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CompanyAuthority &&
+      (other is CompanyAuthorityRow &&
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
@@ -2242,7 +2243,7 @@ class CompanyAuthority extends DataClass
           other.notes == this.notes);
 }
 
-class CompanyAuthoritiesCompanion extends UpdateCompanion<CompanyAuthority> {
+class CompanyAuthoritiesCompanion extends UpdateCompanion<CompanyAuthorityRow> {
   final Value<String> id;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -2285,7 +2286,7 @@ class CompanyAuthoritiesCompanion extends UpdateCompanion<CompanyAuthority> {
        companyId = Value(companyId),
        authority = Value(authority),
        status = Value(status);
-  static Insertable<CompanyAuthority> custom({
+  static Insertable<CompanyAuthorityRow> custom({
     Expression<String>? id,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -2479,10 +2480,10 @@ typedef $$CompaniesTableUpdateCompanionBuilder = CompaniesCompanion Function({
 });
 
 final class $$CompaniesTableReferences
-    extends BaseReferences<_$AppDatabase, $CompaniesTable, Company> {
+    extends BaseReferences<_$AppDatabase, $CompaniesTable, CompanyRow> {
   $$CompaniesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$CompanyModulesTable, List<CompanyModule>>
+  static MultiTypedResultKey<$CompanyModulesTable, List<CompanyModuleRow>>
   _companyModulesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.companyModules,
     aliasName: 'companies__id__company_modules__company_id',
@@ -2500,7 +2501,10 @@ final class $$CompaniesTableReferences
     );
   }
 
-  static MultiTypedResultKey<$CompanyAuthoritiesTable, List<CompanyAuthority>>
+  static MultiTypedResultKey<
+    $CompanyAuthoritiesTable,
+    List<CompanyAuthorityRow>
+  >
   _companyAuthoritiesRefsTable(_$AppDatabase db) =>
       MultiTypedResultKey.fromTable(
         db.companyAuthorities,
@@ -2970,14 +2974,14 @@ class $$CompaniesTableTableManager
         RootTableManager<
           _$AppDatabase,
           $CompaniesTable,
-          Company,
+          CompanyRow,
           $$CompaniesTableFilterComposer,
           $$CompaniesTableOrderingComposer,
           $$CompaniesTableAnnotationComposer,
           $$CompaniesTableCreateCompanionBuilder,
           $$CompaniesTableUpdateCompanionBuilder,
-          (Company, $$CompaniesTableReferences),
-          Company,
+          (CompanyRow, $$CompaniesTableReferences),
+          CompanyRow,
           PrefetchHooks Function({
             bool companyModulesRefs,
             bool companyAuthoritiesRefs,
@@ -3097,7 +3101,7 @@ class $$CompaniesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$CompaniesTable, Company>(table),
+                  e.readTable<$CompaniesTable, CompanyRow>(table),
                   $$CompaniesTableReferences(db, table, e),
                 ),
               )
@@ -3115,9 +3119,9 @@ class $$CompaniesTableTableManager
                     return [
                       if (companyModulesRefs)
                         await $_getPrefetchedData<
-                          Company,
+                          CompanyRow,
                           $CompaniesTable,
-                          CompanyModule
+                          CompanyModuleRow
                         >(
                           currentTable: table,
                           referencedTable: $$CompaniesTableReferences
@@ -3136,9 +3140,9 @@ class $$CompaniesTableTableManager
                         ),
                       if (companyAuthoritiesRefs)
                         await $_getPrefetchedData<
-                          Company,
+                          CompanyRow,
                           $CompaniesTable,
-                          CompanyAuthority
+                          CompanyAuthorityRow
                         >(
                           currentTable: table,
                           referencedTable: $$CompaniesTableReferences
@@ -3167,14 +3171,14 @@ typedef $$CompaniesTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $CompaniesTable,
-      Company,
+      CompanyRow,
       $$CompaniesTableFilterComposer,
       $$CompaniesTableOrderingComposer,
       $$CompaniesTableAnnotationComposer,
       $$CompaniesTableCreateCompanionBuilder,
       $$CompaniesTableUpdateCompanionBuilder,
-      (Company, $$CompaniesTableReferences),
-      Company,
+      (CompanyRow, $$CompaniesTableReferences),
+      CompanyRow,
       PrefetchHooks Function({
         bool companyModulesRefs,
         bool companyAuthoritiesRefs,
@@ -3204,7 +3208,8 @@ typedef $$CompanyModulesTableUpdateCompanionBuilder =
     });
 
 final class $$CompanyModulesTableReferences
-    extends BaseReferences<_$AppDatabase, $CompanyModulesTable, CompanyModule> {
+    extends
+        BaseReferences<_$AppDatabase, $CompanyModulesTable, CompanyModuleRow> {
   $$CompanyModulesTableReferences(
     super.$_db,
     super.$_table,
@@ -3413,14 +3418,14 @@ class $$CompanyModulesTableTableManager
         RootTableManager<
           _$AppDatabase,
           $CompanyModulesTable,
-          CompanyModule,
+          CompanyModuleRow,
           $$CompanyModulesTableFilterComposer,
           $$CompanyModulesTableOrderingComposer,
           $$CompanyModulesTableAnnotationComposer,
           $$CompanyModulesTableCreateCompanionBuilder,
           $$CompanyModulesTableUpdateCompanionBuilder,
-          (CompanyModule, $$CompanyModulesTableReferences),
-          CompanyModule,
+          (CompanyModuleRow, $$CompanyModulesTableReferences),
+          CompanyModuleRow,
           PrefetchHooks Function({bool companyId})
         > {
   $$CompanyModulesTableTableManager(
@@ -3479,7 +3484,7 @@ class $$CompanyModulesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$CompanyModulesTable, CompanyModule>(table),
+                  e.readTable<$CompanyModulesTable, CompanyModuleRow>(table),
                   $$CompanyModulesTableReferences(db, table, e),
                 ),
               )
@@ -3531,14 +3536,14 @@ typedef $$CompanyModulesTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $CompanyModulesTable,
-      CompanyModule,
+      CompanyModuleRow,
       $$CompanyModulesTableFilterComposer,
       $$CompanyModulesTableOrderingComposer,
       $$CompanyModulesTableAnnotationComposer,
       $$CompanyModulesTableCreateCompanionBuilder,
       $$CompanyModulesTableUpdateCompanionBuilder,
-      (CompanyModule, $$CompanyModulesTableReferences),
-      CompanyModule,
+      (CompanyModuleRow, $$CompanyModulesTableReferences),
+      CompanyModuleRow,
       PrefetchHooks Function({bool companyId})
     >;
 typedef $$CompanyAuthoritiesTableCreateCompanionBuilder =
@@ -3575,7 +3580,7 @@ final class $$CompanyAuthoritiesTableReferences
         BaseReferences<
           _$AppDatabase,
           $CompanyAuthoritiesTable,
-          CompanyAuthority
+          CompanyAuthorityRow
         > {
   $$CompanyAuthoritiesTableReferences(
     super.$_db,
@@ -3828,14 +3833,14 @@ class $$CompanyAuthoritiesTableTableManager
         RootTableManager<
           _$AppDatabase,
           $CompanyAuthoritiesTable,
-          CompanyAuthority,
+          CompanyAuthorityRow,
           $$CompanyAuthoritiesTableFilterComposer,
           $$CompanyAuthoritiesTableOrderingComposer,
           $$CompanyAuthoritiesTableAnnotationComposer,
           $$CompanyAuthoritiesTableCreateCompanionBuilder,
           $$CompanyAuthoritiesTableUpdateCompanionBuilder,
-          (CompanyAuthority, $$CompanyAuthoritiesTableReferences),
-          CompanyAuthority,
+          (CompanyAuthorityRow, $$CompanyAuthoritiesTableReferences),
+          CompanyAuthorityRow,
           PrefetchHooks Function({bool companyId})
         > {
   $$CompanyAuthoritiesTableTableManager(
@@ -3909,7 +3914,7 @@ class $$CompanyAuthoritiesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable<$CompanyAuthoritiesTable, CompanyAuthority>(
+                  e.readTable<$CompanyAuthoritiesTable, CompanyAuthorityRow>(
                     table,
                   ),
                   $$CompanyAuthoritiesTableReferences(db, table, e),
@@ -3963,14 +3968,14 @@ typedef $$CompanyAuthoritiesTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $CompanyAuthoritiesTable,
-      CompanyAuthority,
+      CompanyAuthorityRow,
       $$CompanyAuthoritiesTableFilterComposer,
       $$CompanyAuthoritiesTableOrderingComposer,
       $$CompanyAuthoritiesTableAnnotationComposer,
       $$CompanyAuthoritiesTableCreateCompanionBuilder,
       $$CompanyAuthoritiesTableUpdateCompanionBuilder,
-      (CompanyAuthority, $$CompanyAuthoritiesTableReferences),
-      CompanyAuthority,
+      (CompanyAuthorityRow, $$CompanyAuthoritiesTableReferences),
+      CompanyAuthorityRow,
       PrefetchHooks Function({bool companyId})
     >;
 

@@ -87,3 +87,16 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - `build_runner` 2.16 ignora `--delete-conflicting-outputs` ("These options have been removed"). O comando do `CLAUDE.md` continua funcionando (só avisa); não alterei o `CLAUDE.md`.
 - Colunas comuns em um mixin (`EntityColumns`) em `core/database`, reaproveitável pelas próximas tabelas.
 - `app_database.g.dart` é commitado (não há regra no `.gitignore` para `*.g.dart`), assim o projeto compila sem rodar codegen.
+
+## 2026-09-24 — Passo 5: LocalCompanyRepository
+
+**Feito**
+- `company_mapper.dart` (linhas ↔ entidades, enums pelo `code`) e `LocalCompanyRepository` com todas as regras do plano: normalizar → validar → CNPJ duplicado → gravar em transação; upsert de módulos e registros; exclusão lógica em cascata; archive/unarchive idempotentes; filtros em Dart; ordenação por `normalizeForSearch(displayName)`.
+- `local_company_repository_test.dart` (banco em memória, relógio fixo, ids sequenciais): 21 casos, cobrindo todos os itens da tabela de testes do plano.
+
+**Decidido / desvios do plano**
+- `@DataClassName('CompanyRow' | 'CompanyModuleRow' | 'CompanyAuthorityRow')` nas tabelas: o drift geraria `Company`, que colide com a entidade do domínio. O plano não previa; `plan.md` atualizado na seção Dados.
+- Reatividade: `watchAll`/`watchById` usam uma consulta-gatilho (`customSelect('SELECT 1', readsFrom: {as 3 tabelas}).watch()`) e recarregam o agregado com `asyncMap`, com `distinct` para não emitir lista igual. Mais simples que combinar três streams sem `rxdart`, e cobre mudança em qualquer tabela.
+- `updatedAt` da empresa só muda quando os dados cadastrais ou o arquivamento mudam; alterar só módulos/registros atualiza o `updatedAt` das linhas filhas, não o da empresa (leitura literal de "só nas linhas que mudaram de fato"). Se a task 003 precisar de "última alteração" do agregado, calcular pelo maior `updatedAt` entre as linhas.
+- Empate na ordenação por nome resolvido pelo `id` (estável).
+- Construtor com parâmetros nomeados privados (`required this._clock`, Dart ≥ 3.12); quem chama continua usando `clock:`/`newId:`, como no plano.

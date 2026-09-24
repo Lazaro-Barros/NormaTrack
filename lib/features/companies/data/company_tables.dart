@@ -6,6 +6,7 @@ import '../../../core/database/converters.dart';
   'CREATE UNIQUE INDEX companies_cnpj_active ON companies (cnpj) '
   'WHERE cnpj IS NOT NULL AND deleted_at IS NULL',
 )
+@DataClassName('CompanyRow')
 class Companies extends Table with EntityColumns {
   TextColumn get legalName => text()();
   TextColumn get tradeName => text().nullable()();
@@ -29,6 +30,7 @@ class Companies extends Table with EntityColumns {
   DateTimeColumn get archivedAt => dateTime().nullable()();
 }
 
+@DataClassName('CompanyModuleRow')
 class CompanyModules extends Table with EntityColumns {
   TextColumn get companyId => text().references(Companies, #id)();
 
@@ -42,6 +44,7 @@ class CompanyModules extends Table with EntityColumns {
   ];
 }
 
+@DataClassName('CompanyAuthorityRow')
 class CompanyAuthorities extends Table with EntityColumns {
   TextColumn get companyId => text().references(Companies, #id)();
 

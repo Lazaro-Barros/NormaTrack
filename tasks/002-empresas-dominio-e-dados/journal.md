@@ -49,3 +49,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Código conferido contra o "Contexto do repositório" do plano: bate (só `main.dart`, tema e `StatusChip`; sem drift/Riverpod/`build.yaml`).
 - Dependências adicionadas com os comandos do plano. Versões resolvidas: drift 2.35.0, drift_dev 2.35.0, drift_flutter 0.3.1 (sqlite3 3.6.0), uuid 4.6.0, flutter_riverpod 3.4.3, collection 1.19.1, meta 1.19.0, build_runner 2.16.1.
 - `build.yaml` criado conforme o plano.
+
+## 2026-09-24 — Passo 2: core/utils
+
+**Feito**
+- `clock.dart`, `id_generator.dart`, `search_text.dart` e `br_documents.dart` (CNPJ numérico/alfanumérico, CPF, CEP, telefone: normalizar, validar, formatar), com testes. CPF de teste `123.456.789-09` conferido por script.
+
+**Decidido**
+- `is…`/`format…` esperam valor já normalizado; `normalize…` é separado. Mantém a validação do domínio sobre o input normalizado, como no plano.
+- `normalizeForSearch` com tabela de acentos do português (sem pacote extra de diacríticos).
+- Validação de telefone marcada `// TODO(RF-EMP-04)` (suposição C18).

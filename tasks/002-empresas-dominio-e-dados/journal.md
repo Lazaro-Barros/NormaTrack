@@ -59,3 +59,17 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - `is…`/`format…` esperam valor já normalizado; `normalize…` é separado. Mantém a validação do domínio sobre o input normalizado, como no plano.
 - `normalizeForSearch` com tabela de acentos do português (sem pacote extra de diacríticos).
 - Validação de telefone marcada `// TODO(RF-EMP-04)` (suposição C18).
+
+## 2026-09-24 — Passo 3: domínio
+
+**Feito**
+- `ModuleType`, `Authority`, `RegistrationStatus`, `BrazilianState`, `Address`, `LegalRepresentative`, `AuthorityRegistration`, `CompanyInput`, `Company`, `normalizeCompanyInput`, `validateCompany` e `CompanyRepository` (+ `CompanyFilter` e exceções), com testes de enums, entidade e validação.
+- Suposições marcadas com `// TODO(RF-EMP-0X)`: telefone 10/11 dígitos e um telefone/e-mail (C18), nenhum módulo por padrão (C18), validade inclusiva (C18), validade × prazo (C16), observação livre por órgão (C17).
+
+**Decidido**
+- `BrazilianState` em ordem alfabética **estrita** da sigla (AM antes de AP, MG/MS/MT, RO/RR/RS, SE/SP). A lista do plano tinha AP/AM, MT/MS/MG etc. fora de ordem, mas a regra escrita é "ordem alfabética da sigla"; segui a regra. Valores do enum = sigla em minúsculas (`BrazilianState.ce`).
+- `CompanyInput` mantém o construtor `const` do plano (coleções podem vir modificáveis de quem chama); `normalizeCompanyInput` e `Company` embrulham em coleções não modificáveis.
+- `Company ==` compara id, timestamps, `archivedAt` e os dados editáveis (via `toInput()`).
+- Documento que só tem máscara (ex.: `"../-"`) normaliza para `null`, como texto vazio.
+- `CompanyFilter` tem `==`/`hashCode` para servir de chave de provider `family` na task 003.
+- `validateCompany` não tem erro de UF: a UF é o enum `BrazilianState`, inválida não é representável.

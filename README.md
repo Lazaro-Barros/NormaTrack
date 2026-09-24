@@ -14,6 +14,8 @@ Aplicativo de gestão de conformidade regulatória para indústrias: controle de
 | [04 — Arquitetura](docs/04-arquitetura.md) | Stack Flutter, camadas, persistência local preparada para API |
 | [05 — Roadmap](docs/05-roadmap.md) | Fases de entrega, começando pelo MVP |
 | [06 — Perguntas em aberto](docs/06-perguntas-em-aberto.md) | O que precisa ser respondido antes/durante o desenvolvimento |
+| [07 — Design system e telas](docs/07-design-system.md) | Tokens visuais, componentes e inventário das telas principais |
+| [Tasks](tasks/README.md) | Índice das tasks: escopo, plano técnico, protótipos e journal de cada uma |
 | [Decisões](docs/decisoes.md) | Registro de decisões técnicas (ADR simplificado) |
 
 ## Stack (fase 1)

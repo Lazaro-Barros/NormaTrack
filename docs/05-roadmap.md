@@ -8,7 +8,7 @@ As fases seguem a lógica dos [três padrões](01-visao-geral.md#os-três-padrõ
 - [ ] Lints (`flutter_lints` ou `very_good_analysis`) e formatação
 - [ ] Estrutura de pastas conforme a [arquitetura](04-arquitetura.md)
 - [ ] `AppDatabase` (drift) com migração inicial e testes de banco em memória
-- [ ] Riverpod, go_router, tema e localização pt-BR
+- [ ] Riverpod, go_router, tema (feito: task 001) e localização pt-BR
 - [ ] CI simples: `flutter analyze` e `flutter test` a cada push
 
 **Pronto quando:** o app abre em uma tela vazia, com banco criado e pipeline verde.

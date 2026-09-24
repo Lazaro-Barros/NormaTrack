@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/providers.dart';
 import '../../../core/utils/br_documents.dart';
 import '../../../core/utils/clock.dart';
 import '../../../core/utils/id_generator.dart';
@@ -12,6 +14,15 @@ import '../domain/company_repository.dart';
 import '../domain/company_validation.dart';
 import '../domain/module_type.dart';
 import 'company_mapper.dart';
+
+/// A UI depende só do tipo [CompanyRepository].
+final companyRepositoryProvider = Provider<CompanyRepository>(
+  (ref) => LocalCompanyRepository(
+    ref.watch(appDatabaseProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
 
 class LocalCompanyRepository implements CompanyRepository {
   LocalCompanyRepository(

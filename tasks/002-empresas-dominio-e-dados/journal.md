@@ -100,3 +100,10 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - `updatedAt` da empresa só muda quando os dados cadastrais ou o arquivamento mudam; alterar só módulos/registros atualiza o `updatedAt` das linhas filhas, não o da empresa (leitura literal de "só nas linhas que mudaram de fato"). Se a task 003 precisar de "última alteração" do agregado, calcular pelo maior `updatedAt` entre as linhas.
 - Empate na ordenação por nome resolvido pelo `id` (estável).
 - Construtor com parâmetros nomeados privados (`required this._clock`, Dart ≥ 3.12); quem chama continua usando `clock:`/`newId:`, como no plano.
+
+## 2026-09-24 — Passo 6: providers e ProviderScope
+
+**Feito**
+- `lib/core/providers.dart` (`clockProvider`, `idGeneratorProvider`) e `companyRepositoryProvider` em `local_company_repository.dart`, como no plano.
+- `ProviderScope` em `main()`; `NormaTrackApp` inalterado, então `test/widget_test.dart` continua passando.
+- `test/core/providers_test.dart`: o provider do repositório usa banco/relógio/ids sobrescritos, e o gerador padrão produz UUID v7 com relógio em UTC (teste extra, fora da tabela do plano).

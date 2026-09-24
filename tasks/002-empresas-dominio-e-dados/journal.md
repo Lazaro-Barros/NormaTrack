@@ -107,3 +107,26 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - `lib/core/providers.dart` (`clockProvider`, `idGeneratorProvider`) e `companyRepositoryProvider` em `local_company_repository.dart`, como no plano.
 - `ProviderScope` em `main()`; `NormaTrackApp` inalterado, então `test/widget_test.dart` continua passando.
 - `test/core/providers_test.dart`: o provider do repositório usa banco/relógio/ids sobrescritos, e o gerador padrão produz UUID v7 com relógio em UTC (teste extra, fora da tabela do plano).
+
+## 2026-09-24 — Task concluída
+
+**Feito**
+- Todos os critérios de aceite marcados no `README.md`. O de "teste de migração do schema v1" é atendido pelo teste escrito à mão em `test/core/database/migration_test.dart` (ver entrada do passo 4).
+- `dart format .` (0 alterações), `flutter analyze` (sem issues) e `flutter test` (71 testes) passando. `grep -rE "package:(flutter|drift)" lib/features/companies/domain lib/core/utils` sem resultado. `test/widget_test.dart` continua passando.
+- Status → `concluída` aqui e em `tasks/README.md`. Roadmap: itens de Fase 0 (AppDatabase, Riverpod) marcados "em parte" e itens de empresas da Fase 1 anotados com a parte da task 002.
+- Convenções de tabela drift que valem para o projeto registradas em [D008](../../docs/decisoes.md#d008--convenções-de-tabela-drift).
+
+**Como verificar**
+```bash
+flutter pub get
+dart run build_runner build     # regenera app_database.g.dart (já commitado)
+flutter analyze && flutter test
+grep -rE "package:(flutter|drift)" lib/features/companies/domain lib/core/utils   # deve sair vazio
+```
+
+**Pendente / dúvidas**
+- Perguntas de negócio continuam abertas: C15 (órgão ↔ módulo), C16 (validade × prazo), C17 (detalhe de conselho/secretaria), C18 (suposições). Todas marcadas com `// TODO(RF-EMP-0X)` no código. Nenhuma pergunta nova surgiu na implementação.
+- Na primeira mudança de schema (v2): rodar `dart run drift_dev make-migrations`, que passa a gerar os testes de passo em `test/core/database/`.
+- Task 003: `updatedAt` da empresa não reflete mudanças só em módulos/registros (ver passo 5).
+
+**Refs:** commits 551ea20 · 5329b5b · 3638542 · 9ce7cb3 · e1374ee · 716eda9 · docs/decisoes.md#d008--convenções-de-tabela-drift

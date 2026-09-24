@@ -7,8 +7,8 @@ As fases seguem a lógica dos [três padrões](01-visao-geral.md#os-três-padrõ
 - [x] Projeto Flutter criado no repo, alvo Android, `applicationId` definido
 - [ ] Lints (`flutter_lints` ou `very_good_analysis`) e formatação
 - [ ] Estrutura de pastas conforme a [arquitetura](04-arquitetura.md)
-- [ ] `AppDatabase` (drift) com migração inicial e testes de banco em memória
-- [ ] Riverpod, go_router, tema (feito: task 001) e localização pt-BR
+- [ ] `AppDatabase` (drift) com migração inicial e testes de banco em memória (em parte: schema v1, teste de schema e banco em memória na task 002)
+- [ ] Riverpod, go_router, tema (feito: task 001) e localização pt-BR (em parte: Riverpod na task 002)
 - [ ] CI simples: `flutter analyze` e `flutter test` a cada push
 
 **Pronto quando:** o app abre em uma tela vazia, com banco criado e pipeline verde.
@@ -17,9 +17,9 @@ As fases seguem a lógica dos [três padrões](01-visao-geral.md#os-três-padrõ
 
 Entrega o padrão "prazo com alerta" para **todos** os módulos de uma vez.
 
-- [ ] CRUD de empresas (RF-EMP-01) — tasks 002 e 003
-- [ ] Dados cadastrais e registros em órgãos (RF-EMP-04/05) — tasks 002 e 003
-- [ ] Habilitar módulos por empresa (RF-EMP-02/03) — tasks 002 e 003
+- [ ] CRUD de empresas (RF-EMP-01) — tasks 002 (domínio e dados, concluída) e 003 (telas)
+- [ ] Dados cadastrais e registros em órgãos (RF-EMP-04/05) — tasks 002 (domínio e dados, concluída) e 003 (telas)
+- [ ] Habilitar módulos por empresa (RF-EMP-02/03) — tasks 002 (domínio e dados, concluída) e 003 (telas)
 - [ ] CRUD de prazos por módulo e categoria: licença ambiental, laudo e manutenção de ETE/ETA, licença PF e licença Exército (RF-PRZ-01/02, RF-AMB-01/05/06, RF-PCT-01)
 - [ ] Renovação com histórico (RF-PRZ-04)
 - [ ] Painel de próximos vencimentos (RF-PRZ-05)

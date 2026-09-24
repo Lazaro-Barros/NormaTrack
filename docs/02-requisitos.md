@@ -9,6 +9,8 @@ Identificadores no formato `RF-<ÁREA>-<nº>` para rastrear requisitos em tasks 
 - **RF-EMP-01** — Cadastrar, editar e arquivar empresas.
 - **RF-EMP-02** — Habilitar/desabilitar módulos por empresa (Ambiental, Produtos Controlados, Controle de Qualidade).
 - **RF-EMP-03** — Exibir para a empresa apenas os módulos habilitados.
+- **RF-EMP-04** — Dados cadastrais da empresa: razão social (obrigatória), nome fantasia, CNPJ, inscrição estadual, endereço completo (logradouro, número, complemento, bairro, cidade, UF, CEP), telefone, e-mail e responsável legal (nome, CPF, telefone, e-mail). CNPJ, CPF, e-mail, CEP e telefone são validados quando preenchidos. O CNPJ aceita o formato **alfanumérico** (IN RFB nº 2.229/2024, desde julho de 2026) além do numérico, e não se repete entre empresas não excluídas.
+- **RF-EMP-05** — Registros em órgãos: para cada órgão da lista fixa (Prefeitura, Ministério da Agricultura, ANVISA, SEMACE, IBAMA, Secretaria de Meio Ambiente, Conselho de Classe, Polícia Federal, Exército Brasileiro), indicar se a empresa **possui registro** ou **precisa obter**, com nº do registro e validade opcionais. Esses dados alimentam telas condicionais e relatórios. **(?)** relação órgão ↔ módulo (C15) e alerta de validade (C16).
 
 ### Prazos e alertas
 

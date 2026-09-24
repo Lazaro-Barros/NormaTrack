@@ -7,3 +7,5 @@ Status: `rascunho` · `planejada` · `em andamento` · `concluída` · `bloquead
 | # | Task | Requisitos | Fase | Status |
 |---|---|---|---|---|
 | 001 | [Design system e tema Flutter](001-design-system-e-tema/) | RNF-06 | 0 | concluída |
+| 002 | [Empresas: domínio e dados](002-empresas-dominio-e-dados/) | RF-EMP-01/02/04/05 | 1 | planejada |
+| 003 | [Empresas: telas de lista, cadastro e detalhe](003-empresas-telas/) | RF-EMP-01..05 | 1 | rascunho |

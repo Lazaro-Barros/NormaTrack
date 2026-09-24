@@ -44,3 +44,12 @@ As entidades centrais serão tipadas. Medições (ruído, ETE/ETA, laudos de an�
 O `applicationId` é `br.com.normatrack.app`. Por enquanto o app não será publicado na Play Store: será distribuído como APK instalado manualmente.
 
 - *Atenção:* para um APK novo atualizar o já instalado sem perder dados, o `applicationId` e a chave de assinatura precisam ser os mesmos. Antes de distribuir, criar uma keystore de release e guardá-la fora do repositório.
+
+## D007 — Órgãos e módulos como enums de domínio
+
+**Status:** aceita · 2026-09-24 (task 002)
+
+`Authority` (os 9 órgãos) e `ModuleType` são enums fixos no domínio. Cada valor tem um `code` estável em texto (`federal_police`, `controlled_products`…), que é o que vai para o banco e para a futura API, e um rótulo pt-BR. `Deadline.authority` reutiliza o mesmo `Authority`.
+
+- *Por quê:* telas condicionais, relatórios por órgão e regras de módulo precisam de valores conhecidos em tempo de compilação. Guardar `code`, e não `name`/`index`, permite renomear o enum sem migração.
+- *Descartado:* tabela de órgãos editável pela usuária, porque o comportamento passaria a depender de dados. Novo órgão = nova versão do app.

@@ -73,3 +73,17 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Documento que só tem máscara (ex.: `"../-"`) normaliza para `null`, como texto vazio.
 - `CompanyFilter` tem `==`/`hashCode` para servir de chave de provider `family` na task 003.
 - `validateCompany` não tem erro de UF: a UF é o enum `BrazilianState`, inválida não é representável.
+
+## 2026-09-24 — Passo 4: tabelas, AppDatabase v1 e schema dump
+
+**Feito**
+- `company_tables.dart` (`Companies`, `CompanyModules`, `CompanyAuthorities`), `converters.dart` (`DateOnlyConverter` + mixin `EntityColumns` com `id`/`createdAt`/`updatedAt`/`deletedAt`) e `AppDatabase` v1 com `PRAGMA foreign_keys = ON` e `appDatabaseProvider`.
+- `@TableIndex.sql` com `WHERE` funciona no drift 2.35.0 (conferido no pub cache): o índice parcial `companies_cnpj_active` está no código gerado e no dump. O plano B do `customStatement` não foi necessário.
+- `drift_schemas/app/drift_schema_v1.json` gerado por `make-migrations`.
+- `test/core/database/migration_test.dart`: schema v1 × dump (`SchemaVerifier`), banco novo × código gerado (`validateDatabaseSchema`), índice parcial e foreign keys ligadas.
+
+**Decidido / desvios do plano**
+- `make-migrations` só gera testes de migração com **duas ou mais** versões de schema (`make_migrations.dart`: `if (writer.schemas.length == 1) continue;`). Com só a v1 ele grava apenas o JSON. Os helpers foram gerados com `dart run drift_dev schema generate drift_schemas/app/ test/core/database/generated/` e o teste de v1 foi escrito à mão. Na v2, `make-migrations` passa a gerar os testes de passo em `test/core/database/`.
+- `build_runner` 2.16 ignora `--delete-conflicting-outputs` ("These options have been removed"). O comando do `CLAUDE.md` continua funcionando (só avisa); não alterei o `CLAUDE.md`.
+- Colunas comuns em um mixin (`EntityColumns`) em `core/database`, reaproveitável pelas próximas tabelas.
+- `app_database.g.dart` é commitado (não há regra no `.gitignore` para `*.g.dart`), assim o projeto compila sem rodar codegen.

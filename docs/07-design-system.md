@@ -121,5 +121,5 @@ Ainda não desenhadas: lançamento mensal de produtos controlados (Fase 3) e lot
 ## Suposições a validar
 
 - Unidade dos ruídos em dB(A) — pergunta C6.
-- CNPJ opcional no cadastro de empresa — pergunta C5.
+- ~~CNPJ opcional no cadastro de empresa — pergunta C5.~~ Confirmado em 2026-09-24: só a razão social é obrigatória (RF-EMP-04). O formulário ganha seções de endereço, contato, responsável legal e órgãos (task 003).
 - Campo "Nº do documento" no prazo, que não está no modelo — incluir em `Deadline` se a cliente confirmar (C5/C13).

@@ -7,6 +7,8 @@ description: Fluxo de tasks do NormaTrack. Use sempre que for criar, quebrar, re
 
 Todo trabalho de implementação vive em `tasks/NNN-slug/`. A pasta da task guarda o escopo, o plano técnico, os protótipos e o diário (journal) do que foi feito e decidido. Um agente que abre a pasta deve conseguir retomar o trabalho sem o histórico da conversa.
 
+**Regra de ouro: a pasta da task é autocontida.** Um agente novo e independente, com acesso só à pasta, ao `CLAUDE.md`, aos `docs/` citados e ao código, deve conseguir implementar a task sem perguntar nada e sem adivinhar. Tudo que foi decidido em conversa (respostas da usuária, suposições, escolhas técnicas) vai para o `README.md`, o `plan.md` ou o `journal.md`. O que ficou só no chat está perdido.
+
 ## Estrutura
 
 ```
@@ -51,6 +53,21 @@ Antes de escrever código de produção, preencha o `plan.md`:
 - Telas e componentes. Toda UI segue o design system: `docs/07-design-system.md`, `lib/app/theme/`, `lib/app/widgets/` e o wireframe em `docs/design/wireframes/`.
 - Estratégia de testes (unitário de domínio, banco em memória, widget).
 - Riscos e alternativas descartadas.
+
+O plano precisa passar no **teste do agente novo**: antes de mudar o status para `planejada`, releia a pasta como se não conhecesse a conversa. Para cada decisão que um implementador teria que tomar, a resposta tem que estar escrita. Checklist:
+
+- **Contexto do repositório:** o que já existe e o que ainda não existe (pacotes, arquivos, pastas), versões do Flutter/Dart e armadilhas conhecidas (ex.: um teste que quebra se o widget raiz mudar).
+- **Ordem de implementação:** passos, branch, formato dos commits e como atualizar journal, status e roadmap no fim.
+- **Setup:** pacotes com versão (confira com `flutter pub add --dry-run`), arquivos de configuração (`build.yaml`…) e comandos de codegen.
+- **Contratos completos:** assinaturas de entidades, interfaces, parâmetros de filtro e exceções, e não só nomes.
+- **Valores de referência:** todo enum ou lista fixa com valor, código persistido e rótulo pt-BR.
+- **Regras exatas:** normalização de entrada, validação campo a campo, casos de borda (inexistente, excluído, duplicado, idempotência), transações, timestamps e o que acontece com os filhos numa exclusão.
+- **Dados:** tabelas, colunas, tipos, nulidade, índices, FKs, formato de datas e versão da migração.
+- **Testes por arquivo**, com os casos obrigatórios e dados de exemplo **conferidos** (ex.: dígitos verificadores calculados por script).
+- **Como verificar:** comandos e checagens que definem "pronto".
+- **Suposições marcadas:** cada suposição de negócio com **[suposição]** no plano, também em `docs/06-perguntas-em-aberto.md`, e virando `// TODO(RF-XXX):` no código.
+
+Confira no pub cache ou na documentação toda API de terceiro citada no plano. Plano com API inventada não é autocontido. O que não der para fechar vira pergunta registrada, não lacuna silenciosa. O `README.md` da task aponta o plano como ponto de partida para quem for implementar.
 
 Status → `planejada`. Para planos com decisões relevantes, mostre o plano ao usuário antes de implementar.
 

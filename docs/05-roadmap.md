@@ -17,8 +17,9 @@ As fases seguem a lógica dos [três padrões](01-visao-geral.md#os-três-padrõ
 
 Entrega o padrão "prazo com alerta" para **todos** os módulos de uma vez.
 
-- [ ] CRUD de empresas (RF-EMP-01)
-- [ ] Habilitar módulos por empresa (RF-EMP-02/03)
+- [ ] CRUD de empresas (RF-EMP-01) — tasks 002 e 003
+- [ ] Dados cadastrais e registros em órgãos (RF-EMP-04/05) — tasks 002 e 003
+- [ ] Habilitar módulos por empresa (RF-EMP-02/03) — tasks 002 e 003
 - [ ] CRUD de prazos por módulo e categoria: licença ambiental, laudo e manutenção de ETE/ETA, licença PF e licença Exército (RF-PRZ-01/02, RF-AMB-01/05/06, RF-PCT-01)
 - [ ] Renovação com histórico (RF-PRZ-04)
 - [ ] Painel de próximos vencimentos (RF-PRZ-05)

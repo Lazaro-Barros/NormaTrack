@@ -19,7 +19,11 @@ Nomes em código propostos em inglês — **a confirmar** (ver perguntas em aber
 | ETA | Estação de Tratamento de Água | `TreatmentStation` (tipo `water`) |
 | Laudo | Análise técnica com data/resultado (não confundir com relatório exportado) | `Deadline` (datas) / `AnalysisResult` (valores) |
 | Produto controlado | Produto químico fiscalizado por PF ou Exército | `ControlledProduct` |
-| Órgão | PF, Exército, órgão ambiental | `Authority` |
+| Órgão | Prefeitura, MAPA, ANVISA, SEMACE, IBAMA, Secretaria de Meio Ambiente, Conselho de Classe, PF, Exército (lista fixa) | `Authority` |
+| Registro no órgão | Situação da empresa perante um órgão: possui registro ou precisa obter, com nº e validade | `AuthorityRegistration` |
+| Responsável legal | Pessoa que responde legalmente pela empresa | `LegalRepresentative` |
+| Razão social / nome fantasia | Nome jurídico / nome comercial | `legalName` / `tradeName` |
+| Inscrição estadual | Registro na Sefaz estadual | `stateRegistration` |
 | Nota fiscal | Documento fiscal da compra/uso | `invoiceNumber` |
 | Lote | Unidade de produção rastreável | `Batch` |
 | Matéria-prima | Insumo comprado para produção | `RawMaterialPurchase` |
@@ -41,6 +45,7 @@ Campos de controle omitidos no diagrama, mas presentes em todas as tabelas: `id`
 ```mermaid
 erDiagram
     Company ||--o{ CompanyModule : habilita
+    Company ||--o{ CompanyAuthority : registra
     Company ||--o{ Deadline : possui
     Company ||--o{ MeasurementParameter : define
     Company ||--o{ WasteRecord : lanca
@@ -59,9 +64,22 @@ erDiagram
     Product ||--o{ MeasurementParameter : analisa
 
     Company {
-        string name
-        string cnpj
-        bool archived
+        string legalName "obrigatorio"
+        string tradeName
+        string cnpj "14 digitos, unico"
+        string stateRegistration
+        string address "logradouro, numero, complemento, bairro, cidade, UF, CEP"
+        string phone
+        string email
+        string legalRep "nome, CPF, telefone, e-mail"
+        datetime archivedAt
+    }
+    CompanyAuthority {
+        string authority "city_hall | agriculture_ministry | anvisa | semace | ibama | environment_secretariat | professional_council | federal_police | army"
+        string status "registered | required"
+        string registrationNumber
+        date validUntil
+        string notes
     }
     CompanyModule {
         string moduleType "environmental | controlled_products | quality"
@@ -70,7 +88,7 @@ erDiagram
     Deadline {
         string module
         string category "license | lab_report | maintenance"
-        string authority "environmental | federal_police | army | null"
+        string authority "Authority (ver D007) | null"
         string title
         date dueDate
         int alertDaysBefore "padrao 150"
@@ -138,6 +156,8 @@ erDiagram
 
 - **Estoque por lote** = `quantityProduced` − soma de `BatchSale.quantity`. É **calculado**, não digitado.
 - **Consolidação anual** de um produto = soma dos lotes produzidos no ano, soma das vendas no ano e soma dos saldos em aberto.
+- **Órgãos e módulos** são enums fixos no código, guardados por um código estável em texto ([D007](decisoes.md#d007--órgãos-e-módulos-como-enums-de-domínio)). Órgão sem registro na empresa = "não se aplica".
+- **Registro vencido** (`validUntil` anterior a hoje) é derivado, não persistido.
 - **Situação de um prazo** é derivada de `dueDate` e `alertDaysBefore` em relação à data atual: *vigente* → *a vencer* (dentro da janela de alerta) → *vencido*.
 - **Renovar** cria um novo `Deadline` apontando para o anterior e marca o anterior como `renewed`.
 - **Produtos controlados:** o estoque ao fim do mês é informado pela cliente, não calculado. **(?)** confirmar se deveria ser calculado a partir do estoque anterior e das entradas/saídas.

@@ -41,3 +41,11 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Pendente / dúvidas**
 - Suposições enviadas para confirmação em C18: telefone com 10/11 dígitos, um telefone/e-mail, nenhum módulo por padrão, validade inclusiva.
+
+## 2026-09-24 — Implementação iniciada; passo 1 (dependências)
+
+**Feito**
+- Branch `task/002-empresas-dominio-e-dados` criada a partir de `docs/cadastro-de-empresa`. Status → `em andamento`.
+- Código conferido contra o "Contexto do repositório" do plano: bate (só `main.dart`, tema e `StatusChip`; sem drift/Riverpod/`build.yaml`).
+- Dependências adicionadas com os comandos do plano. Versões resolvidas: drift 2.35.0, drift_dev 2.35.0, drift_flutter 0.3.1 (sqlite3 3.6.0), uuid 4.6.0, flutter_riverpod 3.4.3, collection 1.19.1, meta 1.19.0, build_runner 2.16.1.
+- `build.yaml` criado conforme o plano.

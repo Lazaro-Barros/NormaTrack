@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | em andamento |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)); traz junto o mínimo da Fase 0 (drift, uuid, Riverpod) |
 | **Requisitos** | RF-EMP-01, RF-EMP-02, RF-EMP-04, RF-EMP-05 · RNF-02, RNF-03 |
 | **Depende de** | 001 (concluída) |

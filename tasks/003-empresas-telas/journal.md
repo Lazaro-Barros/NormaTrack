@@ -73,3 +73,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Desvio temporário: neste passo o ramo `/empresas` aponta para um `Scaffold` só com a faixa "Empresas", porque `CompanyListScreen` só nasce no passo 6. O caso "tocar em Empresas mostra 'Nenhuma empresa cadastrada'" do `widget_test.dart` entra no passo 6, junto com a tela.
 - `test/helpers/pump_widget.dart` (`pumpComponent`) monta componentes isolados em `MaterialApp(theme: AppTheme.light, home: Scaffold(body: ...))`, como o plano pede para os testes de `lib/app/widgets/`.
 - `pumpApp` ganha o parâmetro `repository` no passo 6, com o `FakeCompanyRepository`.
+
+## 2026-09-29 — Passo 4: componentes
+
+**Feito**
+- `SectionCard`, `StatusText`, `NavRow`, `SwitchRow`, `InfoRow`, `AppTextField`, `AppDropdownField`, `AppActionBar`, `DestructiveButton` e `showConfirmDialog` (`confirm_dialog.dart`), cada um com teste em `test/app/widgets/`.
+
+**Decidido**
+- Dois auxiliares compartilhados em `lib/app/widgets/`, fora da lista do plano, para não duplicar layout: `RowLayout` (em `nav_row.dart`, usado por `NavRow` e `SwitchRow`) e `FieldParts` (`field_parts.dart`: rótulo com `*`, erro com ícone e coluna rótulo + campo, usado por `AppTextField` e `AppDropdownField`). São públicos porque o Dart não tem privado entre arquivos; o comentário de cada um diz para não usar fora de `lib/app/widgets/`.
+- `AppDropdownField` usa `isExpanded: true` e textos com reticências: no campo UF (flex 1) o menu tem a largura do campo e `CE · Ceará` pode aparecer cortado. Esta versão do Flutter não tem `menuWidth` no `DropdownButtonFormField`. Aceito; conferir no emulador.
+- `StatusText` e o `caption` do `SectionCard` usam algarismos tabulares (têm datas e contagens).

@@ -32,7 +32,7 @@ Os nomes abaixo são os mesmos usados no código (`lib/app/theme/`). As telas n�
 | `primaryStrong` | `#0A434A` | estado pressionado |
 | `primarySoft` | `#DCEBEA` | `primaryContainer` |
 | `onPrimary` | `#FFFFFF` | `onPrimary` |
-| `onBandMuted` | `#CFE5E3` | texto secundário na faixa de cabeçalho |
+| `onBandMuted` | `#CFE5E3` | texto secundário na faixa de cabeçalho; nos widgets, `BandColors.of(context).muted` (fora do `ColorScheme`) |
 | `ground` | `#E6EFEE` | `surface` (fundo das telas, petróleo bem claro) |
 | `surface` | `#FFFFFF` | `surfaceContainerLowest` (cards, barras, sheets) |
 | `surface2` | `#EDF2F1` | `surfaceContainerHigh` (trilho do segmentado) |
@@ -55,6 +55,22 @@ A situação é derivada de `dueDate` e `alertDaysBefore` (ver [domínio](03-dom
 | Renovado | `statusClosed` | `#4A5055` | `#E9ECEB` | setas de renovação |
 
 Implementado como `ThemeExtension` em `StatusColors` (`StatusColors.of(context).resolve(StatusTone.overdue)`).
+
+### Situação do registro em órgão
+
+O domínio calcula `AuthorityRegistration.situationOn(hoje)` e a apresentação converte com `registrationDisplay` (`lib/features/companies/presentation/company_labels.dart`). É o mesmo no formulário e no detalhe da empresa, sempre com `StatusText` (texto colorido com ícone). O formulário **não** usa pílula, embora o wireframe `EmpresaForm` mostre uma.
+
+| Caso | Rótulo | Tom |
+|---|---|---|
+| Sem registro | Não se aplica | nenhum (texto neutro, sem ícone) |
+| Precisa obter | Precisa obter | `dueSoon` |
+| Possui, validade vencida | Venceu `dd/MM/yyyy` | `overdue` |
+| Possui, com validade | Até `dd/MM/yyyy` | `ok` |
+| Possui, sem validade | Possui registro | `ok` |
+
+### Faixa de cabeçalho
+
+`BandColors` (`ThemeExtension`, `lib/app/theme/band_colors.dart`) tem `muted` = `onBandMuted`, para o subtítulo da faixa. A busca da faixa é um `SearchBar` estilizado por `searchBarTheme`: pílula branca sem borda nem sombra, altura 48.
 
 ### Tipografia
 
@@ -94,15 +110,21 @@ Botões, campos, chips, segmentado, interruptores, navegação inferior, snackba
 
 | Widget | Uso |
 |---|---|
-| Faixa de cabeçalho | `AppBar` do tema (petróleo, cantos inferiores 24). Título, subtítulo em `onBandMuted`, ações e no máximo **um** bloco extra abaixo: números, resumo em pílulas, abas (segmentado claro) ou busca. Se o bloco não couber no `AppBar`, criar `AppHeaderBand` em `lib/app/widgets/` |
+| Faixa de cabeçalho | `AppBar` do tema (petróleo, cantos inferiores 24) com `BandTitle` ✅ no `title:` (título, `large` nas telas da barra inferior; subtítulo em `onBandMuted`, tabular), ações e no máximo **um** bloco extra abaixo: números, resumo em pílulas, abas (segmentado claro) ou busca. Se o bloco não couber no `AppBar`, criar `AppHeaderBand` em `lib/app/widgets/` |
 | `StatusChip` ✅ | Situação com ícone e texto. Só onde não há bloco de data: histórico de ciclos, tabelas |
 | `DeadlineCard` | Bloco de data preenchido com a cor forte da situação + título + uma linha de contexto (empresa **ou** categoria) + texto relativo na cor da situação ("Vence / em 12 dias"). Sem chip |
 | `StatTile` | Número + rótulo na cor suave da situação, dentro da faixa do Painel. Tocar filtra a lista; o selecionado ganha anel |
 | `PendingRow` | Lançamento periódico a fazer, com botão tonal "Lançar" |
-| `NavRow` / `SwitchRow` | Linhas dentro de um card, separadas por `divider`. A navegável tem chevron; situação em texto colorido à direita. O interruptor aplica na hora |
-| `AppTextField` | Rótulo acima (obrigatório com `*`), nunca só placeholder. Erro com ícone e texto. Formulários longos em seções, cada uma num card |
+| `NavRow` / `SwitchRow` ✅ | Linhas dentro de um card, separadas por `divider`. A navegável tem chevron; situação em texto colorido à direita. O interruptor aplica na hora |
+| `AppTextField` ✅ | Rótulo acima (obrigatório com `*`), nunca só placeholder. Erro com ícone e texto. Formulários longos em seções, cada uma num card |
 | `StatusBanner` | Aviso no topo do conteúdo, na cor suave da situação (prazo vencido, sem backup) |
-| `EmptyState` | Explica o próximo passo e oferece a ação |
+| `EmptyState` ✅ | Explica o próximo passo e oferece a ação (`FilledButton.tonal`, opcional) |
+| `SectionCard` ✅ | Seção de tela: título em frase normal (e legenda à direita, descrição abaixo) sobre um card com os itens separados por divisória |
+| `StatusText` ✅ | Situação em texto colorido com ícone, à direita de um `NavRow`. Sem tom: texto neutro, sem ícone |
+| `InfoRow` ✅ | Dado cadastral: rótulo à esquerda, uma ou mais linhas à direita (1ª em destaque), algarismos tabulares |
+| `AppDropdownField` ✅ | Lista de opções com o layout do `AppTextField`; 1º item "Nenhuma" limpa o valor |
+| `AppActionBar` ✅ | Barra de ações no rodapé das telas internas (`Scaffold.bottomNavigationBar`), branca com cantos superiores 24 |
+| `DestructiveButton` ✅ / `showConfirmDialog` ✅ | Ação destrutiva com contorno vermelho, sempre depois do diálogo de confirmação (`destructive: true` pinta o botão de confirmar de vermelho) |
 | Botões | `FilledButton` primário: um por tela, no rodapé. `FilledButton.tonal`: ação secundária de destaque. `OutlinedButton`: secundária. Destrutivo: contorno vermelho + confirmação |
 
 ## Telas

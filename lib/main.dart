@@ -1,36 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'app/router.dart';
 import 'app/theme/app_theme.dart';
 
 void main() {
   runApp(const ProviderScope(child: NormaTrackApp()));
 }
 
-class NormaTrackApp extends StatelessWidget {
+class NormaTrackApp extends ConsumerWidget {
   const NormaTrackApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
       title: 'NormaTrack',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       themeMode: ThemeMode.light,
-      home: const _HomePlaceholder(),
-    );
-  }
-}
-
-// TODO(RF-PRZ-05): substituir pelo Painel quando as rotas forem criadas.
-class _HomePlaceholder extends StatelessWidget {
-  const _HomePlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('NormaTrack')),
-      body: const Center(child: Text('Painel')),
+      routerConfig: ref.watch(routerProvider),
+      locale: const Locale('pt', 'BR'),
+      supportedLocales: const [Locale('pt', 'BR')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
     );
   }
 }

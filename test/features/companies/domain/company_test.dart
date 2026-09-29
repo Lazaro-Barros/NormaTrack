@@ -61,6 +61,47 @@ void main() {
     });
   });
 
+  group('situationOn', () {
+    final today = DateTime(2026, 9, 29);
+    AuthorityRegistration reg(RegistrationStatus status, [DateTime? until]) =>
+        AuthorityRegistration(
+          authority: Authority.federalPolice,
+          status: status,
+          validUntil: until,
+        );
+
+    test('precisa obter, mesmo com validade vencida', () {
+      expect(
+        reg(
+          RegistrationStatus.required,
+          DateTime(2026, 1, 1),
+        ).situationOn(today),
+        RegistrationSituation.required,
+      );
+    });
+    test('possui, vencido ontem: expired', () {
+      expect(
+        reg(
+          RegistrationStatus.registered,
+          DateTime(2026, 9, 28),
+        ).situationOn(today),
+        RegistrationSituation.expired,
+      );
+    });
+    test('possui, vence hoje: registered', () {
+      expect(
+        reg(RegistrationStatus.registered, today).situationOn(today),
+        RegistrationSituation.registered,
+      );
+    });
+    test('possui, sem validade: registered', () {
+      expect(
+        reg(RegistrationStatus.registered).situationOn(today),
+        RegistrationSituation.registered,
+      );
+    });
+  });
+
   test('igualdade por valor', () {
     expect(company(), company());
     expect(company().hashCode, company().hashCode);

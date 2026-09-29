@@ -79,6 +79,18 @@ void main() {
       );
     });
 
+    test('registra a extensão da faixa com onBandMuted', () {
+      expect(theme.extension<BandColors>(), BandColors.light);
+      expect(BandColors.light.muted, AppColors.onBandMuted);
+    });
+
+    test('busca da faixa é branca', () {
+      expect(
+        theme.searchBarTheme.backgroundColor?.resolve(const {}),
+        AppColors.surface,
+      );
+    });
+
     test('faixa de cabeçalho e cards seguem a v0.2', () {
       expect(theme.appBarTheme.backgroundColor, AppColors.primary);
       final cardShape = theme.cardTheme.shape! as RoundedRectangleBorder;

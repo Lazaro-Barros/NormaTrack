@@ -17,6 +17,10 @@ void main() {
       );
     }
 
+    await tester.tap(find.descendant(of: bar, matching: find.text('Empresas')));
+    await tester.pumpAndSettle();
+    expect(find.text('Nenhuma empresa cadastrada'), findsOneWidget);
+
     await tester.tap(find.descendant(of: bar, matching: find.text('Ajustes')));
     await tester.pumpAndSettle();
     expect(find.text('Ajustes em construção'), findsOneWidget);
@@ -28,6 +32,6 @@ void main() {
     await tester.tap(find.text('Ver empresas'));
     await tester.pumpAndSettle();
     expect(find.text('Painel em construção'), findsNothing);
-    expect(find.text('Empresas'), findsWidgets);
+    expect(find.text('Nenhuma empresa cadastrada'), findsOneWidget);
   });
 }

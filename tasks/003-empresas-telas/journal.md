@@ -88,3 +88,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Feito**
 - `RegistrationSituation` e `AuthorityRegistration.situationOn` em `authority.dart`, com os quatro casos do plano em `company_test.dart`. `TODO(RF-EMP-05)` do alerta antes da validade (C16) no enum.
+
+## 2026-09-29 — Passo 6: lista de empresas
+
+**Feito**
+- `company_providers.dart`, `company_labels.dart` (`ModuleTypeUi`, `registrationDisplay`, `cityState`, `companyFieldMessage`, `duplicateCnpjMessage`), `CompanyListScreen` ligada ao ramo `/empresas`. `FakeCompanyRepository` e `pumpApp(repository:)` em `test/helpers/`. Testes de rótulos e da lista; `widget_test.dart` agora cobre "tocar em Empresas mostra 'Nenhuma empresa cadastrada'".
+
+**Decidido**
+- Os casos de navegação a partir da lista (ação do vazio e FAB abrem "Nova empresa"; tocar em Alfa abre o detalhe e esconde a barra) entram nos passos 7 e 8, quando as rotas `nova` e `:id` existirem.
+- Trocar ativas/arquivadas limpa a lista anterior (`_last = null`): mostrar as ativas por um instante sob "Arquivadas" seria enganoso. A lista anterior só é mantida durante a busca, como o plano pede.
+- `FakeCompanyRepository` expõe `all` (empresas vivas) para os testes conferirem o que foi gravado.

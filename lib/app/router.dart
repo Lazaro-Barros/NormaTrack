@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/companies/presentation/company_list_screen.dart';
 import 'app_shell.dart';
 import 'placeholder_screens.dart';
-import 'widgets/band_title.dart';
 
 abstract final class AppRoutes {
   static const dashboard = '/painel';
@@ -44,11 +44,7 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.dashboard}) {
             routes: [
               GoRoute(
                 path: AppRoutes.companies,
-                builder: (context, state) => Scaffold(
-                  appBar: AppBar(
-                    title: const BandTitle(title: 'Empresas', large: true),
-                  ),
-                ),
+                builder: (context, state) => const CompanyListScreen(),
               ),
             ],
           ),

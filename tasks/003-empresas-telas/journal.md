@@ -49,3 +49,9 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Pendente / dúvidas**
 - Nenhuma pergunta de negócio nova. C15–C18 seguem abertas e já estão marcadas no código da 002.
 
+
+## 2026-09-29 — Implementação iniciada (passo 1: setup)
+
+**Feito**
+- Status → `em andamento` (README da task e índice).
+- `flutter pub add 'go_router:^17.5.0' 'flutter_localizations:{"sdk":"flutter"}'`: resolveu `go_router 17.5.0` e `intl 0.20.3` (transitiva), como no plano. `flutter analyze` e `flutter test` (75 testes) verdes.

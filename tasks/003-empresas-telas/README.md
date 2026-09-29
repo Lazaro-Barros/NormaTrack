@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | em andamento |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)); traz junto o mínimo da Fase 0 (go_router, barra inferior, localização pt-BR) |
 | **Requisitos** | RF-EMP-01, RF-EMP-02, RF-EMP-03, RF-EMP-04, RF-EMP-05 · RNF-06 |
 | **Depende de** | 001, [002](../002-empresas-dominio-e-dados/), [004](../004-refinamento-visual/) (design system v0.2) |

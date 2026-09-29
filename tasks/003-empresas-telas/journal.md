@@ -29,3 +29,23 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Usuária aprovou os wireframes v0.2 de `Empresas`, `EmpresaForm`, `EmpresaOrgao` e `EmpresaDetalhe`. Critério de aceite do wireframe do formulário atendido.
+
+## 2026-09-29 — Plano técnico escrito
+
+**Feito**
+- `plan.md` preenchido no nível do plano da 002: contexto do repositório, ordem de implementação em 9 passos, setup com versões, rotas, contratos dos 12 componentes novos, textos pt-BR de cada tela, regras de salvar/descartar/arquivar e testes por arquivo com dados conferidos. Status → `planejada`.
+- APIs conferidas no pub cache / SDK: `go_router` 17.5.0 (`StatefulShellRoute.indexedStack`, `goBranch`), Riverpod 3.4.3 (`StreamProvider.autoDispose.family`, `AsyncValue.when`), `SearchBarThemeData`, `GlobalMaterialLocalizations.delegates`, `InputDecoration.error`, `DropdownButtonFormField.initialValue`, `showDatePicker`, `SegmentedButton`.
+- Dígitos verificadores dos CNPJs/CPFs de teste calculados por script.
+
+**Decidido**
+- Usuária: omitir por ora tudo que depende de prazos (situação na lista, pílulas no detalhe, pendências por módulo) e o que depende de telas inexistentes ("Gerar relatório", abrir módulo). Ficam como TODO.
+- `go_router` fixado em `^17.5.0`: a 18.x migrou para `material_ui`, separado do `package:flutter/material.dart` do app. Vira D010 no fechamento.
+- Situação do registro em órgão calculada no domínio (`AuthorityRegistration.situationOn` → `RegistrationSituation`) e mostrada igual no formulário e no detalhe com `StatusText` (texto colorido + ícone), em vez da pílula do wireframe do formulário.
+- No bottom sheet, "Precisa obter" descarta nº e validade (critério de aceite), embora o domínio aceite.
+- Testes de widget usam `FakeCompanyRepository`, não drift (timers do stream e `path_provider`).
+- Nova extensão de tema `BandColors`, porque `onBandMuted` não está no `ColorScheme` e widgets não podem usar `AppColors`.
+- UF sem valor padrão (não pré-selecionar CE).
+
+**Pendente / dúvidas**
+- Nenhuma pergunta de negócio nova. C15–C18 seguem abertas e já estão marcadas no código da 002.
+

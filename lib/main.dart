@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/theme/app_theme.dart';
 
 void main() {
-  runApp(const NormaTrackApp());
+  runApp(const ProviderScope(child: NormaTrackApp()));
 }
 
 class NormaTrackApp extends StatelessWidget {

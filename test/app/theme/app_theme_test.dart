@@ -46,6 +46,44 @@ void main() {
         greaterThanOrEqualTo(4.5),
       );
     });
+
+    test(
+      'texto sobre a faixa de cabeçalho tem contraste de pelo menos 4,5:1',
+      () {
+        expect(
+          _contrast(AppColors.onBandMuted, AppColors.primary),
+          greaterThanOrEqualTo(4.5),
+        );
+      },
+    );
+
+    test('bloco de data: branco sobre a cor forte da situação ≥ 4,5:1', () {
+      for (final tone in StatusTone.values) {
+        final s = StatusColors.light.resolve(tone);
+        expect(
+          _contrast(AppColors.onPrimary, s.foreground),
+          greaterThanOrEqualTo(4.5),
+          reason: tone.name,
+        );
+      }
+    });
+
+    test('bordas de campo e placeholder são distinguíveis', () {
+      expect(
+        _contrast(AppColors.borderStrong, AppColors.surface),
+        greaterThanOrEqualTo(3),
+      );
+      expect(
+        _contrast(AppColors.placeholder, AppColors.surface),
+        greaterThanOrEqualTo(4.5),
+      );
+    });
+
+    test('faixa de cabeçalho e cards seguem a v0.2', () {
+      expect(theme.appBarTheme.backgroundColor, AppColors.primary);
+      final cardShape = theme.cardTheme.shape! as RoundedRectangleBorder;
+      expect(cardShape.side, BorderSide.none);
+    });
   });
 
   testWidgets('StatusChip mostra ícone e texto na cor da situação', (

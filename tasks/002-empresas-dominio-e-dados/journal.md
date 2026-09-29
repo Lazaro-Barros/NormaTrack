@@ -41,3 +41,92 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Pendente / dúvidas**
 - Suposições enviadas para confirmação em C18: telefone com 10/11 dígitos, um telefone/e-mail, nenhum módulo por padrão, validade inclusiva.
+
+## 2026-09-24 — Implementação iniciada; passo 1 (dependências)
+
+**Feito**
+- Branch `task/002-empresas-dominio-e-dados` criada a partir de `docs/cadastro-de-empresa`. Status → `em andamento`.
+- Código conferido contra o "Contexto do repositório" do plano: bate (só `main.dart`, tema e `StatusChip`; sem drift/Riverpod/`build.yaml`).
+- Dependências adicionadas com os comandos do plano. Versões resolvidas: drift 2.35.0, drift_dev 2.35.0, drift_flutter 0.3.1 (sqlite3 3.6.0), uuid 4.6.0, flutter_riverpod 3.4.3, collection 1.19.1, meta 1.19.0, build_runner 2.16.1.
+- `build.yaml` criado conforme o plano.
+
+## 2026-09-24 — Passo 2: core/utils
+
+**Feito**
+- `clock.dart`, `id_generator.dart`, `search_text.dart` e `br_documents.dart` (CNPJ numérico/alfanumérico, CPF, CEP, telefone: normalizar, validar, formatar), com testes. CPF de teste `123.456.789-09` conferido por script.
+
+**Decidido**
+- `is…`/`format…` esperam valor já normalizado; `normalize…` é separado. Mantém a validação do domínio sobre o input normalizado, como no plano.
+- `normalizeForSearch` com tabela de acentos do português (sem pacote extra de diacríticos).
+- Validação de telefone marcada `// TODO(RF-EMP-04)` (suposição C18).
+
+## 2026-09-24 — Passo 3: domínio
+
+**Feito**
+- `ModuleType`, `Authority`, `RegistrationStatus`, `BrazilianState`, `Address`, `LegalRepresentative`, `AuthorityRegistration`, `CompanyInput`, `Company`, `normalizeCompanyInput`, `validateCompany` e `CompanyRepository` (+ `CompanyFilter` e exceções), com testes de enums, entidade e validação.
+- Suposições marcadas com `// TODO(RF-EMP-0X)`: telefone 10/11 dígitos e um telefone/e-mail (C18), nenhum módulo por padrão (C18), validade inclusiva (C18), validade × prazo (C16), observação livre por órgão (C17).
+
+**Decidido**
+- `BrazilianState` em ordem alfabética **estrita** da sigla (AM antes de AP, MG/MS/MT, RO/RR/RS, SE/SP). A lista do plano tinha AP/AM, MT/MS/MG etc. fora de ordem, mas a regra escrita é "ordem alfabética da sigla"; segui a regra. Valores do enum = sigla em minúsculas (`BrazilianState.ce`).
+- `CompanyInput` mantém o construtor `const` do plano (coleções podem vir modificáveis de quem chama); `normalizeCompanyInput` e `Company` embrulham em coleções não modificáveis.
+- `Company ==` compara id, timestamps, `archivedAt` e os dados editáveis (via `toInput()`).
+- Documento que só tem máscara (ex.: `"../-"`) normaliza para `null`, como texto vazio.
+- `CompanyFilter` tem `==`/`hashCode` para servir de chave de provider `family` na task 003.
+- `validateCompany` não tem erro de UF: a UF é o enum `BrazilianState`, inválida não é representável.
+
+## 2026-09-24 — Passo 4: tabelas, AppDatabase v1 e schema dump
+
+**Feito**
+- `company_tables.dart` (`Companies`, `CompanyModules`, `CompanyAuthorities`), `converters.dart` (`DateOnlyConverter` + mixin `EntityColumns` com `id`/`createdAt`/`updatedAt`/`deletedAt`) e `AppDatabase` v1 com `PRAGMA foreign_keys = ON` e `appDatabaseProvider`.
+- `@TableIndex.sql` com `WHERE` funciona no drift 2.35.0 (conferido no pub cache): o índice parcial `companies_cnpj_active` está no código gerado e no dump. O plano B do `customStatement` não foi necessário.
+- `drift_schemas/app/drift_schema_v1.json` gerado por `make-migrations`.
+- `test/core/database/migration_test.dart`: schema v1 × dump (`SchemaVerifier`), banco novo × código gerado (`validateDatabaseSchema`), índice parcial e foreign keys ligadas.
+
+**Decidido / desvios do plano**
+- `make-migrations` só gera testes de migração com **duas ou mais** versões de schema (`make_migrations.dart`: `if (writer.schemas.length == 1) continue;`). Com só a v1 ele grava apenas o JSON. Os helpers foram gerados com `dart run drift_dev schema generate drift_schemas/app/ test/core/database/generated/` e o teste de v1 foi escrito à mão. Na v2, `make-migrations` passa a gerar os testes de passo em `test/core/database/`.
+- `build_runner` 2.16 ignora `--delete-conflicting-outputs` ("These options have been removed"). O comando do `CLAUDE.md` continua funcionando (só avisa); não alterei o `CLAUDE.md`.
+- Colunas comuns em um mixin (`EntityColumns`) em `core/database`, reaproveitável pelas próximas tabelas.
+- `app_database.g.dart` é commitado (não há regra no `.gitignore` para `*.g.dart`), assim o projeto compila sem rodar codegen.
+
+## 2026-09-24 — Passo 5: LocalCompanyRepository
+
+**Feito**
+- `company_mapper.dart` (linhas ↔ entidades, enums pelo `code`) e `LocalCompanyRepository` com todas as regras do plano: normalizar → validar → CNPJ duplicado → gravar em transação; upsert de módulos e registros; exclusão lógica em cascata; archive/unarchive idempotentes; filtros em Dart; ordenação por `normalizeForSearch(displayName)`.
+- `local_company_repository_test.dart` (banco em memória, relógio fixo, ids sequenciais): 21 casos, cobrindo todos os itens da tabela de testes do plano.
+
+**Decidido / desvios do plano**
+- `@DataClassName('CompanyRow' | 'CompanyModuleRow' | 'CompanyAuthorityRow')` nas tabelas: o drift geraria `Company`, que colide com a entidade do domínio. O plano não previa; `plan.md` atualizado na seção Dados.
+- Reatividade: `watchAll`/`watchById` usam uma consulta-gatilho (`customSelect('SELECT 1', readsFrom: {as 3 tabelas}).watch()`) e recarregam o agregado com `asyncMap`, com `distinct` para não emitir lista igual. Mais simples que combinar três streams sem `rxdart`, e cobre mudança em qualquer tabela.
+- `updatedAt` da empresa só muda quando os dados cadastrais ou o arquivamento mudam; alterar só módulos/registros atualiza o `updatedAt` das linhas filhas, não o da empresa (leitura literal de "só nas linhas que mudaram de fato"). Se a task 003 precisar de "última alteração" do agregado, calcular pelo maior `updatedAt` entre as linhas.
+- Empate na ordenação por nome resolvido pelo `id` (estável).
+- Construtor com parâmetros nomeados privados (`required this._clock`, Dart ≥ 3.12); quem chama continua usando `clock:`/`newId:`, como no plano.
+
+## 2026-09-24 — Passo 6: providers e ProviderScope
+
+**Feito**
+- `lib/core/providers.dart` (`clockProvider`, `idGeneratorProvider`) e `companyRepositoryProvider` em `local_company_repository.dart`, como no plano.
+- `ProviderScope` em `main()`; `NormaTrackApp` inalterado, então `test/widget_test.dart` continua passando.
+- `test/core/providers_test.dart`: o provider do repositório usa banco/relógio/ids sobrescritos, e o gerador padrão produz UUID v7 com relógio em UTC (teste extra, fora da tabela do plano).
+
+## 2026-09-24 — Task concluída
+
+**Feito**
+- Todos os critérios de aceite marcados no `README.md`. O de "teste de migração do schema v1" é atendido pelo teste escrito à mão em `test/core/database/migration_test.dart` (ver entrada do passo 4).
+- `dart format .` (0 alterações), `flutter analyze` (sem issues) e `flutter test` (71 testes) passando. `grep -rE "package:(flutter|drift)" lib/features/companies/domain lib/core/utils` sem resultado. `test/widget_test.dart` continua passando.
+- Status → `concluída` aqui e em `tasks/README.md`. Roadmap: itens de Fase 0 (AppDatabase, Riverpod) marcados "em parte" e itens de empresas da Fase 1 anotados com a parte da task 002.
+- Convenções de tabela drift que valem para o projeto registradas em [D008](../../docs/decisoes.md#d008--convenções-de-tabela-drift).
+
+**Como verificar**
+```bash
+flutter pub get
+dart run build_runner build     # regenera app_database.g.dart (já commitado)
+flutter analyze && flutter test
+grep -rE "package:(flutter|drift)" lib/features/companies/domain lib/core/utils   # deve sair vazio
+```
+
+**Pendente / dúvidas**
+- Perguntas de negócio continuam abertas: C15 (órgão ↔ módulo), C16 (validade × prazo), C17 (detalhe de conselho/secretaria), C18 (suposições). Todas marcadas com `// TODO(RF-EMP-0X)` no código. Nenhuma pergunta nova surgiu na implementação.
+- Na primeira mudança de schema (v2): rodar `dart run drift_dev make-migrations`, que passa a gerar os testes de passo em `test/core/database/`.
+- Task 003: `updatedAt` da empresa não reflete mudanças só em módulos/registros (ver passo 5).
+
+**Refs:** commits 551ea20 · 5329b5b · 3638542 · 9ce7cb3 · e1374ee · 716eda9 · docs/decisoes.md#d008--convenções-de-tabela-drift

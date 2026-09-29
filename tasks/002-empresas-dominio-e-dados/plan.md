@@ -273,7 +273,7 @@ Regras da implementação (`LocalCompanyRepository(AppDatabase db, {required Clo
 
 ## Dados
 
-Nomes de tabela e coluna em snake_case (padrão do drift). Todas as tabelas: `id TEXT PRIMARY KEY` (UUID v7 gerado no app), `created_at`, `updated_at` (`DateTime` NOT NULL), `deleted_at` (`DateTime` nulo). Com `store_date_time_values_as_text`, as datas ficam em ISO-8601.
+Nomes de tabela e coluna em snake_case (padrão do drift). As classes de linha geradas se chamam `CompanyRow`, `CompanyModuleRow` e `CompanyAuthorityRow` (`@DataClassName`), para não colidir com as entidades do domínio. Todas as tabelas: `id TEXT PRIMARY KEY` (UUID v7 gerado no app), `created_at`, `updated_at` (`DateTime` NOT NULL), `deleted_at` (`DateTime` nulo). Com `store_date_time_values_as_text`, as datas ficam em ISO-8601.
 
 **companies**: `legal_name` (NOT NULL), `trade_name`, `cnpj`, `state_registration`, `address_street`, `address_number`, `address_complement`, `address_district`, `address_city`, `address_state` (code da UF), `address_postal_code`, `phone`, `email`, `legal_rep_name`, `legal_rep_cpf`, `legal_rep_phone`, `legal_rep_email`, `archived_at` (`DateTime` nulo). Tudo texto nulo, exceto o indicado.
 

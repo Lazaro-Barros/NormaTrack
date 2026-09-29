@@ -1,5 +1,7 @@
 # 07 — Design system e telas
 
+**Versão 0.2** (2026-09-29, [task 004](../tasks/004-refinamento-visual/)): fundo tingido, cards sem borda, faixa de cabeçalho em petróleo, situação na cor forte do bloco de data e menos informação repetida. A v0.1 está no histórico do git.
+
 Identidade visual mínima e inventário das telas principais. **Os valores deste documento prevalecem** sobre os wireframes se os dois divergirem.
 
 | Onde | O quê |
@@ -13,8 +15,10 @@ Identidade visual mínima e inventário das telas principais. **Os valores deste
 ## Princípios
 
 1. **Situação primeiro.** O usuário abre o app para saber o que vence. A situação e o prazo aparecem antes de qualquer outro dado.
-2. **Um padrão, vários módulos.** Prazo, lançamento e relatório têm a mesma aparência em Ambiental, Produtos Controlados e Qualidade.
-3. **Nunca só a cor.** Toda situação tem ícone e texto, para funcionar sob sol forte, para daltônicos e na impressão.
+2. **Uma informação, um lugar.** Cada dado aparece uma vez por item: nada de chip, cor e texto repetindo a mesma situação. Metadados secundários (CNPJ, módulo) ficam no detalhe, não nas listas.
+3. **Cor com propósito.** Petróleo marca estrutura (faixa de cabeçalho, ações). Vermelho, âmbar e verde são só para situação.
+4. **Nunca só a cor.** Toda situação tem texto ou ícone junto, para funcionar sob sol forte, para daltônicos e na impressão.
+5. **Um padrão, vários módulos.** Prazo, lançamento e relatório têm a mesma aparência em Ambiental, Produtos Controlados e Qualidade.
 
 ## Tokens
 
@@ -28,25 +32,27 @@ Os nomes abaixo são os mesmos usados no código (`lib/app/theme/`). As telas n�
 | `primaryStrong` | `#0A434A` | estado pressionado |
 | `primarySoft` | `#DCEBEA` | `primaryContainer` |
 | `onPrimary` | `#FFFFFF` | `onPrimary` |
-| `ground` | `#F5F4EF` | `surface` (fundo das telas) |
-| `surface` | `#FFFFFF` | `surfaceContainerLowest` (cards) |
-| `surface2` | `#EEEDE7` | `surfaceContainerHigh` |
-| `border` | `#DCDAD2` | `outlineVariant` |
-| `borderStrong` | `#8E8B82` | `outline` (borda de campos) |
+| `onBandMuted` | `#CFE5E3` | texto secundário na faixa de cabeçalho |
+| `ground` | `#E6EFEE` | `surface` (fundo das telas, petróleo bem claro) |
+| `surface` | `#FFFFFF` | `surfaceContainerLowest` (cards, barras, sheets) |
+| `surface2` | `#EDF2F1` | `surfaceContainerHigh` (trilho do segmentado) |
+| `divider` | `#E1E8E7` | `outlineVariant` (divisórias dentro de cards) |
+| `borderStrong` | `#7F8B8A` | `outline` (borda de campos) |
 | `ink` | `#1A1D1F` | `onSurface` |
 | `ink2` | `#4A5055` | `onSurfaceVariant` |
-| `ink3` | `#636A70` | legendas e texto auxiliar |
+| `ink3` | `#5E666B` | legendas e texto auxiliar |
+| `placeholder` | `#6B7176` | placeholder de campos |
 
 ### Situação do prazo
 
-A situação é derivada de `dueDate` e `alertDaysBefore` (ver [domínio](03-dominio.md#regras-de-negócio-já-identificadas)). Cada uma tem um ícone fixo. Todos os pares texto/fundo têm contraste de pelo menos 4,5:1.
+A situação é derivada de `dueDate` e `alertDaysBefore` (ver [domínio](03-dominio.md#regras-de-negócio-já-identificadas)). Cada uma tem um ícone fixo. A cor **forte** vai no bloco de data (com texto branco), no texto de situação e no ícone; a **suave** vai no fundo dos números do Painel, dos avisos e dos chips. Todos os pares têm contraste de pelo menos 4,5:1 (coberto por teste).
 
-| Situação | Token | Texto | Fundo | Ícone |
+| Situação | Token | Forte | Suave | Ícone |
 |---|---|---|---|---|
 | Vencido | `statusOverdue` | `#A8261B` | `#FBE3E0` | x em círculo |
 | A vencer | `statusDueSoon` | `#8A4B00` | `#FCEBD2` | relógio |
 | Vigente | `statusOk` | `#1D6B45` | `#E2F1E8` | check em círculo |
-| Renovado | `statusClosed` | `#4A5055` | `#ECEBE6` | setas de renovação |
+| Renovado | `statusClosed` | `#4A5055` | `#E9ECEB` | setas de renovação |
 
 Implementado como `ThemeExtension` em `StatusColors` (`StatusColors.of(context).resolve(StatusTone.overdue)`).
 
@@ -57,24 +63,23 @@ Títulos e números grandes em **Manrope** e o restante em **IBM Plex Sans**, em
 | Estilo (`TextTheme`) | Fonte | Peso | Tamanho/altura |
 |---|---|---|---|
 | `headlineMedium` | Manrope | 800 | 26/32 |
-| `titleLarge` | Manrope | 700 | 18/24 |
-| `titleMedium` | Manrope | 700 | 15/20 |
+| `titleLarge` (título da faixa) | Manrope | 800 | 22/28 |
+| `titleMedium` (título de seção) | Manrope | 700 | 16/22 |
 | `bodyLarge` | IBM Plex Sans | 400 | 15/22 |
 | `bodyMedium` | IBM Plex Sans | 400 | 13/18 |
 | `labelLarge` | IBM Plex Sans | 600 | 15/20 |
 | `labelMedium` (rótulo de campo) | IBM Plex Sans | 600 | 13/18 |
 | `labelSmall` (chips, navegação) | IBM Plex Sans | 600 | 12/16 |
 | `bodySmall` (ajuda, legenda) | IBM Plex Sans | 400 | 12/16 |
-| `AppTypography.overline` (sobretítulo) | IBM Plex Sans | 600 | 12/16, caixa alta, espaçamento 0,06em |
 | `AppTypography.number` (destaque) | Manrope | 800 | 30/36, tabular |
 
-Datas, quantidades e CNPJ usam algarismos tabulares (`FontFeature.tabularFigures()`). Datas sempre em `dd/MM/yyyy`.
+Títulos de seção em frase normal, nunca em caixa alta (o sobretítulo da v0.1 saiu). Datas, quantidades e CNPJ usam algarismos tabulares (`FontFeature.tabularFigures()`). Datas sempre em `dd/MM/yyyy`.
 
 ### Espaço, raios e elevação
 
-- **Espaçamento** (grade de 4): `xs 4`, `sm 8`, `md 12`, `lg 16`, `xl 24`, `2xl 32`, `3xl 48`. A margem lateral das telas é 16, entre cards 8–12 e entre seções 16.
-- **Raios:** `sm 8` (bloco de data, ícones), `md 12` (botões, campos, cards de lista), `lg 16` (cards de seção, FAB), `pill` (chips, navegação).
-- **Elevação:** cards sem sombra, com borda de 1 px `border`. A única sombra do app é a do FAB.
+- **Espaçamento** (grade de 4): `xs 4`, `sm 8`, `md 12`, `lg 16`, `xl 24`, `2xl 32`, `3xl 48`. Margem lateral 16, entre cards 8, entre seções 16–18, dentro de card 16.
+- **Raios:** `sm 8` (ícones pequenos), `md 12` (botões, campos, bloco de data), `lg 16` (cards, FAB), `xl 24` (faixa de cabeçalho, bottom sheets), `pill` (chips, segmentado, busca, navegação).
+- **Superfícies:** cards brancos **sem borda e sem sombra** sobre o fundo tingido; itens de um mesmo grupo ficam num só card, separados por `divider`. A única sombra do app é a do FAB. Barra de navegação e barra de ações são brancas com cantos superiores arredondados.
 - **Toque:** área mínima de 48 × 48.
 
 ### Ícones
@@ -89,15 +94,16 @@ Botões, campos, chips, segmentado, interruptores, navegação inferior, snackba
 
 | Widget | Uso |
 |---|---|
-| `StatusChip` ✅ | Situação do prazo. Tem sempre ícone e texto, e há uma variante compacta |
-| `DeadlineCard` | Bloco de data + título + "empresa · módulo" + situação + tempo relativo ("em 12 dias") |
-| `StatTile` | Contagem por situação no Painel. Um toque filtra a lista |
-| `ModuleCard` | Módulo habilitado na tela da empresa, com resumo de pendências |
-| `NavRow` / `SwitchRow` | Linhas de lista. A navegável tem chevron. O interruptor aplica na hora |
-| `AppTextField` | Rótulo sempre acima do campo (nunca só placeholder). O erro tem ícone e texto |
-| `StatusBanner` | Faixa de aviso no topo (prazo vencido, sem backup) |
+| Faixa de cabeçalho | `AppBar` do tema (petróleo, cantos inferiores 24). Título, subtítulo em `onBandMuted`, ações e no máximo **um** bloco extra abaixo: números, resumo em pílulas, abas (segmentado claro) ou busca. Se o bloco não couber no `AppBar`, criar `AppHeaderBand` em `lib/app/widgets/` |
+| `StatusChip` ✅ | Situação com ícone e texto. Só onde não há bloco de data: histórico de ciclos, tabelas |
+| `DeadlineCard` | Bloco de data preenchido com a cor forte da situação + título + uma linha de contexto (empresa **ou** categoria) + texto relativo na cor da situação ("Vence / em 12 dias"). Sem chip |
+| `StatTile` | Número + rótulo na cor suave da situação, dentro da faixa do Painel. Tocar filtra a lista; o selecionado ganha anel |
+| `PendingRow` | Lançamento periódico a fazer, com botão tonal "Lançar" |
+| `NavRow` / `SwitchRow` | Linhas dentro de um card, separadas por `divider`. A navegável tem chevron; situação em texto colorido à direita. O interruptor aplica na hora |
+| `AppTextField` | Rótulo acima (obrigatório com `*`), nunca só placeholder. Erro com ícone e texto. Formulários longos em seções, cada uma num card |
+| `StatusBanner` | Aviso no topo do conteúdo, na cor suave da situação (prazo vencido, sem backup) |
 | `EmptyState` | Explica o próximo passo e oferece a ação |
-| Botões | Um primário por tela, no rodapé. O destrutivo tem só contorno e pede confirmação |
+| Botões | `FilledButton` primário: um por tela, no rodapé. `FilledButton.tonal`: ação secundária de destaque. `OutlinedButton`: secundária. Destrutivo: contorno vermelho + confirmação |
 
 ## Telas
 
@@ -106,9 +112,10 @@ A navegação inferior tem 3 destinos: **Painel**, **Empresas** e **Ajustes**. N
 | Tela | Requisitos | Conteúdo |
 |---|---|---|
 | Painel | RF-PRZ-05 | Contagem por situação, próximos vencimentos de todas as empresas, lançamentos pendentes |
-| Empresas | RF-EMP-01 | Busca, filtro ativas/arquivadas, módulos habilitados e pior situação de cada empresa |
-| Empresa | RF-EMP-03 | Aviso de situação e cards só dos módulos habilitados |
-| Nova/editar empresa | RF-EMP-01/02 | Dados básicos e interruptores de módulos |
+| Empresas | RF-EMP-01 | Busca na faixa, segmentado ativas/arquivadas; por empresa só nome, cidade/UF e pior situação |
+| Empresa | RF-EMP-03/05 | Resumo de situação na faixa; módulos habilitados; órgãos que se aplicam com situação do registro; dados cadastrais; gerar relatório e arquivar |
+| Nova/editar empresa | RF-EMP-01/02/04/05 | Tela rolável em seções: Identificação · Endereço · Contato · Responsável legal · Módulos · Órgãos. Só a razão social é obrigatória |
+| Registro em órgão | RF-EMP-05 | Bottom sheet aberto a partir de um órgão no formulário: situação (não se aplica / possui / precisa obter), nº, validade e observações |
 | Módulo (ex.: Ambiental) | RF-AMB-01/05/06 | Abas Prazos · Lançamentos · Relatórios, com prazos agrupados (Licenciamento, ETE, ETA) |
 | Detalhe do prazo | RF-PRZ-01/04 | Situação em destaque, dados, histórico de ciclos, renovação |
 | Novo prazo | RF-PRZ-01/02 | Categoria, título, órgão, vencimento, antecedência com data calculada do primeiro alerta |

@@ -36,7 +36,7 @@ abstract final class AppTheme {
     surfaceContainerHigh: AppColors.surface2,
     surfaceContainerHighest: AppColors.surface2,
     outline: AppColors.borderStrong,
-    outlineVariant: AppColors.border,
+    outlineVariant: AppColors.divider,
     inverseSurface: AppColors.ink,
     onInverseSurface: AppColors.onPrimary,
     inversePrimary: Color(0xFF9FD3D0),
@@ -67,27 +67,33 @@ abstract final class AppTheme {
       extensions: const [StatusColors.light],
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.standard,
+      // A AppBar é a faixa de cabeçalho: petróleo, cantos inferiores de 24.
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.ground,
-        foregroundColor: AppColors.ink,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.onPrimary,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: text.titleLarge,
+        toolbarHeight: 64,
+        shape: const RoundedRectangleBorder(borderRadius: AppRadius.band),
+        titleTextStyle: text.titleLarge?.copyWith(color: AppColors.onPrimary),
+        iconTheme: const IconThemeData(size: 20, color: AppColors.onPrimary),
+        actionsIconTheme: const IconThemeData(
+          size: 20,
+          color: AppColors.onPrimary,
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: AppRadius.lgAll,
-          side: const BorderSide(color: AppColors.border),
-        ),
+        // Sem borda nem sombra: o card se separa do fundo tingido pela cor.
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.lgAll),
       ),
       dividerTheme: const DividerThemeData(
-        color: AppColors.border,
+        color: AppColors.divider,
         thickness: 1,
         space: 1,
       ),
@@ -138,7 +144,7 @@ abstract final class AppTheme {
         ),
         labelStyle: text.labelMedium,
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        hintStyle: text.bodyLarge?.copyWith(color: const Color(0xFF6B7176)),
+        hintStyle: text.bodyLarge?.copyWith(color: AppColors.placeholder),
         helperStyle: text.bodySmall,
         errorStyle: text.bodySmall?.copyWith(color: AppColors.overdue),
         prefixIconColor: AppColors.ink2,
@@ -148,7 +154,7 @@ abstract final class AppTheme {
         focusedBorder: inputBorder(AppColors.primary, 2),
         errorBorder: inputBorder(AppColors.overdue),
         focusedErrorBorder: inputBorder(AppColors.overdue, 2),
-        disabledBorder: inputBorder(AppColors.border),
+        disabledBorder: inputBorder(AppColors.divider),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.surface,
@@ -167,11 +173,11 @@ abstract final class AppTheme {
         style: SegmentedButton.styleFrom(
           backgroundColor: AppColors.surface2,
           foregroundColor: AppColors.ink2,
-          selectedBackgroundColor: AppColors.surface,
-          selectedForegroundColor: AppColors.primary,
+          selectedBackgroundColor: AppColors.primary,
+          selectedForegroundColor: AppColors.onPrimary,
           side: BorderSide.none,
           textStyle: text.labelMedium,
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.mdAll),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.pillAll),
         ),
       ),
       switchTheme: SwitchThemeData(
@@ -179,7 +185,7 @@ abstract final class AppTheme {
         trackColor: WidgetStateProperty.resolveWith(
           (states) => states.contains(WidgetState.selected)
               ? AppColors.primary
-              : const Color(0xFFB9B6AD),
+              : AppColors.switchOff,
         ),
         trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
       ),
@@ -240,14 +246,14 @@ abstract final class AppTheme {
         surfaceTintColor: Colors.transparent,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppRadius.lg),
+            top: Radius.circular(AppRadius.xl),
           ),
         ),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surface,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: AppRadius.lgAll),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.xlAll),
         titleTextStyle: text.titleLarge,
         contentTextStyle: text.bodyLarge,
       ),

@@ -29,9 +29,10 @@ Toda funcionalidade nova com interface parte do design system. Antes de criar um
 Regras:
 
 - Cores só via `Theme.of(context).colorScheme` ou `StatusColors.of(context)`. Nada de `Color(0x…)`, `Colors.*` ou hex solto em widgets de feature. `AppColors` é usado apenas dentro de `lib/app/theme/`.
-- Texto só via `Theme.of(context).textTheme` (ou `AppTypography.overline` / `.number` / `.tabular`). Não defina `fontSize`/`fontWeight` avulsos. Datas, quantidades e CNPJ usam algarismos tabulares.
+- Texto só via `Theme.of(context).textTheme` (ou `AppTypography.number` / `.tabular`). Não defina `fontSize`/`fontWeight` avulsos. Datas, quantidades e CNPJ usam algarismos tabulares.
 - Espaço e cantos só com `AppSpacing` e `AppRadius`. Margem lateral das telas: `AppSpacing.screen`. Área de toque mínima: 48.
-- Situação de prazo é sempre `StatusChip` (ícone + texto), nunca só cor. O domínio calcula a situação; a UI converte para `StatusTone`.
+- Situação nunca só por cor: sempre com texto ou ícone. Em listas de prazos, o `DeadlineCard` (bloco de data na cor forte + texto relativo); `StatusChip` só onde não há bloco de data (histórico, tabelas). O domínio calcula a situação; a UI converte para `StatusTone`.
+- Toda tela começa com a faixa de cabeçalho em petróleo (`AppBar` do tema). Conteúdo em cards brancos sem borda sobre o fundo tingido; títulos de seção em frase normal, nunca caixa alta.
 - Reutilize os widgets de `lib/app/widgets/`. Se a tela precisa de um componente listado em `docs/07-design-system.md` que ainda não existe, crie-o lá (genérico, com teste) antes de usar, em vez de desenhá-lo dentro da feature.
 - Um botão primário (`FilledButton`) por tela, no rodapé. Ações destrutivas usam contorno e pedem confirmação.
 - Navegação: barra inferior com Painel, Empresas e Ajustes; telas internas trocam a barra por uma barra de ações.

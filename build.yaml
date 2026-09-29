@@ -1,0 +1,10 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          store_date_time_values_as_text: true   # ISO-8601, legível e seguro para sync
+          databases:
+            app: lib/core/database/app_database.dart
+          test_dir: test/core/database/
+          schema_dir: drift_schemas/

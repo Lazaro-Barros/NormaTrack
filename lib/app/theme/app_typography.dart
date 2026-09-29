@@ -21,17 +21,19 @@ abstract final class AppTypography {
       fontWeight: FontWeight.w800,
       color: AppColors.ink,
     ),
+    // Título da faixa de cabeçalho.
     titleLarge: TextStyle(
       fontFamily: display,
-      fontSize: 18,
-      height: 24 / 18,
-      fontWeight: FontWeight.w700,
+      fontSize: 22,
+      height: 28 / 22,
+      fontWeight: FontWeight.w800,
       color: AppColors.ink,
     ),
+    // Título de seção, em frase normal (não caixa alta).
     titleMedium: TextStyle(
       fontFamily: display,
-      fontSize: 15,
-      height: 20 / 15,
+      fontSize: 16,
+      height: 22 / 16,
       fontWeight: FontWeight.w700,
       color: AppColors.ink,
     ),
@@ -75,17 +77,6 @@ abstract final class AppTypography {
       height: 16 / 12,
       fontWeight: FontWeight.w600,
     ),
-  );
-
-  /// Sobretítulo de seção ("MÓDULOS HABILITADOS"). Aplicar em texto já em
-  /// caixa alta.
-  static const overline = TextStyle(
-    fontFamily: body,
-    fontSize: 12,
-    height: 16 / 12,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0.72,
-    color: AppColors.ink3,
   );
 
   /// Número de destaque (contagens do Painel).

@@ -98,3 +98,16 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Os casos de navegação a partir da lista (ação do vazio e FAB abrem "Nova empresa"; tocar em Alfa abre o detalhe e esconde a barra) entram nos passos 7 e 8, quando as rotas `nova` e `:id` existirem.
 - Trocar ativas/arquivadas limpa a lista anterior (`_last = null`): mostrar as ativas por um instante sob "Arquivadas" seria enganoso. A lista anterior só é mantida durante a busca, como o plano pede.
 - `FakeCompanyRepository` expõe `all` (empresas vivas) para os testes conferirem o que foi gravado.
+
+## 2026-09-29 — Passo 7: formulário e registro em órgão
+
+**Feito**
+- `CompanyFormScreen` (criar e editar, seis seções, salvar com erros por campo, CNPJ duplicado, descartar alterações) e `showRegistrationSheet`. Rotas `nova`, `:id` e `:id/editar` no navigator raiz. Testes do formulário, do sheet e da navegação da lista para o formulário (ação do vazio e FAB). Helper `test/helpers/finders.dart` (`fieldLabeled`, `fieldText`).
+
+**Decidido**
+- Desvio do plano: o corpo do formulário é `SingleChildScrollView` + `Column`, não `ListView`. O `ListView` só monta o que está perto da tela, e aí `Scrollable.ensureVisible` não acha o primeiro campo com erro se ele estiver fora dela (a `GlobalKey` fica sem contexto). São ~20 campos, custo desprezível. Comentário no código.
+- Todo campo chama `setState` no `onChanged`, para o `PopScope.canPop` refletir `_isDirty` na hora (não só o campo com erro).
+- A validade no sheet usa um `TextEditingController` de estado, atualizado ao escolher ou remover a data, em vez de recriar o campo.
+- Enquanto a empresa carrega ou não existe, o `PopScope` libera a saída e a barra de ações não aparece (não há o que salvar).
+- A rota `:id` aponta para um `Scaffold` provisório com a faixa "Empresa" até o passo 8. Por isso o teste "só a razão social" confere o repositório, o SnackBar e a saída do formulário; abrir o detalhe com o nome certo entra no passo 8.
+- Nos testes, o título é buscado no `BandTitle`: o FAB da lista também diz "Nova empresa".

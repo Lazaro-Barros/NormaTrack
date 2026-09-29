@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/router.dart';
+import 'package:normatrack/app/widgets/band_title.dart';
 import 'package:normatrack/features/companies/domain/brazilian_state.dart';
 import 'package:normatrack/features/companies/domain/company.dart';
 
@@ -28,7 +29,18 @@ void main() {
     await pumpApp(tester, initialLocation: AppRoutes.companies);
 
     expect(find.text('Nenhuma empresa cadastrada'), findsOneWidget);
-    expect(find.text('Cadastrar empresa'), findsOneWidget);
+    await tester.tap(find.text('Cadastrar empresa'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(BandTitle, 'Nova empresa'), findsOneWidget);
+  });
+
+  testWidgets('FAB abre Nova empresa', (tester) async {
+    await pumpApp(tester, initialLocation: AppRoutes.companies);
+
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(BandTitle, 'Nova empresa'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
   });
 
   testWidgets('ativas e arquivadas', (tester) async {

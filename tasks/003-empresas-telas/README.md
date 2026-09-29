@@ -5,8 +5,8 @@
 | **Status** | rascunho |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)); traz junto o mínimo da Fase 0 (go_router, barra inferior, localização pt-BR) |
 | **Requisitos** | RF-EMP-01, RF-EMP-02, RF-EMP-03, RF-EMP-04, RF-EMP-05 · RNF-06 |
-| **Depende de** | 001, [002](../002-empresas-dominio-e-dados/) |
-| **Wireframe** | [Empresas](../../docs/design/wireframes/Empresas.dc.html) · [EmpresaForm](../../docs/design/wireframes/EmpresaForm.dc.html) · [EmpresaDetalhe](../../docs/design/wireframes/EmpresaDetalhe.dc.html) |
+| **Depende de** | 001, [002](../002-empresas-dominio-e-dados/), [004](../004-refinamento-visual/) (design system v0.2) |
+| **Wireframe** | [Empresas](../../docs/design/wireframes/Empresas.dc.html) · [EmpresaForm](../../docs/design/wireframes/EmpresaForm.dc.html) · [EmpresaDetalhe](../../docs/design/wireframes/EmpresaDetalhe.dc.html) · [EmpresaOrgao](../../docs/design/wireframes/EmpresaOrgao.dc.html) (v0.2) |
 
 ## Objetivo
 
@@ -21,7 +21,7 @@ A usuária cadastra, edita, arquiva e consulta empresas no app, com dados cadast
   - Órgãos: para cada um dos 9, situação (não se aplica / possui registro / precisa obter). Com "possui registro", mostra nº e validade.
 - Detalhe: dados cadastrais formatados, órgãos com situação, módulos habilitados e ações arquivar/desarquivar (contorno + confirmação).
 - Componentes de `lib/app/widgets/` que ainda faltam: `AppTextField`, `SwitchRow`, `NavRow`, `EmptyState` (cada um com teste).
-- Atualizar o wireframe `EmpresaForm` com as novas seções (protótipo aprovado primeiro).
+- ~~Atualizar o wireframe `EmpresaForm` com as novas seções~~ — feito na task 004: tela rolável com seções em cards; órgãos abrem um bottom sheet (`EmpresaOrgao`).
 
 ## Fora de escopo
 
@@ -31,7 +31,7 @@ A usuária cadastra, edita, arquiva e consulta empresas no app, com dados cadast
 
 ## Critérios de aceite
 
-- [ ] Wireframe do formulário atualizado e aprovado pela usuária antes da implementação
+- [x] Wireframe do formulário atualizado e aprovado pela usuária antes da implementação (v0.2, 2026-09-29)
 - [ ] Criar empresa só com a razão social, e editar todos os campos
 - [ ] CNPJ/CPF/e-mail/CEP inválidos mostram erro no campo. CNPJ duplicado mostra erro claro
 - [ ] Módulos ligados/desligados no formulário refletem no detalhe (só os habilitados aparecem)

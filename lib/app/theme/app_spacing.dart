@@ -22,17 +22,24 @@ abstract final class AppRadius {
   /// Bloco de data, ícones.
   static const sm = 8.0;
 
-  /// Botões, campos, cards de lista.
+  /// Botões, campos, bloco de data.
   static const md = 12.0;
 
-  /// Cards de seção, FAB.
+  /// Cards, FAB.
   static const lg = 16.0;
 
-  /// Chips, indicador da navegação.
+  /// Faixa de cabeçalho (cantos inferiores), bottom sheets.
+  static const xl = 24.0;
+
+  /// Chips, segmentado, busca, indicador da navegação.
   static const pill = 999.0;
 
   static final smAll = BorderRadius.circular(sm);
   static final mdAll = BorderRadius.circular(md);
   static final lgAll = BorderRadius.circular(lg);
+  static final xlAll = BorderRadius.circular(xl);
+
+  /// Faixa de cabeçalho: só os cantos de baixo.
+  static const band = BorderRadius.vertical(bottom: Radius.circular(xl));
   static final pillAll = BorderRadius.circular(pill);
 }

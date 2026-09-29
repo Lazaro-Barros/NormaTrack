@@ -63,3 +63,12 @@ O `applicationId` é `br.com.normatrack.app`. Por enquanto o app não será publ
 - Datas-hora em ISO-8601 UTC (`store_date_time_values_as_text`); datas sem hora como texto `AAAA-MM-DD` (`DateOnlyConverter`). Enums gravados pelo `code` (D007), sem `textEnum`.
 - Repositórios que expõem agregados de várias tabelas observam todas elas com uma consulta-gatilho (`customSelect(..., readsFrom: {...}).watch()`) e recarregam o agregado.
 - *Por quê:* regras do `CLAUDE.md` (UUID, exclusão lógica) num único lugar, e datas que não mudam de dia por fuso.
+
+## D009 — Design system v0.2
+
+**Status:** aceita · 2026-09-29 (task 004)
+
+A interface usa fundo tingido de petróleo (`#E6EFEE`), cards brancos sem borda nem sombra, faixa de cabeçalho em petróleo no topo de toda tela e, em listas de prazos, bloco de data preenchido com a cor forte da situação no lugar do chip. Detalhes em `docs/07-design-system.md`.
+
+- *Por quê:* a v0.1 ficou branca demais e repetia a mesma situação em chip, cor e texto. Cor passa a marcar estrutura (petróleo) e situação (vermelho, âmbar, verde), e cada informação aparece uma vez por item.
+- *Descartado:* uma cor por módulo (proposta B). Pode voltar depois sem conflito, porque não usa as cores de situação.

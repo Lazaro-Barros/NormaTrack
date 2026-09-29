@@ -63,3 +63,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - O telefone troca de máscara pelo número de dígitos brutos (`mask(length)`), em vez de duas classes: é o mesmo `_MaskFormatter` para os quatro campos.
+
+## 2026-09-29 — Passo 3: navegação
+
+**Feito**
+- `router.dart` (`AppRoutes`, `createAppRouter`, `routerProvider`), `AppShell`, `DashboardPlaceholderScreen`/`SettingsPlaceholderScreen`, `NormaTrackApp` com `MaterialApp.router` em pt-BR. `BandTitle` e `EmptyState` com testes. `test/widget_test.dart` reescrito com `pumpApp`.
+
+**Decidido**
+- Desvio temporário: neste passo o ramo `/empresas` aponta para um `Scaffold` só com a faixa "Empresas", porque `CompanyListScreen` só nasce no passo 6. O caso "tocar em Empresas mostra 'Nenhuma empresa cadastrada'" do `widget_test.dart` entra no passo 6, junto com a tela.
+- `test/helpers/pump_widget.dart` (`pumpComponent`) monta componentes isolados em `MaterialApp(theme: AppTheme.light, home: Scaffold(body: ...))`, como o plano pede para os testes de `lib/app/widgets/`.
+- `pumpApp` ganha o parâmetro `repository` no passo 6, com o `FakeCompanyRepository`.

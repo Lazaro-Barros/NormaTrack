@@ -34,6 +34,7 @@ void main() {
     expect(repo.all, hasLength(1));
     expect(repo.all.single.legalName, 'Indústria Alfa Ltda');
     expect(bandTitle('Nova empresa'), findsNothing);
+    expect(bandTitle('Indústria Alfa Ltda'), findsOneWidget);
     expect(find.text('Empresa salva'), findsOneWidget);
   });
 
@@ -177,6 +178,8 @@ void main() {
       await save(tester);
 
       expect(bandTitle('Editar empresa'), findsNothing);
+      expect(bandTitle('Alfa'), findsOneWidget);
+      expect(find.text('Razão social'), findsOneWidget);
       final company = repo.all.single;
       expect(company.tradeName, 'Alfa');
       expect(company.cnpj, '11222333000181');

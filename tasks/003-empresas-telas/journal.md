@@ -111,3 +111,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Enquanto a empresa carrega ou não existe, o `PopScope` libera a saída e a barra de ações não aparece (não há o que salvar).
 - A rota `:id` aponta para um `Scaffold` provisório com a faixa "Empresa" até o passo 8. Por isso o teste "só a razão social" confere o repositório, o SnackBar e a saída do formulário; abrir o detalhe com o nome certo entra no passo 8.
 - Nos testes, o título é buscado no `BandTitle`: o FAB da lista também diz "Nova empresa".
+
+## 2026-09-29 — Passo 8: detalhe da empresa
+
+**Feito**
+- `CompanyDetailScreen` na rota `/empresas/:id`: faixa com CNPJ e "Arquivada", módulos habilitados (ou "Habilitar módulos"), órgãos que se aplicam com `StatusText` e "Ver todos os 9 órgãos"/"Informar órgãos", dados cadastrais em `InfoRow`, arquivar (confirmação + SnackBar com Desfazer) e desarquivar. `TODO(RF-PRZ-05)`, `TODO(RF-REL-01)` e `TODO(RF-EMP-03)` nos lugares previstos.
+- Testes do detalhe (inclui Desfazer, empresa só com a razão social e id inexistente). Os testes do formulário agora conferem que salvar abre o detalhe com o nome certo e que editar volta ao detalhe com o valor novo; o de navegação da lista confere que o detalhe esconde a barra inferior.
+
+**Decidido**
+- Endereço, 1ª linha: `logradouro, número - complemento`, omitindo o que falta (sem logradouro nem número, fica só o complemento). O plano não cobria esse caso; é formatação, não regra de negócio.
+- O "9" de "N de 9" e "Ver todos os 9 órgãos" vem de `Authority.values.length`, não de literal.

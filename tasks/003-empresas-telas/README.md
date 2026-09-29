@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | em andamento |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)); traz junto o mínimo da Fase 0 (go_router, barra inferior, localização pt-BR) |
 | **Requisitos** | RF-EMP-01, RF-EMP-02, RF-EMP-03, RF-EMP-04, RF-EMP-05 · RNF-06 |
 | **Depende de** | 001, [002](../002-empresas-dominio-e-dados/), [004](../004-refinamento-visual/) (design system v0.2) |
@@ -35,13 +35,13 @@ A usuária cadastra, edita, arquiva e consulta empresas no app, com dados cadast
 ## Critérios de aceite
 
 - [x] Wireframe do formulário atualizado e aprovado pela usuária antes da implementação (v0.2, 2026-09-29)
-- [ ] Criar empresa só com a razão social, e editar todos os campos
-- [ ] CNPJ/CPF/e-mail/CEP inválidos mostram erro no campo. CNPJ duplicado mostra erro claro
-- [ ] Módulos ligados/desligados no formulário refletem no detalhe (só os habilitados aparecem)
-- [ ] Órgãos: nº e validade só aparecem com "possui registro". Validade vencida aparece destacada (ícone + texto)
-- [ ] Arquivar pede confirmação, e a empresa some das ativas e aparece em arquivadas
-- [ ] Telas seguem o design system (sem cor/fonte/espaço avulsos); testes de widget do formulário e da lista
-- [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros
+- [x] Criar empresa só com a razão social, e editar todos os campos
+- [x] CNPJ/CPF/e-mail/CEP inválidos mostram erro no campo. CNPJ duplicado mostra erro claro
+- [x] Módulos ligados/desligados no formulário refletem no detalhe (só os habilitados aparecem)
+- [x] Órgãos: nº e validade só aparecem com "possui registro". Validade vencida aparece destacada (ícone + texto)
+- [x] Arquivar pede confirmação, e a empresa some das ativas e aparece em arquivadas
+- [x] Telas seguem o design system (sem cor/fonte/espaço avulsos); testes de widget do formulário e da lista
+- [x] `dart format .`, `flutter analyze` e `flutter test` sem erros
 
 ## Links
 

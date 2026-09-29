@@ -121,3 +121,24 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Decidido**
 - Endereço, 1ª linha: `logradouro, número - complemento`, omitindo o que falta (sem logradouro nem número, fica só o complemento). O plano não cobria esse caso; é formatação, não regra de negócio.
 - O "9" de "N de 9" e "Ver todos os 9 órgãos" vem de `Authority.values.length`, não de literal.
+
+## 2026-09-29 — Passo 9: docs e fechamento
+
+**Feito**
+- `docs/07-design-system.md`: componentes novos marcados ✅ com uma linha de uso, `BandColors` e `searchBarTheme` (seção "Faixa de cabeçalho") e a tabela de situação do registro em órgão (`StatusText`, não pílula).
+- `docs/05-roadmap.md`: "CRUD de empresas", "Dados cadastrais e registros em órgãos", "Habilitar módulos por empresa" e, na Fase 0, "Riverpod, go_router, tema e localização pt-BR" marcados.
+- `docs/decisoes.md`: [D010 — Navegação com go_router 17](../../docs/decisoes.md#d010--navegação-com-go_router-17).
+- `docs/06-perguntas-em-aberto.md`: nova C19 (UF pré-selecionada?), a suposição do plano que ainda não estava registrada; o `TODO(RF-EMP-04)` do campo UF aponta para ela.
+- Critérios de aceite marcados e status → `concluída` (README e índice).
+
+**Decidido**
+- O grep de cores do "Como verificar" casava `StatusColors.`/`BandColors.` (substring de `Colors.`), inclusive no `status_chip.dart` que já existia, então nunca sairia vazio. Corrigido no `plan.md` com limite de palavra: `(^|[^A-Za-z])Colors\.`. Com ele, os três greps saem vazios.
+
+**Como verificar**
+- `flutter pub get`, `dart format .` (0 alterados), `flutter analyze` (sem problemas), `flutter test` (146 testes verdes) e os três greps do plano (vazios). `flutter build apk --debug` compila.
+- Critérios de aceite e onde estão cobertos: criar só com razão social e editar (`company_form_screen_test`); erros de CNPJ/CPF/e-mail/CEP e CNPJ duplicado (idem); módulos no detalhe (`company_form_screen_test` grava o módulo, `company_detail_screen_test` mostra só os habilitados); nº/validade só com "Possui" e validade vencida com ícone + texto (`registration_sheet_test`, `company_detail_screen_test`); arquivar com confirmação e Arquivadas (`company_detail_screen_test`).
+
+**Pendente / dúvidas**
+- **Não verificado no emulador**: não havia dispositivo Android conectado nesta sessão, então o `flutter run` do "Como verificar" (criar, editar, órgão com validade vencida, arquivar/desfazer) fica para a usuária. Pontos a olhar: menu da UF estreito (`CE · Ceará` pode aparecer cortado, passo 4), teclado sobre o bottom sheet, cursor no fim ao editar no meio de CNPJ/telefone (limitação aceita no plano).
+- "Editar todos os campos": todos os campos são editáveis no formulário, mas o teste de edição altera só o nome fantasia (e confere que CNPJ e telefone chegam formatados).
+- Seguem os TODOs de prazos e relatórios: `TODO(RF-PRZ-05)` (lista, faixa do detalhe, Painel), `TODO(RF-REL-01)` (gerar relatório), `TODO(RF-EMP-03)` (tela do módulo), `TODO(RF-PRZ-03)` (Ajustes). C15–C19 abertas.

@@ -413,7 +413,7 @@ class _CompanyFormScreenState extends ConsumerState<CompanyFormScreen> {
             _field(null, label: 'Bairro', controller: _district),
             _pair(
               _field(null, label: 'Cidade', controller: _city),
-              // TODO(RF-EMP-04): UF sem valor padrão (não pré-selecionar CE).
+              // TODO(RF-EMP-04): UF sem valor padrão é suposição (C19).
               AppDropdownField<BrazilianState>(
                 label: 'UF',
                 value: _state,

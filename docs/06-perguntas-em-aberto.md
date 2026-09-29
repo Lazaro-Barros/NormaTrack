@@ -37,6 +37,7 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | C16 | A validade do registro no órgão deve gerar um prazo com alerta, como as licenças? | 🟡 Fase 1 | |
 | C17 | Conselho de Classe e Secretaria de Meio Ambiente precisam de detalhe (qual conselho; municipal ou estadual)? Pode haver mais de um registro no mesmo órgão? | 🟡 Fase 1 | Suposição: um registro por órgão, com observação livre. |
 | C18 | Confirmar as suposições do cadastro de empresa (task 002): um telefone e um e-mail por empresa, com 10 ou 11 dígitos; nenhum módulo habilitado por padrão; o registro no órgão vale até o dia da validade, inclusive. | ⚪ Fase 1 | |
+| C19 | No cadastro de empresa, a UF deve vir pré-selecionada (ex.: CE, onde estão as empresas de hoje)? | ⚪ Fase 1 | Suposição (task 003): sem valor padrão; a usuária escolhe. |
 
 ## Pendências de material
 

@@ -289,12 +289,12 @@ Wireframe: `EmpresaForm.dc.html`. `ConsumerStatefulWidget`.
 
 **Layout.** `Scaffold`:
 - `AppBar(leading: IconButton(Icons.close, tooltip: 'Fechar', onPressed: → Navigator.maybePop), title: BandTitle(title: companyId == null ? 'Nova empresa' : 'Editar empresa'))`.
-- Corpo: `ListView` com padding `AppSpacing.screen` + topo `lg`/base `xl`, espaço `lg` entre seções. Primeiro, `Text('Só a razão social é obrigatória. O resto pode ser preenchido depois.', style: bodyMedium)`. Depois as seções (`SectionCard`), cada campo com espaço `md` dentro de um `Padding(lg)`:
+- Corpo: `SingleChildScrollView` + `Column` (não `ListView`: o `ensureVisible` do primeiro erro precisa de todos os campos montados; ver journal, passo 7) com padding `AppSpacing.screen` + topo `lg`/base `xl`, espaço `lg` entre seções. Primeiro, `Text('Só a razão social é obrigatória. O resto pode ser preenchido depois.', style: bodyMedium)`. Depois as seções (`SectionCard`), cada campo com espaço `md` dentro de um `Padding(lg)`:
 
 | Seção | Campos (`AppTextField` salvo indicação) |
 |---|---|
 | Identificação | Razão social * (`hint: 'Ex.: Indústria Alfa Ltda'`, `words`) · Nome fantasia (`hint: 'Como aparece nas listas'`, `words`) · CNPJ (`CnpjInputFormatter`, `characters`, `tabular`) · Inscrição estadual (`hint: 'Opcional'`, `characters`) |
-| Endereço | CEP (`hint: '00000-000'`, `number`, formatter, `tabular`) · Logradouro (`hint: 'Rua, avenida…'`) · Número (`hint: 'Nº'`) e Complemento (`hint: 'Sala, galpão…'`) lado a lado (`Row`, flex 1 e 2) · Bairro · Cidade e UF lado a lado (flex 3 e 1). UF = `AppDropdownField<BrazilianState>` com `itemLabel: '${s.code} · ${s.label}'` e `selectedLabel: s.code`, sem valor padrão **[suposição: não pré-selecionar CE]** |
+| Endereço | CEP (`hint: '00000-000'`, `number`, formatter, `tabular`) · Logradouro (`hint: 'Rua, avenida…'`) · Número (`hint: 'Nº'`) e Complemento (`hint: 'Sala, galpão…'`) lado a lado (`Row`, flex 1 e 2) · Bairro · Cidade e UF lado a lado (flex 3 e 1). UF = `AppDropdownField<BrazilianState>` com `itemLabel: '${s.code} · ${s.label}'` e `selectedLabel: s.code`, sem valor padrão **[suposição: não pré-selecionar CE; C19]** |
 | Contato | Telefone (`hint: '(00) 00000-0000'`, `phone`, formatter, `tabular`) · E-mail (`hint: 'contato@empresa.com.br'`, `emailAddress`) |
 | Responsável legal | Nome (`words`) · CPF (`hint: '000.000.000-00'`, `number`, formatter, `tabular`) · Telefone (como acima) · E-mail |
 | Módulos (`description: 'Só os módulos ligados aparecem para a empresa.'`) | Um `SwitchRow` por `ModuleType` (ordem do enum), com `leadingIcon`, `title: label`, `subtitle: description`. Nenhum ligado por padrão (suposição da 002) |
@@ -410,7 +410,7 @@ flutter pub get
 dart format .
 flutter analyze
 flutter test
-grep -rnE "Color\(0x|Colors\.|AppColors\." lib/features lib/app/widgets lib/app/*.dart   # deve sair vazio
+grep -rnE "Color\(0x|(^|[^A-Za-z])Colors\.|AppColors\." lib/features lib/app/widgets lib/app/*.dart   # deve sair vazio (sem o limite de palavra, casava StatusColors./BandColors.)
 grep -rnE "fontSize|fontWeight:" lib/features                                            # deve sair vazio
 grep -rn "AppDatabase\|features/companies/data/company_" lib/features/companies/presentation   # deve sair vazio
 flutter run   # conferir no emulador: criar, editar, órgão com validade vencida, arquivar/desfazer

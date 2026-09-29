@@ -156,3 +156,20 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - **SnackBar cobre o FAB:** depois de arquivar, "Empresa arquivada / Desfazer" aparece sobre o FAB "Nova empresa". O SnackBar vai para o `Scaffold` do `AppShell`, que não tem FAB, então o FAB não sobe.
 - **Botão tonal sai como primário:** o `filledButtonTheme` pinta também o `FilledButton.tonal` de petróleo cheio, então a ação do `EmptyState` ("Ver empresas", "Cadastrar empresa") parece um botão primário. Vem do tema (task 001/004), não desta task.
 - **Menu da UF cortado:** confirmado. O menu tem a largura do campo ("AL · Alago…", "MS · Mato …"). A sigla aparece sempre, então dá para usar.
+
+## 2026-09-29 — Correções da verificação no emulador (itens 1 a 3)
+
+**Feito**
+- **Foco:** `CompanyFormScreen` tira o foco (`FocusManager.instance.primaryFocus?.unfocus()`) antes de abrir o sheet de órgão e o diálogo de descarte, e o sheet faz o mesmo antes do seletor de data. Ao fechar, a rota não tem mais foco para devolver, e o teclado fica fechado.
+- **Barra de ações:** `AppActionBar` ganhou padding inferior de `viewInsets.bottom` e sobe junto com o teclado. O `Scaffold` desconta a altura da barra do corpo, então nada fica escondido.
+- **SnackBar sobre o FAB:** `AppShell` deixou de ter `Scaffold`; o `Scaffold` da lista vira o raiz e o Flutter põe o SnackBar flutuante acima do FAB. O `AppShell` passa a ser o `navigatorContainerBuilder` de um `StatefulShellRoute` (não mais `.indexedStack`), com o mesmo `IndexedStack` do `go_router` mais `HeroMode` desligado nos ramos fora da tela.
+- Testes novos: fechar o sheet e cancelar o descarte não reabrem o teclado; "Salvar empresa" fica acima de um teclado de 300; `AppActionBar` sobe com `viewInsets`; o SnackBar de arquivar não sobrepõe o FAB; arquivar depois de visitar o Painel não lança erro. Todos falham com o código anterior (conferido com `git stash` de `lib/`) e passam agora. 151 testes verdes.
+- Conferido de novo no emulador: teclado fechado depois do sheet, do diálogo e do seletor de data; barra acima do teclado; SnackBar acima do FAB; abas e Desfazer funcionando; sem exceções no log.
+
+**Decidido**
+- Tirar o `Scaffold` do `AppShell` teve dois efeitos colaterais, os dois corrigidos: (1) a `NavigationBar` passou a receber o padding da barra de status e ficou 24dp mais alta; resolvido com `MediaQuery.removePadding(removeTop: true)`, como o `Scaffold` fazia. (2) Os `Scaffold`s de todos os ramos já visitados viram raiz e mostram o SnackBar ao mesmo tempo; o do Painel, fora da tela, gerava "multiple heroes share the same tag" na volta do detalhe. Resolvido com `HeroMode(enabled: false)` nos ramos inativos. As telas também recebem `removePadding(removeBottom: true)`, porque a barra já trata a área de gestos.
+- Descartado: manter o `Scaffold` no shell e mostrar o SnackBar pelo `ScaffoldMessenger` do ramo. O detalhe fica no navigator raiz e não enxerga esse messenger; seria preciso expor uma `GlobalKey`.
+- `plan.md` (Navegação e `AppActionBar`) e D010 atualizados.
+
+**Pendente / dúvidas**
+- Item 4 (botão tonal com cor de primário, vem do tema) fica para uma task própria, porque mexe no tema e em `docs/07-design-system.md`.

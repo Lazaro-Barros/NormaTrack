@@ -31,8 +31,10 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.dashboard}) {
     navigatorKey: rootKey,
     initialLocation: initialLocation,
     routes: [
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, shell) => AppShell(shell: shell),
+      StatefulShellRoute(
+        builder: (context, state, shell) => shell,
+        navigatorContainerBuilder: (context, shell, branches) =>
+            AppShell(shell: shell, branches: branches),
         branches: [
           StatefulShellBranch(
             routes: [

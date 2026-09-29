@@ -74,6 +74,8 @@ class _RegistrationSheetState extends State<_RegistrationSheet> {
   }
 
   Future<void> _pickDate() async {
+    // Sem isso, ao fechar o seletor o foco volta ao campo e o teclado reabre.
+    FocusManager.instance.primaryFocus?.unfocus();
     final picked = await showDatePicker(
       context: context,
       initialDate: _validUntil ?? widget.today,

@@ -125,11 +125,42 @@ void main() {
     expect(find.text('Empresa arquivada'), findsOneWidget);
     expect(find.text('Desfazer'), findsOneWidget);
     expect(find.byType(NavigationBar), findsOneWidget);
+    // O SnackBar aparece na lista, acima do FAB, sem cobri-lo nem a barra.
+    final snackBar = tester.getRect(find.byType(SnackBar));
+    final fab = tester.getRect(find.byType(FloatingActionButton));
+    expect(snackBar.overlaps(fab), isFalse, reason: '$snackBar × $fab');
+    expect(
+      snackBar.bottom,
+      lessThanOrEqualTo(tester.getRect(find.byType(NavigationBar)).top),
+    );
     expect(find.text('Indústria Alfa Ltda'), findsNothing);
 
     await tester.tap(find.text('Arquivadas'));
     await tester.pumpAndSettle();
     expect(find.text('Indústria Alfa Ltda'), findsOneWidget);
+  });
+
+  testWidgets('arquivar depois de visitar o Painel não duplica o SnackBar', (
+    tester,
+  ) async {
+    // Ramos visitados continuam montados fora da tela; o SnackBar não pode
+    // virar Hero repetido na volta do detalhe.
+    final repo = FakeCompanyRepository(now: testNow);
+    await repo.seed(alfa);
+    await pumpApp(tester, repository: repo);
+    await tester.tap(find.text('Ver empresas'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Indústria Alfa Ltda'));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(find.text('Arquivar'), 200);
+    await tester.tap(find.text('Arquivar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Arquivar').last);
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Empresa arquivada'), findsOneWidget);
   });
 
   testWidgets('Desfazer no SnackBar desarquiva', (tester) async {

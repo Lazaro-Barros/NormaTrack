@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/router.dart';
 import 'package:normatrack/app/widgets/band_title.dart';
@@ -143,6 +144,52 @@ void main() {
     expect(find.text('Registro da empresa neste órgão'), findsNothing);
     expect(find.text('Precisa obter'), findsOneWidget);
     expect(find.text('Não se aplica'), findsNWidgets(8));
+  });
+
+  group('teclado', () {
+    testWidgets('fechar o sheet de órgão não reabre o teclado', (tester) async {
+      await pumpApp(tester, initialLocation: AppRoutes.newCompany);
+      await type(tester, 'Razão social', 'Alfa');
+      expect(tester.testTextInput.isVisible, isTrue);
+
+      await tester.ensureVisible(find.text('Polícia Federal'));
+      await tester.tap(find.text('Polícia Federal'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Aplicar'));
+      await tester.pumpAndSettle();
+
+      expect(tester.testTextInput.isVisible, isFalse);
+      expect(
+        FocusManager.instance.primaryFocus?.context?.widget,
+        isNot(isA<EditableText>()),
+      );
+    });
+
+    testWidgets('cancelar o descarte não reabre o teclado', (tester) async {
+      await pumpApp(tester, initialLocation: AppRoutes.newCompany);
+      await type(tester, 'Razão social', 'Alfa');
+
+      await tester.tap(find.byTooltip('Fechar'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cancelar').last);
+      await tester.pumpAndSettle();
+
+      expect(tester.testTextInput.isVisible, isFalse);
+    });
+
+    testWidgets('Salvar fica acima do teclado', (tester) async {
+      await pumpApp(tester, initialLocation: AppRoutes.newCompany);
+      // Teclado de 300 lógicos numa tela de 844 (dpr 3).
+      tester.view.viewInsets = const FakeViewPadding(bottom: 900);
+      addTearDown(tester.view.resetViewInsets);
+      await tester.pumpAndSettle();
+
+      final save = tester.getRect(find.text('Salvar empresa'));
+      expect(save.bottom, lessThanOrEqualTo(844 - 300));
+      await tester.tap(find.text('Salvar empresa'));
+      await tester.pumpAndSettle();
+      expect(find.text('Informe a razão social'), findsOneWidget);
+    });
   });
 
   group('editar', () {

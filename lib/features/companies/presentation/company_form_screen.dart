@@ -252,7 +252,12 @@ class _CompanyFormScreenState extends ConsumerState<CompanyFormScreen> {
     }
   }
 
+  /// Tira o foco do campo antes de abrir sheet ou diálogo: senão, ao fechar,
+  /// a rota devolve o foco ao campo e o teclado reabre sozinho.
+  void _unfocus() => FocusManager.instance.primaryFocus?.unfocus();
+
   Future<void> _confirmDiscard() async {
+    _unfocus();
     final discard = await showConfirmDialog(
       context,
       title: 'Descartar alterações?',
@@ -266,6 +271,7 @@ class _CompanyFormScreenState extends ConsumerState<CompanyFormScreen> {
   }
 
   Future<void> _editRegistration(Authority authority) async {
+    _unfocus();
     final result = await showRegistrationSheet(
       context,
       authority: authority,

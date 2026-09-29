@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_spacing.dart';
 import 'app_typography.dart';
+import 'band_colors.dart';
 import 'status_colors.dart';
 
 export 'app_colors.dart';
 export 'app_spacing.dart';
 export 'app_typography.dart';
+export 'band_colors.dart';
 export 'status_colors.dart';
 
 /// Tema do app. Única fonte de cores, tipografia e formas dos widgets
@@ -64,7 +66,7 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: AppColors.ground,
       fontFamily: AppTypography.body,
       textTheme: text,
-      extensions: const [StatusColors.light],
+      extensions: const [StatusColors.light, BandColors.light],
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.standard,
       // A AppBar é a faixa de cabeçalho: petróleo, cantos inferiores de 24.
@@ -155,6 +157,28 @@ abstract final class AppTheme {
         errorBorder: inputBorder(AppColors.overdue),
         focusedErrorBorder: inputBorder(AppColors.overdue, 2),
         disabledBorder: inputBorder(AppColors.divider),
+      ),
+      // Busca da faixa de cabeçalho: pílula branca sem borda.
+      searchBarTheme: SearchBarThemeData(
+        elevation: const WidgetStatePropertyAll(0),
+        backgroundColor: const WidgetStatePropertyAll(AppColors.surface),
+        shadowColor: const WidgetStatePropertyAll(Colors.transparent),
+        surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
+        side: const WidgetStatePropertyAll(BorderSide.none),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: AppRadius.pillAll),
+        ),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 14),
+        ),
+        textStyle: WidgetStatePropertyAll(text.bodyLarge),
+        hintStyle: WidgetStatePropertyAll(
+          text.bodyLarge?.copyWith(color: AppColors.placeholder),
+        ),
+        constraints: const BoxConstraints(
+          minHeight: AppSpacing.minTouch,
+          maxHeight: AppSpacing.minTouch,
+        ),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.surface,

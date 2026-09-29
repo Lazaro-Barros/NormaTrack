@@ -55,3 +55,11 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Feito**
 - Status → `em andamento` (README da task e índice).
 - `flutter pub add 'go_router:^17.5.0' 'flutter_localizations:{"sdk":"flutter"}'`: resolveu `go_router 17.5.0` e `intl 0.20.3` (transitiva), como no plano. `flutter analyze` e `flutter test` (75 testes) verdes.
+
+## 2026-09-29 — Passo 2: tema e utilitários
+
+**Feito**
+- `BandColors` (extensão com `muted`), `searchBarTheme`, `formatDate` e os quatro input formatters (`_MaskFormatter` com máscara por tamanho), com testes.
+
+**Decidido**
+- O telefone troca de máscara pelo número de dígitos brutos (`mask(length)`), em vez de duas classes: é o mesmo `_MaskFormatter` para os quatro campos.

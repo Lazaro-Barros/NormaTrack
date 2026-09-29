@@ -142,3 +142,17 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - **Não verificado no emulador**: não havia dispositivo Android conectado nesta sessão, então o `flutter run` do "Como verificar" (criar, editar, órgão com validade vencida, arquivar/desfazer) fica para a usuária. Pontos a olhar: menu da UF estreito (`CE · Ceará` pode aparecer cortado, passo 4), teclado sobre o bottom sheet, cursor no fim ao editar no meio de CNPJ/telefone (limitação aceita no plano).
 - "Editar todos os campos": todos os campos são editáveis no formulário, mas o teste de edição altera só o nome fantasia (e confere que CNPJ e telefone chegam formatados).
 - Seguem os TODOs de prazos e relatórios: `TODO(RF-PRZ-05)` (lista, faixa do detalhe, Painel), `TODO(RF-REL-01)` (gerar relatório), `TODO(RF-EMP-03)` (tela do módulo), `TODO(RF-PRZ-03)` (Ajustes). C15–C19 abertas.
+
+## 2026-09-29 — Verificação no emulador
+
+**Feito**
+- `flutter run` no emulador Android (sdk gphone16k arm64, API 37), dirigido por `adb` com capturas de tela. Sem exceções nem overflow no log.
+- Funcionou como esperado: barra inferior e localização pt-BR ("Guia 1 de 3", seletor de data em português); lista vazia e FAB; erro de razão social vazia com rolagem até o campo; máscaras de CNPJ alfanumérico (`12.ABC.345/01DE-35`), telefone e CPF; erros de e-mail e CPF com ícone + texto, que somem ao editar; CNPJ duplicado; sheet de órgão (nº e validade só com "Possui", aviso "Validade vencida em 02/08/2026", sheet acima do teclado); detalhe com só o módulo ligado, "2 de 9 se aplicam", "Precisa obter" e "Venceu 02/08/2026"; editar volta ao detalhe com o valor novo; Voltar do sistema e X pedem "Descartar alterações?"; arquivar com confirmação, SnackBar com Desfazer, aba Arquivadas, faixa "· Arquivada" e Desarquivar; busca por CNPJ parcial e "Nenhuma empresa encontrada"; dados persistem depois de reiniciar o app (drift).
+- Digitação rápida pelo `adb input text` perdia caracteres no campo com máscara; digitando com pausa, a máscara sai certa. É artefato da injeção de teclas, não do app.
+
+**Pendente / dúvidas** (achados, não corrigidos)
+- **Foco volta ao campo ao fechar o sheet ou o diálogo:** depois de "Aplicar" no sheet de órgão ou de "Cancelar" em "Descartar alterações?", o último campo focado recupera o foco e o teclado reabre sozinho (o formulário rola até ele). Correção provável: `FocusScope.of(context).unfocus()` antes de abrir o sheet e o diálogo.
+- **Barra de ações escondida pelo teclado:** com o teclado aberto, "Salvar empresa" fica atrás dele (comportamento padrão de `Scaffold.bottomNavigationBar`). É preciso fechar o teclado para salvar. Agrava o item anterior.
+- **SnackBar cobre o FAB:** depois de arquivar, "Empresa arquivada / Desfazer" aparece sobre o FAB "Nova empresa". O SnackBar vai para o `Scaffold` do `AppShell`, que não tem FAB, então o FAB não sobe.
+- **Botão tonal sai como primário:** o `filledButtonTheme` pinta também o `FilledButton.tonal` de petróleo cheio, então a ação do `EmptyState` ("Ver empresas", "Cadastrar empresa") parece um botão primário. Vem do tema (task 001/004), não desta task.
+- **Menu da UF cortado:** confirmado. O menu tem a largura do campo ("AL · Alago…", "MS · Mato …"). A sigla aparece sempre, então dá para usar.

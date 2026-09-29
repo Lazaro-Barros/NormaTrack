@@ -83,3 +83,8 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Dois auxiliares compartilhados em `lib/app/widgets/`, fora da lista do plano, para não duplicar layout: `RowLayout` (em `nav_row.dart`, usado por `NavRow` e `SwitchRow`) e `FieldParts` (`field_parts.dart`: rótulo com `*`, erro com ícone e coluna rótulo + campo, usado por `AppTextField` e `AppDropdownField`). São públicos porque o Dart não tem privado entre arquivos; o comentário de cada um diz para não usar fora de `lib/app/widgets/`.
 - `AppDropdownField` usa `isExpanded: true` e textos com reticências: no campo UF (flex 1) o menu tem a largura do campo e `CE · Ceará` pode aparecer cortado. Esta versão do Flutter não tem `menuWidth` no `DropdownButtonFormField`. Aceito; conferir no emulador.
 - `StatusText` e o `caption` do `SectionCard` usam algarismos tabulares (têm datas e contagens).
+
+## 2026-09-29 — Passo 5: situação do registro
+
+**Feito**
+- `RegistrationSituation` e `AuthorityRegistration.situationOn` em `authority.dart`, com os quatro casos do plano em `company_test.dart`. `TODO(RF-EMP-05)` do alerta antes da validade (C16) no enum.

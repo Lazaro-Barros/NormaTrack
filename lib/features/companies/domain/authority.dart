@@ -53,6 +53,13 @@ enum RegistrationStatus {
   );
 }
 
+/// Situação de um registro numa data. A UI converte para `StatusTone`.
+///
+/// "Não se aplica" não é situação: é a ausência do registro. Não existe
+/// "a vencer" para registro.
+// TODO(RF-EMP-05): alerta antes da validade depende de C16.
+enum RegistrationSituation { registered, expired, required }
+
 /// Registro da empresa em um órgão. Ausência de registro = "não se aplica".
 @immutable
 class AuthorityRegistration {
@@ -83,6 +90,17 @@ class AuthorityRegistration {
     final untilDate = DateTime(until.year, until.month, until.day);
     final todayDate = DateTime(today.year, today.month, today.day);
     return untilDate.isBefore(todayDate);
+  }
+
+  /// `required` se a situação é "precisa obter"; senão `expired` se
+  /// [isExpiredOn]; senão `registered`.
+  RegistrationSituation situationOn(DateTime today) {
+    if (status == RegistrationStatus.required) {
+      return RegistrationSituation.required;
+    }
+    return isExpiredOn(today)
+        ? RegistrationSituation.expired
+        : RegistrationSituation.registered;
   }
 
   @override

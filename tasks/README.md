@@ -11,3 +11,4 @@ Status: `rascunho` · `planejada` · `em andamento` · `concluída` · `bloquead
 | 003 | [Empresas: telas de lista, cadastro e detalhe](003-empresas-telas/) | RF-EMP-01..05 | 1 | concluída |
 | 004 | [Refinamento visual: menos informação e mais cor](004-refinamento-visual/) | RNF-06 | 1 | concluída |
 | 005 | [Botão tonal com as cores do design system](005-botao-tonal/) | RNF-06 | 1 | concluída |
+| 006 | [Prazos: domínio e dados](006-prazos-dominio-e-dados/) | RF-PRZ-01/02/04 | 1 | planejada |

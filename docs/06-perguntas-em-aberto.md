@@ -21,7 +21,7 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 |---|---|---|---|
 | C1 | Quem usa o app: só ela, gerenciando várias empresas, ou cada empresa terá o próprio acesso? | 🟡 Fase 1 | |
 | C2 | Precisa de senha/PIN para abrir o app, mesmo offline? | 🟡 Fase 1 | |
-| C3 | Os 150 dias de antecedência valem para todas as licenças? E para laudos e manutenções, qual antecedência? | 🟡 Fase 1 | |
+| C3 | Os 150 dias de antecedência valem para todas as licenças? E para laudos e manutenções, qual antecedência? | 🟡 Fase 1 | 2026-09-30 (usuária, task 006): licença 150 dias, laudo e manutenção 30 dias, com lembretes extras de 30, 10 e 3 dias e no dia, editáveis por prazo. Falta confirmar com a cliente. |
 | C4 | Depois que o alerta começa, com que frequência ele deve repetir (diário, semanal) até a renovação? | 🟡 Fase 1 | |
 | C5 | Que dados da empresa cadastrar (CNPJ, endereço, responsável técnico, números das licenças)? | 🟡 Fase 1 | 2026-09-24: dados cadastrais, responsável legal e registros em órgãos (RF-EMP-04/05); só a razão social é obrigatória. Responsável **técnico** e anexos seguem em aberto (C13). |
 | C6 | Ruídos: sempre 4 pontos ou varia por empresa? Unidade (dB)? Existem limites para destacar valores fora do permitido? | 🟡 Fase 2 | |
@@ -38,6 +38,8 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | C17 | Conselho de Classe e Secretaria de Meio Ambiente precisam de detalhe (qual conselho; municipal ou estadual)? Pode haver mais de um registro no mesmo órgão? | 🟡 Fase 1 | Suposição: um registro por órgão, com observação livre. |
 | C18 | Confirmar as suposições do cadastro de empresa (task 002): um telefone e um e-mail por empresa, com 10 ou 11 dígitos; nenhum módulo habilitado por padrão; o registro no órgão vale até o dia da validade, inclusive. | ⚪ Fase 1 | |
 | C19 | No cadastro de empresa, a UF deve vir pré-selecionada (ex.: CE, onde estão as empresas de hoje)? | ⚪ Fase 1 | Suposição (task 003): sem valor padrão; a usuária escolhe. |
+| C20 | Confirmar as suposições dos prazos (task 006): qualquer categoria (licença, laudo, manutenção) em qualquer módulo; a nova data de uma renovação é sempre posterior à anterior; excluir o ciclo atual desfaz a renovação e reabre o anterior; prazos de módulo desabilitado somem do painel. | ⚪ Fase 1 | |
+| C21 | Um ciclo de prazo tem data de início ou de emissão própria (ex.: data de emissão da licença)? Hoje o início é o vencimento do ciclo anterior, e o primeiro ciclo não tem início. | ⚪ Fase 1 | |
 
 ## Pendências de material
 

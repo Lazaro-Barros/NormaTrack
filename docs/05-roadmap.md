@@ -20,8 +20,8 @@ Entrega o padrão "prazo com alerta" para **todos** os módulos de uma vez.
 - [x] CRUD de empresas (RF-EMP-01) — tasks 002 e 003 (exclusão pela UI fora do escopo: só arquivar)
 - [x] Dados cadastrais e registros em órgãos (RF-EMP-04/05) — tasks 002 e 003
 - [x] Habilitar módulos por empresa (RF-EMP-02/03) — tasks 002 e 003 (a tela de cada módulo vem com os prazos)
-- [ ] CRUD de prazos por módulo e categoria: licença ambiental, laudo e manutenção de ETE/ETA, licença PF e licença Exército (RF-PRZ-01/02, RF-AMB-01/05/06, RF-PCT-01)
-- [ ] Renovação com histórico (RF-PRZ-04)
+- [ ] CRUD de prazos por módulo e categoria: licença ambiental, laudo e manutenção de ETE/ETA, licença PF e licença Exército (RF-PRZ-01/02, RF-AMB-01/05/06, RF-PCT-01) (em parte: domínio e dados na task 006; faltam as telas)
+- [ ] Renovação com histórico (RF-PRZ-04) (em parte: domínio e dados na task 006; faltam as telas)
 - [ ] Painel de próximos vencimentos (RF-PRZ-05)
 - [ ] Notificações locais (RF-PRZ-03)
 - [ ] Backup e restauração manual do banco (RNF-04)

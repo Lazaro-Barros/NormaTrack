@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-01, RF-PRZ-02, RF-PRZ-04 · RF-AMB-01, RF-AMB-05, RF-AMB-06, RF-PCT-01 (como categorias de prazo) |
 | **Depende de** | 002 (concluída) |
@@ -34,14 +34,14 @@ Modelar e persistir os prazos de cada empresa (licenças, laudos e manutenções
 
 ## Critérios de aceite
 
-- [ ] Criar, editar, concluir, cancelar e excluir (lógico) um prazo. Título obrigatório; módulo precisa estar habilitado na empresa; o erro é um tipo do domínio.
-- [ ] Os lembretes vêm preenchidos pela categoria (licença `150, 30, 10, 3, 0`; laudo e manutenção `30, 10, 3, 0`) e podem ser editados por prazo.
-- [ ] A situação (vigente, a vencer, vencido, renovado, concluído, cancelado) é calculada no domínio e testada nos limites da janela de alerta e do dia do vencimento.
-- [ ] Renovar encerra o ciclo atual (`renewed`) e cria o próximo, com nova data, apontando para o anterior, numa transação. O histórico de ciclos pode ser consultado.
-- [ ] Listagens reativas (`Stream`): por empresa, por empresa e módulo, e próximos vencimentos de todas as empresas (sem empresas arquivadas e sem prazos excluídos, cancelados, concluídos ou renovados).
-- [ ] Tabelas `deadlines` e `deadline_reminders` com `id` UUID, `createdAt`, `updatedAt` e `deletedAt`. Migração v1 → v2 com teste gerado pelo `drift_dev make-migrations`.
-- [ ] `docs/03-dominio.md` e `docs/06-perguntas-em-aberto.md` refletem o modelo e as suposições.
-- [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros
+- [x] Criar, editar, concluir, cancelar e excluir (lógico) um prazo. Título obrigatório; módulo precisa estar habilitado na empresa; o erro é um tipo do domínio.
+- [x] Os lembretes vêm preenchidos pela categoria (licença `150, 30, 10, 3, 0`; laudo e manutenção `30, 10, 3, 0`) e podem ser editados por prazo.
+- [x] A situação (vigente, a vencer, vencido, renovado, concluído, cancelado) é calculada no domínio e testada nos limites da janela de alerta e do dia do vencimento.
+- [x] Renovar encerra o ciclo atual (`renewed`) e cria o próximo, com nova data, apontando para o anterior, numa transação. O histórico de ciclos pode ser consultado.
+- [x] Listagens reativas (`Stream`): por empresa, por empresa e módulo, e próximos vencimentos de todas as empresas (sem empresas arquivadas e sem prazos excluídos, cancelados, concluídos ou renovados).
+- [x] Tabelas `deadlines` e `deadline_reminders` com `id` UUID, `createdAt`, `updatedAt` e `deletedAt`. Migração v1 → v2 com teste gerado pelo `drift_dev make-migrations` (em `test/core/database/app/`).
+- [x] `docs/03-dominio.md` e `docs/06-perguntas-em-aberto.md` refletem o modelo e as suposições.
+- [x] `dart format .`, `flutter analyze` e `flutter test` sem erros
 
 ## Para quem vai implementar
 

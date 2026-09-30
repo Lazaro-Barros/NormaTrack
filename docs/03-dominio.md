@@ -47,6 +47,8 @@ erDiagram
     Company ||--o{ CompanyModule : habilita
     Company ||--o{ CompanyAuthority : registra
     Company ||--o{ Deadline : possui
+    Deadline ||--o{ DeadlineReminder : lembra
+    Deadline |o--o| Deadline : renova
     Company ||--o{ MeasurementParameter : define
     Company ||--o{ WasteRecord : lanca
     Company ||--o{ TreatmentStation : possui
@@ -86,14 +88,17 @@ erDiagram
         bool enabled
     }
     Deadline {
-        string module
+        string module "ModuleType"
         string category "license | lab_report | maintenance"
         string authority "Authority (ver D007) | null"
         string title
         date dueDate
-        int alertDaysBefore "padrao 150"
-        string status "active | renewed | cancelled"
+        string status "active | renewed | completed | cancelled"
+        date completedOn "so com completed"
         string previousDeadlineId "ciclo anterior"
+    }
+    DeadlineReminder {
+        int daysBefore "dias antes do vencimento"
     }
     MeasurementParameter {
         string context "noise_point | effluent | water | product_analysis"
@@ -158,6 +163,9 @@ erDiagram
 - **Consolidação anual** de um produto = soma dos lotes produzidos no ano, soma das vendas no ano e soma dos saldos em aberto.
 - **Órgãos e módulos** são enums fixos no código, guardados por um código estável em texto ([D007](decisoes.md#d007--órgãos-e-módulos-como-enums-de-domínio)). Órgão sem registro na empresa = "não se aplica".
 - **Registro vencido** (`validUntil` anterior a hoje) é derivado, não persistido.
-- **Situação de um prazo** é derivada de `dueDate` e `alertDaysBefore` em relação à data atual: *vigente* → *a vencer* (dentro da janela de alerta) → *vencido*.
-- **Renovar** cria um novo `Deadline` apontando para o anterior e marca o anterior como `renewed`.
+- **Lembretes de prazo** ([D011](decisoes.md#d011--lembretes-de-prazo-em-tabela-filha)): cada prazo tem uma lista de dias antes do vencimento (`DeadlineReminder`), editável. O maior valor é a antecedência do alerta. Padrões: licença `150, 30, 10, 3, 0`; laudo e manutenção `30, 10, 3, 0` (C3).
+- **Situação de um prazo** é derivada de `dueDate`, do maior lembrete e do estado, em relação à data atual. Em aberto: *vigente* → *a vencer* (do primeiro alerta até o dia do vencimento, inclusive) → *vencido* (a partir do dia seguinte). Fechado: *renovado*, *concluído* ou *cancelado*.
+- **Renovar** cria um novo `Deadline` com a nova data, apontando para o anterior, e marca o anterior como `renewed`. A nova data é posterior à anterior (C20). Excluir o ciclo em aberto desfaz a renovação: o anterior volta a `active` (C20).
+- **Concluir** vale para laudo e manutenção (RF-AMB-06): estado `completed` com `completedOn`. Concluído e cancelado podem ser reabertos.
+- **Próximos vencimentos** (RF-PRZ-05): prazos em aberto de empresas não arquivadas, com o módulo habilitado (C20).
 - **Produtos controlados:** o estoque ao fim do mês é informado pela cliente, não calculado. **(?)** confirmar se deveria ser calculado a partir do estoque anterior e das entradas/saídas.

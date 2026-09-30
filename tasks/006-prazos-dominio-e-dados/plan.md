@@ -45,6 +45,8 @@ dart run drift_dev make-migrations                          # gera v2.json, step
 - `test/core/database/generated/schema_v2.dart` e atualiza `generated/schema.dart`;
 - `test/core/database/migration_test.dart` (só se não existir) com um teste de migração por par de versões e um modelo de teste de integridade de dados.
 
+> **Correção (2026-09-30, na implementação):** com `databases: app:` no `build.yaml`, os arquivos de teste vão para `test/core/database/app/` (`migration_test.dart` e `generated/`). A pasta `test/core/database/generated/` da task 002 foi removida e `schema_test.dart` passou a não depender dela. Ver journal.
+
 Commite todos os arquivos gerados (como na task 002).
 
 ## Arquivos
@@ -281,7 +283,7 @@ Todas as escritas rodam em `_db.transaction`. `now = clock()` (UTC) uma vez por 
 - **`cancel(id)`:** exige `active`. Grava `status = cancelled`.
 - **`reopen(id)`:** exige `completed` ou `cancelled` (um `renewed` não reabre: teria dois ciclos abertos). Grava `status = active` e `completedOn = null`.
 - **Idempotência:** as ações não são idempotentes; repetir `cancel` num cancelado lança `InvalidDeadlineTransitionException`. A UI só oferece a ação válida.
-- **`delete(id)`:** exclusão lógica do prazo e dos lembretes vivos. Se o prazo excluído tem `previousDeadlineId` e o anterior está vivo e `renewed`, o anterior volta a `active` (excluir o ciclo novo desfaz a renovação). **[suposição]** `// TODO(RF-PRZ-04): excluir o ciclo atual reabre o anterior (C20).` Excluir um ciclo antigo não muda os outros.
+- **`delete(id)`:** exclusão lógica do prazo e dos lembretes vivos. Se o prazo excluído está **em aberto** (é o ciclo atual), tem `previousDeadlineId` e o anterior está vivo e `renewed`, o anterior volta a `active` (excluir o ciclo novo desfaz a renovação). **[suposição]** `// TODO(RF-PRZ-04): excluir o ciclo atual reabre o anterior (C20).` Excluir um ciclo antigo não muda os outros.
 - **Exclusão da empresa:** `LocalCompanyRepository.delete` passa a excluir logicamente, na mesma transação, os prazos vivos da empresa e os lembretes vivos desses prazos (`deadline_id IN (SELECT id FROM deadlines WHERE company_id = ?)`). Arquivar a empresa não mexe nos prazos: eles só somem de `watchUpcoming`.
 - **Módulo desabilitado:** os prazos continuam gravados e aparecem em `watchByCompany`, mas saem de `watchUpcoming`. Reabilitar o módulo traz de volta. **[suposição]** `// TODO(RF-EMP-02): prazos de módulo desabilitado somem do painel (C20).`
 - **`watchHistory(id)`:** a partir da linha `id` (viva), sobe por `previousDeadlineId` e desce procurando a linha viva com `previous_deadline_id = atual`, passando **por dentro** de linhas excluídas (não as retorna, mas continua a cadeia). Limite de 1000 passos por direção como proteção contra ciclo.

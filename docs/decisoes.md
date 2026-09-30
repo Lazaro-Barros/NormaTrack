@@ -81,3 +81,12 @@ Rotas com `go_router` fixado em `^17.5.0` (`lib/app/router.dart`). Um `StatefulS
 
 - *Por quê:* navegação declarativa por URL, pilha por aba sem código próprio, e rotas testáveis.
 - *Descartado:* `go_router` 18.x, que migrou para os pacotes `material_ui`/`cupertino_ui`, separados do `package:flutter/material.dart` que o app usa (o `Theme` passaria a ser outra classe). Reavaliar quando o app migrar para `material_ui`. Também descartado `go_router_builder` (codegen) enquanto há poucas rotas.
+
+## D011 — Lembretes de prazo em tabela filha
+
+**Status:** aceita · 2026-09-30 (task 006)
+
+Os lembretes de cada prazo ficam em `deadline_reminders` (uma linha por dia de aviso, `(deadline_id, days_before)` único), e não num campo `alertDaysBefore`. O maior valor abre a janela "a vencer"; os demais alimentam as notificações (RF-PRZ-03). Editar a lista reaproveita a linha do mesmo valor, mesmo excluída, como os registros em órgão.
+
+- *Por quê:* a usuária quer vários avisos personalizáveis por prazo (ex.: 150, 30, 10, 3 dias e no dia), e a tabela segue a convenção de linhas com `id` e exclusão lógica (D008), boa para sincronização.
+- *Descartado:* a lista numa coluna de texto (`"150,30,10,3,0"`), que não segue a convenção nem permite consultar por dia; e `alertDaysBefore` separado dos lembretes, que seriam duas fontes para a mesma janela.

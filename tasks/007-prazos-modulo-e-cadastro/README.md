@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | em andamento |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-01, RF-PRZ-02 · RF-AMB-01, RF-AMB-05, RF-AMB-06, RF-PCT-01 · RF-EMP-03 (pendências por módulo) |
 | **Depende de** | 006 (concluída) |
@@ -37,14 +37,14 @@ A usuária abre um módulo habilitado a partir do detalhe da empresa, vê os pra
 
 ## Critérios de aceite
 
-- [ ] No detalhe da empresa, cada módulo abre a tela do módulo e mostra a pior situação dos prazos em aberto ("1 vencido", "2 a vencer"); nada quando só há vigentes.
-- [ ] A tela do módulo lista os prazos em aberto em seções Licenças → Laudos → Manutenções (sem seção vazia), por vencimento, com `DeadlineCard` (bloco de data na cor da situação, título, categoria · órgão e texto relativo). Estados: vazio com "Cadastrar prazo", módulo desligado, empresa ou módulo inexistente.
-- [ ] "Novo prazo" (FAB) e o toque num prazo abrem o formulário de criação e de edição.
-- [ ] O formulário tem a categoria na faixa, título*, órgão (opcional), vencimento* e a lista de lembretes com a data de cada um e "Alertas a partir de …". A lista vem do padrão da categoria e é reposta ao trocar de categoria enquanto não foi editada.
-- [ ] O sheet "Adicionar lembrete" tem atalhos (sem os que já estão na lista), campo de dias com a data do aviso, 0 = no dia, e recusa repetido ou vazio.
-- [ ] Salvar valida (título, vencimento, ao menos um lembrete), rola até o erro, grava pelo repositório e volta com "Prazo salvo"; fechar com alterações pede confirmação.
-- [ ] `DeadlineCard`, `BandSegmentedButton` e `FieldErrorText` em `lib/app/widgets/` com teste; `EmptyState` dentro de card; `docs/07-design-system.md` atualizado.
-- [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros
+- [x] No detalhe da empresa, cada módulo abre a tela do módulo e mostra a pior situação dos prazos em aberto ("1 vencido", "2 a vencer"); nada quando só há vigentes.
+- [x] A tela do módulo lista os prazos em aberto em seções Licenças → Laudos → Manutenções (sem seção vazia), por vencimento, com `DeadlineCard` (bloco de data na cor da situação, título, categoria · órgão e texto relativo). Estados: vazio com "Cadastrar prazo", módulo desligado, empresa ou módulo inexistente.
+- [x] "Novo prazo" (FAB) e o toque num prazo abrem o formulário de criação e de edição.
+- [x] O formulário tem a categoria na faixa, título*, órgão (opcional), vencimento* e a lista de lembretes com a data de cada um e "Alertas a partir de …". A lista vem do padrão da categoria e é reposta ao trocar de categoria enquanto não foi editada.
+- [x] O sheet "Adicionar lembrete" tem atalhos (sem os que já estão na lista), campo de dias com a data do aviso, 0 = no dia, e recusa repetido ou vazio.
+- [x] Salvar valida (título, vencimento, ao menos um lembrete), rola até o erro, grava pelo repositório e volta com "Prazo salvo"; fechar com alterações pede confirmação.
+- [x] `DeadlineCard`, `BandSegmentedButton` e `FieldErrorText` em `lib/app/widgets/` com teste; `EmptyState` dentro de card; `docs/07-design-system.md` atualizado.
+- [x] `dart format .`, `flutter analyze` e `flutter test` sem erros
 
 ## Para quem vai implementar
 

@@ -45,7 +45,7 @@ Os nomes abaixo são os mesmos usados no código (`lib/app/theme/`). As telas n�
 
 ### Situação do prazo
 
-A situação é derivada de `dueDate` e `alertDaysBefore` (ver [domínio](03-dominio.md#regras-de-negócio-já-identificadas)). Cada uma tem um ícone fixo. A cor **forte** vai no bloco de data (com texto branco), no texto de situação e no ícone; a **suave** vai no fundo dos números do Painel, dos avisos e dos chips. Todos os pares têm contraste de pelo menos 4,5:1 (coberto por teste).
+A situação é derivada de `dueDate`, do maior lembrete e do estado do prazo (ver [domínio](03-dominio.md#regras-de-negócio-já-identificadas)). Cada uma tem um ícone fixo. A cor **forte** vai no bloco de data (com texto branco), no texto de situação e no ícone; a **suave** vai no fundo dos números do Painel, dos avisos e dos chips. Todos os pares têm contraste de pelo menos 4,5:1 (coberto por teste).
 
 | Situação | Token | Forte | Suave | Ícone |
 |---|---|---|---|---|
@@ -53,6 +53,8 @@ A situação é derivada de `dueDate` e `alertDaysBefore` (ver [domínio](03-dom
 | A vencer | `statusDueSoon` | `#8A4B00` | `#FCEBD2` | relógio |
 | Vigente | `statusOk` | `#1D6B45` | `#E2F1E8` | check em círculo |
 | Renovado | `statusClosed` | `#4A5055` | `#E9ECEB` | setas de renovação |
+
+Concluído e cancelado (task 006) também usam `statusClosed`; o ícone de cada um fica para a task das telas de prazo.
 
 Implementado como `ThemeExtension` em `StatusColors` (`StatusColors.of(context).resolve(StatusTone.overdue)`).
 

@@ -29,7 +29,7 @@ abstract interface class CompanyRepository {
   /// Idempotente. Lança [CompanyNotFoundException].
   Future<void> unarchive(String id);
 
-  /// Exclusão lógica, em cascata nos módulos e registros. Lança
+  /// Exclusão lógica, em cascata nos módulos, registros e prazos. Lança
   /// [CompanyNotFoundException].
   Future<void> delete(String id);
 }

@@ -2402,6 +2402,1210 @@ class CompanyAuthoritiesCompanion extends UpdateCompanion<CompanyAuthorityRow> {
   }
 }
 
+class $DeadlinesTable extends Deadlines
+    with TableInfo<$DeadlinesTable, DeadlineRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DeadlinesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _companyIdMeta = const VerificationMeta(
+    'companyId',
+  );
+  @override
+  late final GeneratedColumn<String> companyId = GeneratedColumn<String>(
+    'company_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES companies (id)',
+    ),
+  );
+  static const VerificationMeta _moduleMeta = const VerificationMeta('module');
+  @override
+  late final GeneratedColumn<String> module = GeneratedColumn<String>(
+    'module',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _authorityMeta = const VerificationMeta(
+    'authority',
+  );
+  @override
+  late final GeneratedColumn<String> authority = GeneratedColumn<String>(
+    'authority',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, String> dueDate =
+      GeneratedColumn<String>(
+        'due_date',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($DeadlinesTable.$converterdueDate);
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime?, String> completedOn =
+      GeneratedColumn<String>(
+        'completed_on',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<DateTime?>($DeadlinesTable.$convertercompletedOnn);
+  static const VerificationMeta _previousDeadlineIdMeta =
+      const VerificationMeta('previousDeadlineId');
+  @override
+  late final GeneratedColumn<String> previousDeadlineId =
+      GeneratedColumn<String>(
+        'previous_deadline_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES deadlines (id)',
+        ),
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    companyId,
+    module,
+    category,
+    authority,
+    title,
+    dueDate,
+    status,
+    completedOn,
+    previousDeadlineId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'deadlines';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DeadlineRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('company_id')) {
+      context.handle(
+        _companyIdMeta,
+        companyId.isAcceptableOrUnknown(data['company_id']!, _companyIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_companyIdMeta);
+    }
+    if (data.containsKey('module')) {
+      context.handle(
+        _moduleMeta,
+        module.isAcceptableOrUnknown(data['module']!, _moduleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_moduleMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('authority')) {
+      context.handle(
+        _authorityMeta,
+        authority.isAcceptableOrUnknown(data['authority']!, _authorityMeta),
+      );
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('previous_deadline_id')) {
+      context.handle(
+        _previousDeadlineIdMeta,
+        previousDeadlineId.isAcceptableOrUnknown(
+          data['previous_deadline_id']!,
+          _previousDeadlineIdMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DeadlineRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DeadlineRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      companyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}company_id'],
+      )!,
+      module: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}module'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      )!,
+      authority: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}authority'],
+      ),
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      dueDate: $DeadlinesTable.$converterdueDate.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}due_date'],
+        )!,
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      completedOn: $DeadlinesTable.$convertercompletedOnn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}completed_on'],
+        ),
+      ),
+      previousDeadlineId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}previous_deadline_id'],
+      ),
+    );
+  }
+
+  @override
+  $DeadlinesTable createAlias(String alias) {
+    return $DeadlinesTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, String> $converterdueDate =
+      const DateOnlyConverter();
+  static TypeConverter<DateTime, String> $convertercompletedOn =
+      const DateOnlyConverter();
+  static TypeConverter<DateTime?, String?> $convertercompletedOnn =
+      NullAwareTypeConverter.wrap($convertercompletedOn);
+}
+
+class DeadlineRow extends DataClass implements Insertable<DeadlineRow> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  final String companyId;
+
+  /// `ModuleType.code`.
+  final String module;
+
+  /// `DeadlineCategory.code`.
+  final String category;
+
+  /// `Authority.code`.
+  final String? authority;
+  final String title;
+  final DateTime dueDate;
+
+  /// `DeadlineStatus.code`.
+  final String status;
+  final DateTime? completedOn;
+  final String? previousDeadlineId;
+  const DeadlineRow({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+    required this.companyId,
+    required this.module,
+    required this.category,
+    this.authority,
+    required this.title,
+    required this.dueDate,
+    required this.status,
+    this.completedOn,
+    this.previousDeadlineId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    map['company_id'] = Variable<String>(companyId);
+    map['module'] = Variable<String>(module);
+    map['category'] = Variable<String>(category);
+    if (!nullToAbsent || authority != null) {
+      map['authority'] = Variable<String>(authority);
+    }
+    map['title'] = Variable<String>(title);
+    {
+      map['due_date'] = Variable<String>(
+        $DeadlinesTable.$converterdueDate.toSql(dueDate),
+      );
+    }
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || completedOn != null) {
+      map['completed_on'] = Variable<String>(
+        $DeadlinesTable.$convertercompletedOnn.toSql(completedOn),
+      );
+    }
+    if (!nullToAbsent || previousDeadlineId != null) {
+      map['previous_deadline_id'] = Variable<String>(previousDeadlineId);
+    }
+    return map;
+  }
+
+  DeadlinesCompanion toCompanion(bool nullToAbsent) {
+    return DeadlinesCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      companyId: Value(companyId),
+      module: Value(module),
+      category: Value(category),
+      authority: authority == null && nullToAbsent
+          ? const Value.absent()
+          : Value(authority),
+      title: Value(title),
+      dueDate: Value(dueDate),
+      status: Value(status),
+      completedOn: completedOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completedOn),
+      previousDeadlineId: previousDeadlineId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(previousDeadlineId),
+    );
+  }
+
+  factory DeadlineRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DeadlineRow(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      companyId: serializer.fromJson<String>(json['companyId']),
+      module: serializer.fromJson<String>(json['module']),
+      category: serializer.fromJson<String>(json['category']),
+      authority: serializer.fromJson<String?>(json['authority']),
+      title: serializer.fromJson<String>(json['title']),
+      dueDate: serializer.fromJson<DateTime>(json['dueDate']),
+      status: serializer.fromJson<String>(json['status']),
+      completedOn: serializer.fromJson<DateTime?>(json['completedOn']),
+      previousDeadlineId: serializer.fromJson<String?>(
+        json['previousDeadlineId'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'companyId': serializer.toJson<String>(companyId),
+      'module': serializer.toJson<String>(module),
+      'category': serializer.toJson<String>(category),
+      'authority': serializer.toJson<String?>(authority),
+      'title': serializer.toJson<String>(title),
+      'dueDate': serializer.toJson<DateTime>(dueDate),
+      'status': serializer.toJson<String>(status),
+      'completedOn': serializer.toJson<DateTime?>(completedOn),
+      'previousDeadlineId': serializer.toJson<String?>(previousDeadlineId),
+    };
+  }
+
+  DeadlineRow copyWith({
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+    String? companyId,
+    String? module,
+    String? category,
+    Value<String?> authority = const Value.absent(),
+    String? title,
+    DateTime? dueDate,
+    String? status,
+    Value<DateTime?> completedOn = const Value.absent(),
+    Value<String?> previousDeadlineId = const Value.absent(),
+  }) => DeadlineRow(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    companyId: companyId ?? this.companyId,
+    module: module ?? this.module,
+    category: category ?? this.category,
+    authority: authority.present ? authority.value : this.authority,
+    title: title ?? this.title,
+    dueDate: dueDate ?? this.dueDate,
+    status: status ?? this.status,
+    completedOn: completedOn.present ? completedOn.value : this.completedOn,
+    previousDeadlineId: previousDeadlineId.present
+        ? previousDeadlineId.value
+        : this.previousDeadlineId,
+  );
+  DeadlineRow copyWithCompanion(DeadlinesCompanion data) {
+    return DeadlineRow(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      companyId: data.companyId.present ? data.companyId.value : this.companyId,
+      module: data.module.present ? data.module.value : this.module,
+      category: data.category.present ? data.category.value : this.category,
+      authority: data.authority.present ? data.authority.value : this.authority,
+      title: data.title.present ? data.title.value : this.title,
+      dueDate: data.dueDate.present ? data.dueDate.value : this.dueDate,
+      status: data.status.present ? data.status.value : this.status,
+      completedOn: data.completedOn.present
+          ? data.completedOn.value
+          : this.completedOn,
+      previousDeadlineId: data.previousDeadlineId.present
+          ? data.previousDeadlineId.value
+          : this.previousDeadlineId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeadlineRow(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('companyId: $companyId, ')
+          ..write('module: $module, ')
+          ..write('category: $category, ')
+          ..write('authority: $authority, ')
+          ..write('title: $title, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('status: $status, ')
+          ..write('completedOn: $completedOn, ')
+          ..write('previousDeadlineId: $previousDeadlineId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    companyId,
+    module,
+    category,
+    authority,
+    title,
+    dueDate,
+    status,
+    completedOn,
+    previousDeadlineId,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DeadlineRow &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.companyId == this.companyId &&
+          other.module == this.module &&
+          other.category == this.category &&
+          other.authority == this.authority &&
+          other.title == this.title &&
+          other.dueDate == this.dueDate &&
+          other.status == this.status &&
+          other.completedOn == this.completedOn &&
+          other.previousDeadlineId == this.previousDeadlineId);
+}
+
+class DeadlinesCompanion extends UpdateCompanion<DeadlineRow> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<String> companyId;
+  final Value<String> module;
+  final Value<String> category;
+  final Value<String?> authority;
+  final Value<String> title;
+  final Value<DateTime> dueDate;
+  final Value<String> status;
+  final Value<DateTime?> completedOn;
+  final Value<String?> previousDeadlineId;
+  final Value<int> rowid;
+  const DeadlinesCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.companyId = const Value.absent(),
+    this.module = const Value.absent(),
+    this.category = const Value.absent(),
+    this.authority = const Value.absent(),
+    this.title = const Value.absent(),
+    this.dueDate = const Value.absent(),
+    this.status = const Value.absent(),
+    this.completedOn = const Value.absent(),
+    this.previousDeadlineId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DeadlinesCompanion.insert({
+    required String id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+    required String companyId,
+    required String module,
+    required String category,
+    this.authority = const Value.absent(),
+    required String title,
+    required DateTime dueDate,
+    required String status,
+    this.completedOn = const Value.absent(),
+    this.previousDeadlineId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt),
+       companyId = Value(companyId),
+       module = Value(module),
+       category = Value(category),
+       title = Value(title),
+       dueDate = Value(dueDate),
+       status = Value(status);
+  static Insertable<DeadlineRow> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<String>? companyId,
+    Expression<String>? module,
+    Expression<String>? category,
+    Expression<String>? authority,
+    Expression<String>? title,
+    Expression<String>? dueDate,
+    Expression<String>? status,
+    Expression<String>? completedOn,
+    Expression<String>? previousDeadlineId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (companyId != null) 'company_id': companyId,
+      if (module != null) 'module': module,
+      if (category != null) 'category': category,
+      if (authority != null) 'authority': authority,
+      if (title != null) 'title': title,
+      if (dueDate != null) 'due_date': dueDate,
+      if (status != null) 'status': status,
+      if (completedOn != null) 'completed_on': completedOn,
+      if (previousDeadlineId != null)
+        'previous_deadline_id': previousDeadlineId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DeadlinesCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<String>? companyId,
+    Value<String>? module,
+    Value<String>? category,
+    Value<String?>? authority,
+    Value<String>? title,
+    Value<DateTime>? dueDate,
+    Value<String>? status,
+    Value<DateTime?>? completedOn,
+    Value<String?>? previousDeadlineId,
+    Value<int>? rowid,
+  }) {
+    return DeadlinesCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      companyId: companyId ?? this.companyId,
+      module: module ?? this.module,
+      category: category ?? this.category,
+      authority: authority ?? this.authority,
+      title: title ?? this.title,
+      dueDate: dueDate ?? this.dueDate,
+      status: status ?? this.status,
+      completedOn: completedOn ?? this.completedOn,
+      previousDeadlineId: previousDeadlineId ?? this.previousDeadlineId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (companyId.present) {
+      map['company_id'] = Variable<String>(companyId.value);
+    }
+    if (module.present) {
+      map['module'] = Variable<String>(module.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (authority.present) {
+      map['authority'] = Variable<String>(authority.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (dueDate.present) {
+      map['due_date'] = Variable<String>(
+        $DeadlinesTable.$converterdueDate.toSql(dueDate.value),
+      );
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (completedOn.present) {
+      map['completed_on'] = Variable<String>(
+        $DeadlinesTable.$convertercompletedOnn.toSql(completedOn.value),
+      );
+    }
+    if (previousDeadlineId.present) {
+      map['previous_deadline_id'] = Variable<String>(previousDeadlineId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeadlinesCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('companyId: $companyId, ')
+          ..write('module: $module, ')
+          ..write('category: $category, ')
+          ..write('authority: $authority, ')
+          ..write('title: $title, ')
+          ..write('dueDate: $dueDate, ')
+          ..write('status: $status, ')
+          ..write('completedOn: $completedOn, ')
+          ..write('previousDeadlineId: $previousDeadlineId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DeadlineRemindersTable extends DeadlineReminders
+    with TableInfo<$DeadlineRemindersTable, DeadlineReminderRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DeadlineRemindersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> deletedAt = GeneratedColumn<DateTime>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _deadlineIdMeta = const VerificationMeta(
+    'deadlineId',
+  );
+  @override
+  late final GeneratedColumn<String> deadlineId = GeneratedColumn<String>(
+    'deadline_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES deadlines (id)',
+    ),
+  );
+  static const VerificationMeta _daysBeforeMeta = const VerificationMeta(
+    'daysBefore',
+  );
+  @override
+  late final GeneratedColumn<int> daysBefore = GeneratedColumn<int>(
+    'days_before',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    createdAt,
+    updatedAt,
+    deletedAt,
+    deadlineId,
+    daysBefore,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'deadline_reminders';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<DeadlineReminderRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    if (data.containsKey('deadline_id')) {
+      context.handle(
+        _deadlineIdMeta,
+        deadlineId.isAcceptableOrUnknown(data['deadline_id']!, _deadlineIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_deadlineIdMeta);
+    }
+    if (data.containsKey('days_before')) {
+      context.handle(
+        _daysBeforeMeta,
+        daysBefore.isAcceptableOrUnknown(data['days_before']!, _daysBeforeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_daysBeforeMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {deadlineId, daysBefore},
+  ];
+  @override
+  DeadlineReminderRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DeadlineReminderRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}deleted_at'],
+      ),
+      deadlineId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}deadline_id'],
+      )!,
+      daysBefore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}days_before'],
+      )!,
+    );
+  }
+
+  @override
+  $DeadlineRemindersTable createAlias(String alias) {
+    return $DeadlineRemindersTable(attachedDatabase, alias);
+  }
+}
+
+class DeadlineReminderRow extends DataClass
+    implements Insertable<DeadlineReminderRow> {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  final String deadlineId;
+
+  /// Dias antes do vencimento.
+  final int daysBefore;
+  const DeadlineReminderRow({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+    required this.deadlineId,
+    required this.daysBefore,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt);
+    }
+    map['deadline_id'] = Variable<String>(deadlineId);
+    map['days_before'] = Variable<int>(daysBefore);
+    return map;
+  }
+
+  DeadlineRemindersCompanion toCompanion(bool nullToAbsent) {
+    return DeadlineRemindersCompanion(
+      id: Value(id),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+      deadlineId: Value(deadlineId),
+      daysBefore: Value(daysBefore),
+    );
+  }
+
+  factory DeadlineReminderRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DeadlineReminderRow(
+      id: serializer.fromJson<String>(json['id']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      deadlineId: serializer.fromJson<String>(json['deadlineId']),
+      daysBefore: serializer.fromJson<int>(json['daysBefore']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'deadlineId': serializer.toJson<String>(deadlineId),
+      'daysBefore': serializer.toJson<int>(daysBefore),
+    };
+  }
+
+  DeadlineReminderRow copyWith({
+    String? id,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+    String? deadlineId,
+    int? daysBefore,
+  }) => DeadlineReminderRow(
+    id: id ?? this.id,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    deadlineId: deadlineId ?? this.deadlineId,
+    daysBefore: daysBefore ?? this.daysBefore,
+  );
+  DeadlineReminderRow copyWithCompanion(DeadlineRemindersCompanion data) {
+    return DeadlineReminderRow(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      deadlineId: data.deadlineId.present
+          ? data.deadlineId.value
+          : this.deadlineId,
+      daysBefore: data.daysBefore.present
+          ? data.daysBefore.value
+          : this.daysBefore,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeadlineReminderRow(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('deadlineId: $deadlineId, ')
+          ..write('daysBefore: $daysBefore')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, createdAt, updatedAt, deletedAt, deadlineId, daysBefore);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DeadlineReminderRow &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt &&
+          other.deadlineId == this.deadlineId &&
+          other.daysBefore == this.daysBefore);
+}
+
+class DeadlineRemindersCompanion extends UpdateCompanion<DeadlineReminderRow> {
+  final Value<String> id;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<String> deadlineId;
+  final Value<int> daysBefore;
+  final Value<int> rowid;
+  const DeadlineRemindersCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.deadlineId = const Value.absent(),
+    this.daysBefore = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  DeadlineRemindersCompanion.insert({
+    required String id,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+    required String deadlineId,
+    required int daysBefore,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt),
+       deadlineId = Value(deadlineId),
+       daysBefore = Value(daysBefore);
+  static Insertable<DeadlineReminderRow> custom({
+    Expression<String>? id,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<DateTime>? deletedAt,
+    Expression<String>? deadlineId,
+    Expression<int>? daysBefore,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (deadlineId != null) 'deadline_id': deadlineId,
+      if (daysBefore != null) 'days_before': daysBefore,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  DeadlineRemindersCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<String>? deadlineId,
+    Value<int>? daysBefore,
+    Value<int>? rowid,
+  }) {
+    return DeadlineRemindersCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      deadlineId: deadlineId ?? this.deadlineId,
+      daysBefore: daysBefore ?? this.daysBefore,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<DateTime>(deletedAt.value);
+    }
+    if (deadlineId.present) {
+      map['deadline_id'] = Variable<String>(deadlineId.value);
+    }
+    if (daysBefore.present) {
+      map['days_before'] = Variable<int>(daysBefore.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DeadlineRemindersCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('deadlineId: $deadlineId, ')
+          ..write('daysBefore: $daysBefore, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2409,9 +3613,24 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CompanyModulesTable companyModules = $CompanyModulesTable(this);
   late final $CompanyAuthoritiesTable companyAuthorities =
       $CompanyAuthoritiesTable(this);
+  late final $DeadlinesTable deadlines = $DeadlinesTable(this);
+  late final $DeadlineRemindersTable deadlineReminders =
+      $DeadlineRemindersTable(this);
   late final Index companiesCnpjActive = Index(
     'companies_cnpj_active',
     'CREATE UNIQUE INDEX companies_cnpj_active ON companies (cnpj) WHERE cnpj IS NOT NULL AND deleted_at IS NULL',
+  );
+  late final Index deadlinesCompanyDue = Index(
+    'deadlines_company_due',
+    'CREATE INDEX deadlines_company_due ON deadlines (company_id, due_date) WHERE deleted_at IS NULL',
+  );
+  late final Index deadlinesStatusDue = Index(
+    'deadlines_status_due',
+    'CREATE INDEX deadlines_status_due ON deadlines (status, due_date) WHERE deleted_at IS NULL',
+  );
+  late final Index deadlinesPreviousLive = Index(
+    'deadlines_previous_live',
+    'CREATE UNIQUE INDEX deadlines_previous_live ON deadlines (previous_deadline_id) WHERE previous_deadline_id IS NOT NULL AND deleted_at IS NULL',
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -2421,7 +3640,12 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     companies,
     companyModules,
     companyAuthorities,
+    deadlines,
+    deadlineReminders,
     companiesCnpjActive,
+    deadlinesCompanyDue,
+    deadlinesStatusDue,
+    deadlinesPreviousLive,
   ];
   @override
   DriftDatabaseOptions get options =>
@@ -2520,6 +3744,24 @@ final class $$CompaniesTableReferences
     final cache = $_typedResult.readTableOrNull(
       _companyAuthoritiesRefsTable($_db),
     );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$DeadlinesTable, List<DeadlineRow>>
+  _deadlinesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.deadlines,
+    aliasName: 'companies__id__deadlines__company_id',
+  );
+
+  $$DeadlinesTableProcessedTableManager get deadlinesRefs {
+    final manager = $$DeadlinesTableTableManager(
+      $_db,
+      $_db.deadlines,
+    ).filter((f) => f.companyId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_deadlinesRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -2686,6 +3928,31 @@ class $$CompaniesTableFilterComposer
           }) => $$CompanyAuthoritiesTableFilterComposer(
             $db: $db,
             $table: $db.companyAuthorities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> deadlinesRefs(
+    Expression<bool> Function($$DeadlinesTableFilterComposer f) f,
+  ) {
+    final $$DeadlinesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.companyId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableFilterComposer(
+            $db: $db,
+            $table: $db.deadlines,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -2967,6 +4234,31 @@ class $$CompaniesTableAnnotationComposer
         );
     return f(composer);
   }
+
+  Expression<T> deadlinesRefs<T extends Object>(
+    Expression<T> Function($$DeadlinesTableAnnotationComposer a) f,
+  ) {
+    final $$DeadlinesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.companyId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.deadlines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $$CompaniesTableTableManager
@@ -2985,6 +4277,7 @@ class $$CompaniesTableTableManager
           PrefetchHooks Function({
             bool companyModulesRefs,
             bool companyAuthoritiesRefs,
+            bool deadlinesRefs,
           })
         > {
   $$CompaniesTableTableManager(_$AppDatabase db, $CompaniesTable table)
@@ -3107,12 +4400,17 @@ class $$CompaniesTableTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({companyModulesRefs = false, companyAuthoritiesRefs = false}) {
+              ({
+                companyModulesRefs = false,
+                companyAuthoritiesRefs = false,
+                deadlinesRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (companyModulesRefs) db.companyModules,
                     if (companyAuthoritiesRefs) db.companyAuthorities,
+                    if (deadlinesRefs) db.deadlines,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -3159,6 +4457,27 @@ class $$CompaniesTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (deadlinesRefs)
+                        await $_getPrefetchedData<
+                          CompanyRow,
+                          $CompaniesTable,
+                          DeadlineRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$CompaniesTableReferences
+                              ._deadlinesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$CompaniesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).deadlinesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.companyId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -3182,6 +4501,7 @@ typedef $$CompaniesTableProcessedTableManager =
       PrefetchHooks Function({
         bool companyModulesRefs,
         bool companyAuthoritiesRefs,
+        bool deadlinesRefs,
       })
     >;
 typedef $$CompanyModulesTableCreateCompanionBuilder =
@@ -3978,6 +5298,1022 @@ typedef $$CompanyAuthoritiesTableProcessedTableManager =
       CompanyAuthorityRow,
       PrefetchHooks Function({bool companyId})
     >;
+typedef $$DeadlinesTableCreateCompanionBuilder = DeadlinesCompanion Function({
+  required String id,
+  required DateTime createdAt,
+  required DateTime updatedAt,
+  Value<DateTime?> deletedAt,
+  required String companyId,
+  required String module,
+  required String category,
+  Value<String?> authority,
+  required String title,
+  required DateTime dueDate,
+  required String status,
+  Value<DateTime?> completedOn,
+  Value<String?> previousDeadlineId,
+  Value<int> rowid,
+});
+typedef $$DeadlinesTableUpdateCompanionBuilder = DeadlinesCompanion Function({
+  Value<String> id,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+  Value<DateTime?> deletedAt,
+  Value<String> companyId,
+  Value<String> module,
+  Value<String> category,
+  Value<String?> authority,
+  Value<String> title,
+  Value<DateTime> dueDate,
+  Value<String> status,
+  Value<DateTime?> completedOn,
+  Value<String?> previousDeadlineId,
+  Value<int> rowid,
+});
+
+final class $$DeadlinesTableReferences
+    extends BaseReferences<_$AppDatabase, $DeadlinesTable, DeadlineRow> {
+  $$DeadlinesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $CompaniesTable _companyIdTable(_$AppDatabase db) =>
+      db.companies.createAlias('deadlines__company_id__companies__id');
+
+  $$CompaniesTableProcessedTableManager get companyId {
+    final $_column = $_itemColumn<String>('company_id')!;
+
+    final manager = $$CompaniesTableTableManager(
+      $_db,
+      $_db.companies,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_companyIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $DeadlinesTable _previousDeadlineIdTable(_$AppDatabase db) => db
+      .deadlines
+      .createAlias('deadlines__previous_deadline_id__deadlines__id');
+
+  $$DeadlinesTableProcessedTableManager? get previousDeadlineId {
+    final $_column = $_itemColumn<String>('previous_deadline_id');
+    if ($_column == null) return null;
+    final manager = $$DeadlinesTableTableManager(
+      $_db,
+      $_db.deadlines,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_previousDeadlineIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$DeadlineRemindersTable, List<DeadlineReminderRow>>
+  _deadlineRemindersRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.deadlineReminders,
+        aliasName: 'deadlines__id__deadline_reminders__deadline_id',
+      );
+
+  $$DeadlineRemindersTableProcessedTableManager get deadlineRemindersRefs {
+    final manager = $$DeadlineRemindersTableTableManager(
+      $_db,
+      $_db.deadlineReminders,
+    ).filter((f) => f.deadlineId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _deadlineRemindersRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$DeadlinesTableFilterComposer
+    extends Composer<_$AppDatabase, $DeadlinesTable> {
+  $$DeadlinesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get module => $composableBuilder(
+    column: $table.module,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get authority => $composableBuilder(
+    column: $table.authority,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get dueDate =>
+      $composableBuilder(
+        column: $table.dueDate,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, String> get completedOn =>
+      $composableBuilder(
+        column: $table.completedOn,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$CompaniesTableFilterComposer get companyId {
+    final $$CompaniesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.companyId,
+      referencedTable: $db.companies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CompaniesTableFilterComposer(
+            $db: $db,
+            $table: $db.companies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$DeadlinesTableFilterComposer get previousDeadlineId {
+    final $$DeadlinesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.previousDeadlineId,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableFilterComposer(
+            $db: $db,
+            $table: $db.deadlines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> deadlineRemindersRefs(
+    Expression<bool> Function($$DeadlineRemindersTableFilterComposer f) f,
+  ) {
+    final $$DeadlineRemindersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.deadlineReminders,
+      getReferencedColumn: (t) => t.deadlineId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlineRemindersTableFilterComposer(
+            $db: $db,
+            $table: $db.deadlineReminders,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$DeadlinesTableOrderingComposer
+    extends Composer<_$AppDatabase, $DeadlinesTable> {
+  $$DeadlinesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get module => $composableBuilder(
+    column: $table.module,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get authority => $composableBuilder(
+    column: $table.authority,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get dueDate => $composableBuilder(
+    column: $table.dueDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get completedOn => $composableBuilder(
+    column: $table.completedOn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$CompaniesTableOrderingComposer get companyId {
+    final $$CompaniesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.companyId,
+      referencedTable: $db.companies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CompaniesTableOrderingComposer(
+            $db: $db,
+            $table: $db.companies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$DeadlinesTableOrderingComposer get previousDeadlineId {
+    final $$DeadlinesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.previousDeadlineId,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableOrderingComposer(
+            $db: $db,
+            $table: $db.deadlines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DeadlinesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DeadlinesTable> {
+  $$DeadlinesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get module =>
+      $composableBuilder(column: $table.module, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<String> get authority =>
+      $composableBuilder(column: $table.authority, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, String> get dueDate =>
+      $composableBuilder(column: $table.dueDate, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, String> get completedOn =>
+      $composableBuilder(
+        column: $table.completedOn,
+        builder: (column) => column,
+      );
+
+  $$CompaniesTableAnnotationComposer get companyId {
+    final $$CompaniesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.companyId,
+      referencedTable: $db.companies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CompaniesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.companies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$DeadlinesTableAnnotationComposer get previousDeadlineId {
+    final $$DeadlinesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.previousDeadlineId,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.deadlines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> deadlineRemindersRefs<T extends Object>(
+    Expression<T> Function($$DeadlineRemindersTableAnnotationComposer a) f,
+  ) {
+    final $$DeadlineRemindersTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.deadlineReminders,
+          getReferencedColumn: (t) => t.deadlineId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$DeadlineRemindersTableAnnotationComposer(
+                $db: $db,
+                $table: $db.deadlineReminders,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$DeadlinesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DeadlinesTable,
+          DeadlineRow,
+          $$DeadlinesTableFilterComposer,
+          $$DeadlinesTableOrderingComposer,
+          $$DeadlinesTableAnnotationComposer,
+          $$DeadlinesTableCreateCompanionBuilder,
+          $$DeadlinesTableUpdateCompanionBuilder,
+          (DeadlineRow, $$DeadlinesTableReferences),
+          DeadlineRow,
+          PrefetchHooks Function({
+            bool companyId,
+            bool previousDeadlineId,
+            bool deadlineRemindersRefs,
+          })
+        > {
+  $$DeadlinesTableTableManager(_$AppDatabase db, $DeadlinesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DeadlinesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DeadlinesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DeadlinesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<String> companyId = const Value.absent(),
+                Value<String> module = const Value.absent(),
+                Value<String> category = const Value.absent(),
+                Value<String?> authority = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<DateTime> dueDate = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<DateTime?> completedOn = const Value.absent(),
+                Value<String?> previousDeadlineId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DeadlinesCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                companyId: companyId,
+                module: module,
+                category: category,
+                authority: authority,
+                title: title,
+                dueDate: dueDate,
+                status: status,
+                completedOn: completedOn,
+                previousDeadlineId: previousDeadlineId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<DateTime?> deletedAt = const Value.absent(),
+                required String companyId,
+                required String module,
+                required String category,
+                Value<String?> authority = const Value.absent(),
+                required String title,
+                required DateTime dueDate,
+                required String status,
+                Value<DateTime?> completedOn = const Value.absent(),
+                Value<String?> previousDeadlineId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DeadlinesCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                companyId: companyId,
+                module: module,
+                category: category,
+                authority: authority,
+                title: title,
+                dueDate: dueDate,
+                status: status,
+                completedOn: completedOn,
+                previousDeadlineId: previousDeadlineId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DeadlinesTable, DeadlineRow>(table),
+                  $$DeadlinesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                companyId = false,
+                previousDeadlineId = false,
+                deadlineRemindersRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (deadlineRemindersRefs) db.deadlineReminders,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (companyId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.companyId,
+                            referencedTable: $$DeadlinesTableReferences
+                                ._companyIdTable(db),
+                            referencedColumn: $$DeadlinesTableReferences
+                                ._companyIdTable(db)
+                                .id,
+                          ) as T;
+                        }
+                        if (previousDeadlineId) {
+                          state = state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.previousDeadlineId,
+                            referencedTable: $$DeadlinesTableReferences
+                                ._previousDeadlineIdTable(db),
+                            referencedColumn: $$DeadlinesTableReferences
+                                ._previousDeadlineIdTable(db)
+                                .id,
+                          ) as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (deadlineRemindersRefs)
+                        await $_getPrefetchedData<
+                          DeadlineRow,
+                          $DeadlinesTable,
+                          DeadlineReminderRow
+                        >(
+                          currentTable: table,
+                          referencedTable: $$DeadlinesTableReferences
+                              ._deadlineRemindersRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$DeadlinesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).deadlineRemindersRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.deadlineId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$DeadlinesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DeadlinesTable,
+      DeadlineRow,
+      $$DeadlinesTableFilterComposer,
+      $$DeadlinesTableOrderingComposer,
+      $$DeadlinesTableAnnotationComposer,
+      $$DeadlinesTableCreateCompanionBuilder,
+      $$DeadlinesTableUpdateCompanionBuilder,
+      (DeadlineRow, $$DeadlinesTableReferences),
+      DeadlineRow,
+      PrefetchHooks Function({
+        bool companyId,
+        bool previousDeadlineId,
+        bool deadlineRemindersRefs,
+      })
+    >;
+typedef $$DeadlineRemindersTableCreateCompanionBuilder =
+    DeadlineRemindersCompanion Function({
+      required String id,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<DateTime?> deletedAt,
+      required String deadlineId,
+      required int daysBefore,
+      Value<int> rowid,
+    });
+typedef $$DeadlineRemindersTableUpdateCompanionBuilder =
+    DeadlineRemindersCompanion Function({
+      Value<String> id,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<String> deadlineId,
+      Value<int> daysBefore,
+      Value<int> rowid,
+    });
+
+final class $$DeadlineRemindersTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $DeadlineRemindersTable,
+          DeadlineReminderRow
+        > {
+  $$DeadlineRemindersTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $DeadlinesTable _deadlineIdTable(_$AppDatabase db) => db.deadlines
+      .createAlias('deadline_reminders__deadline_id__deadlines__id');
+
+  $$DeadlinesTableProcessedTableManager get deadlineId {
+    final $_column = $_itemColumn<String>('deadline_id')!;
+
+    final manager = $$DeadlinesTableTableManager(
+      $_db,
+      $_db.deadlines,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_deadlineIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$DeadlineRemindersTableFilterComposer
+    extends Composer<_$AppDatabase, $DeadlineRemindersTable> {
+  $$DeadlineRemindersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get daysBefore => $composableBuilder(
+    column: $table.daysBefore,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$DeadlinesTableFilterComposer get deadlineId {
+    final $$DeadlinesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.deadlineId,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableFilterComposer(
+            $db: $db,
+            $table: $db.deadlines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DeadlineRemindersTableOrderingComposer
+    extends Composer<_$AppDatabase, $DeadlineRemindersTable> {
+  $$DeadlineRemindersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get daysBefore => $composableBuilder(
+    column: $table.daysBefore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$DeadlinesTableOrderingComposer get deadlineId {
+    final $$DeadlinesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.deadlineId,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableOrderingComposer(
+            $db: $db,
+            $table: $db.deadlines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DeadlineRemindersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DeadlineRemindersTable> {
+  $$DeadlineRemindersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get daysBefore => $composableBuilder(
+    column: $table.daysBefore,
+    builder: (column) => column,
+  );
+
+  $$DeadlinesTableAnnotationComposer get deadlineId {
+    final $$DeadlinesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.deadlineId,
+      referencedTable: $db.deadlines,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DeadlinesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.deadlines,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DeadlineRemindersTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $DeadlineRemindersTable,
+          DeadlineReminderRow,
+          $$DeadlineRemindersTableFilterComposer,
+          $$DeadlineRemindersTableOrderingComposer,
+          $$DeadlineRemindersTableAnnotationComposer,
+          $$DeadlineRemindersTableCreateCompanionBuilder,
+          $$DeadlineRemindersTableUpdateCompanionBuilder,
+          (DeadlineReminderRow, $$DeadlineRemindersTableReferences),
+          DeadlineReminderRow,
+          PrefetchHooks Function({bool deadlineId})
+        > {
+  $$DeadlineRemindersTableTableManager(
+    _$AppDatabase db,
+    $DeadlineRemindersTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DeadlineRemindersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DeadlineRemindersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DeadlineRemindersTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<String> deadlineId = const Value.absent(),
+                Value<int> daysBefore = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DeadlineRemindersCompanion(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                deadlineId: deadlineId,
+                daysBefore: daysBefore,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<DateTime?> deletedAt = const Value.absent(),
+                required String deadlineId,
+                required int daysBefore,
+                Value<int> rowid = const Value.absent(),
+              }) => DeadlineRemindersCompanion.insert(
+                id: id,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                deadlineId: deadlineId,
+                daysBefore: daysBefore,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$DeadlineRemindersTable, DeadlineReminderRow>(
+                    table,
+                  ),
+                  $$DeadlineRemindersTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({deadlineId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (deadlineId) {
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.deadlineId,
+                        referencedTable: $$DeadlineRemindersTableReferences
+                            ._deadlineIdTable(db),
+                        referencedColumn: $$DeadlineRemindersTableReferences
+                            ._deadlineIdTable(db)
+                            .id,
+                      ) as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$DeadlineRemindersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $DeadlineRemindersTable,
+      DeadlineReminderRow,
+      $$DeadlineRemindersTableFilterComposer,
+      $$DeadlineRemindersTableOrderingComposer,
+      $$DeadlineRemindersTableAnnotationComposer,
+      $$DeadlineRemindersTableCreateCompanionBuilder,
+      $$DeadlineRemindersTableUpdateCompanionBuilder,
+      (DeadlineReminderRow, $$DeadlineRemindersTableReferences),
+      DeadlineReminderRow,
+      PrefetchHooks Function({bool deadlineId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3988,4 +6324,8 @@ class $AppDatabaseManager {
       $$CompanyModulesTableTableManager(_db, _db.companyModules);
   $$CompanyAuthoritiesTableTableManager get companyAuthorities =>
       $$CompanyAuthoritiesTableTableManager(_db, _db.companyAuthorities);
+  $$DeadlinesTableTableManager get deadlines =>
+      $$DeadlinesTableTableManager(_db, _db.deadlines);
+  $$DeadlineRemindersTableTableManager get deadlineReminders =>
+      $$DeadlineRemindersTableTableManager(_db, _db.deadlineReminders);
 }

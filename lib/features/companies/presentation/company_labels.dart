@@ -19,6 +19,21 @@ extension ModuleTypeUi on ModuleType {
     ModuleType.controlledProducts => 'Polícia Federal e Exército',
     ModuleType.qualityControl => 'Produtos, lotes, estoque',
   };
+
+  /// Trecho da rota do módulo (`/empresas/:id/modulos/<slug>`).
+  String get slug => switch (this) {
+    ModuleType.environmental => 'ambiental',
+    ModuleType.controlledProducts => 'produtos-controlados',
+    ModuleType.qualityControl => 'controle-de-qualidade',
+  };
+}
+
+/// `null` se o slug não é de nenhum módulo.
+ModuleType? moduleFromSlug(String slug) {
+  for (final m in ModuleType.values) {
+    if (m.slug == slug) return m;
+  }
+  return null;
 }
 
 /// Rótulo e tom da situação de um registro em órgão, iguais no formulário e

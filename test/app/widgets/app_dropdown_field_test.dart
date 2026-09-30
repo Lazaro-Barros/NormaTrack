@@ -40,4 +40,23 @@ void main() {
     await tester.pumpAndSettle();
     expect(changes, ['SP', null]);
   });
+
+  testWidgets('noneLabel troca o rótulo do item vazio', (tester) async {
+    await pumpComponent(
+      tester,
+      AppDropdownField<String>(
+        label: 'Órgão',
+        value: null,
+        items: const ['SEMACE'],
+        itemLabel: (s) => s,
+        noneLabel: 'Nenhum',
+        onChanged: (_) {},
+      ),
+    );
+
+    await tester.tap(find.byType(DropdownButtonFormField<String?>));
+    await tester.pumpAndSettle();
+    expect(find.text('Nenhum'), findsWidgets);
+    expect(find.text('Nenhuma'), findsNothing);
+  });
 }

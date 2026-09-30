@@ -15,6 +15,10 @@ abstract final class AppColors {
   /// Texto secundário sobre a faixa de cabeçalho (`primary`).
   static const onBandMuted = Color(0xFFCFE5E3);
 
+  /// Segmento não selecionado sobre a faixa: branco a 14 % sobre `primary`,
+  /// opaco.
+  static const onBandSegment = Color(0xFF307179);
+
   // Neutros (v0.2: fundo tingido, superfícies brancas sem borda)
   static const ground = Color(0xFFE6EFEE);
   static const surface = Color(0xFFFFFFFF);

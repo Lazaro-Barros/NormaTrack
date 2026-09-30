@@ -122,4 +122,9 @@ void main() {
     expect(deadline().isOpen, isTrue);
     expect(deadline(status: DeadlineStatus.cancelled).isOpen, isFalse);
   });
+
+  test('reminderDate atravessa mês e ano', () {
+    expect(reminderDate(DateTime(2027, 1, 10), 30), DateTime(2026, 12, 11));
+    expect(reminderDate(DateTime(2028, 3, 15), 15), DateTime(2028, 2, 29));
+  });
 }

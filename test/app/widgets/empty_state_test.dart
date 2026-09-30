@@ -20,6 +20,18 @@ void main() {
     expect(find.byType(FilledButton), findsNothing);
   });
 
+  testWidgets('conteúdo fica dentro de um card', (tester) async {
+    await pumpComponent(
+      tester,
+      const EmptyState(icon: Icons.inbox, title: 'Vazio', message: 'Nada.'),
+    );
+
+    expect(
+      find.ancestor(of: find.text('Vazio'), matching: find.byType(Card)),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('com ação, tocar chama o callback', (tester) async {
     var taps = 0;
     await pumpComponent(

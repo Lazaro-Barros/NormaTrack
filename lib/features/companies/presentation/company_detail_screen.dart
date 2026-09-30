@@ -14,6 +14,9 @@ import '../../../app/widgets/section_card.dart';
 import '../../../app/widgets/status_text.dart';
 import '../../../core/providers.dart';
 import '../../../core/utils/br_documents.dart';
+import '../../deadlines/domain/deadline.dart';
+import '../../deadlines/presentation/deadline_labels.dart';
+import '../../deadlines/presentation/deadline_providers.dart';
 import '../data/local_company_repository.dart' show companyRepositoryProvider;
 import '../domain/authority.dart';
 import '../domain/company.dart';
@@ -71,6 +74,8 @@ class _Detail extends ConsumerWidget {
       if (company.isArchived) 'Arquivada',
     ].join(' · ');
     void edit() => context.go(AppRoutes.editCompany(company.id));
+    final deadlines =
+        ref.watch(companyDeadlinesProvider(company.id)).value ?? const [];
 
     return Scaffold(
       appBar: AppBar(
@@ -93,7 +98,7 @@ class _Detail extends ConsumerWidget {
           bottom: AppSpacing.xl,
         ),
         children: [
-          _modules(edit),
+          _modules(context, deadlines, today, edit),
           const SizedBox(height: AppSpacing.lg),
           _authorities(today, edit),
           const SizedBox(height: AppSpacing.lg),
@@ -118,17 +123,42 @@ class _Detail extends ConsumerWidget {
     );
   }
 
-  Widget _modules(VoidCallback edit) {
+  /// Cada módulo abre a tela dele e mostra a pior situação dos prazos em
+  /// aberto (RF-EMP-03).
+  Widget _modules(
+    BuildContext context,
+    List<Deadline> deadlines,
+    DateTime today,
+    VoidCallback edit,
+  ) {
     final modules = ModuleType.values.where(company.hasModule).toList();
     return SectionCard(
       title: 'Módulos',
       children: [
-        // TODO(RF-EMP-03): abrir a tela do módulo e mostrar pendências
-        // (RF-PRZ-05).
         for (final module in modules)
-          NavRow(leadingIcon: module.icon, title: module.label),
+          _moduleRow(context, module, deadlines, today),
         if (modules.isEmpty) NavRow(title: 'Habilitar módulos', onTap: edit),
       ],
+    );
+  }
+
+  Widget _moduleRow(
+    BuildContext context,
+    ModuleType module,
+    List<Deadline> deadlines,
+    DateTime today,
+  ) {
+    final pending = modulePending(
+      deadlines.where((d) => d.module == module),
+      today,
+    );
+    return NavRow(
+      leadingIcon: module.icon,
+      title: module.label,
+      trailing: pending == null
+          ? null
+          : StatusText(label: pending.label, tone: pending.tone),
+      onTap: () => context.go(AppRoutes.module(company.id, module)),
     );
   }
 

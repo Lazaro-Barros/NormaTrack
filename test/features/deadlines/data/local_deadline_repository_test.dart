@@ -465,4 +465,21 @@ void main() {
       await emitted;
     });
   });
+
+  test('stream de prazos atualiza com uma stream de empresas aberta', () async {
+    // Regressão: com o mesmo SQL-gatilho, o drift reaproveitava a stream de
+    // empresas e a de prazos não via gravações em `deadlines`.
+    final c = await company('Alfa');
+    final companiesSub = companies.watchById(c).listen((_) {});
+    addTearDown(companiesSub.cancel);
+    await Future<void>.delayed(Duration.zero);
+
+    final lengths = expectLater(
+      repo.watchByCompany(c).map((l) => l.length),
+      emitsInOrder([0, 1]),
+    );
+    await Future<void>.delayed(Duration.zero);
+    await repo.create(c, input());
+    await lengths;
+  });
 }

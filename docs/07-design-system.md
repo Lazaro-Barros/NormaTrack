@@ -28,9 +28,9 @@ Os nomes abaixo são os mesmos usados no código (`lib/app/theme/`). As telas n�
 
 | Token | Hex | Papel no Material 3 |
 |---|---|---|
-| `primary` | `#0E5A63` | `colorScheme.primary` |
+| `primary` | `#0E5A63` | `colorScheme.primary`; também `onSecondaryContainer` (texto do botão tonal) |
 | `primaryStrong` | `#0A434A` | estado pressionado |
-| `primarySoft` | `#DCEBEA` | `primaryContainer` |
+| `primarySoft` | `#DCEBEA` | `primaryContainer` e `secondaryContainer` (fundo do botão tonal) |
 | `onPrimary` | `#FFFFFF` | `onPrimary` |
 | `onBandMuted` | `#CFE5E3` | texto secundário na faixa de cabeçalho; nos widgets, `BandColors.of(context).muted` (fora do `ColorScheme`) |
 | `ground` | `#E6EFEE` | `surface` (fundo das telas, petróleo bem claro) |
@@ -125,7 +125,7 @@ Botões, campos, chips, segmentado, interruptores, navegação inferior, snackba
 | `AppDropdownField` ✅ | Lista de opções com o layout do `AppTextField`; 1º item "Nenhuma" limpa o valor |
 | `AppActionBar` ✅ | Barra de ações no rodapé das telas internas (`Scaffold.bottomNavigationBar`), branca com cantos superiores 24 |
 | `DestructiveButton` ✅ / `showConfirmDialog` ✅ | Ação destrutiva com contorno vermelho, sempre depois do diálogo de confirmação (`destructive: true` pinta o botão de confirmar de vermelho) |
-| Botões | `FilledButton` primário: um por tela, no rodapé. `FilledButton.tonal`: ação secundária de destaque. `OutlinedButton`: secundária. Destrutivo: contorno vermelho + confirmação |
+| Botões | `FilledButton` primário: um por tela, no rodapé. `FilledButton.tonal`: ação secundária de destaque, com fundo `primarySoft` e texto `primary` (o `filledButtonTheme` não fixa cores: cada variante usa as do `ColorScheme`). `OutlinedButton`: secundária. Destrutivo: contorno vermelho + confirmação |
 
 ## Telas
 

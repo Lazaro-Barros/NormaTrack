@@ -24,7 +24,8 @@ abstract final class AppTheme {
     secondary: AppColors.primary,
     onSecondary: AppColors.onPrimary,
     secondaryContainer: AppColors.primarySoft,
-    onSecondaryContainer: AppColors.primaryStrong,
+    // Fundo e texto do FilledButton.tonal (wireframes: #DCEBEA / #0E5A63).
+    onSecondaryContainer: AppColors.primary,
     error: AppColors.overdue,
     onError: AppColors.onPrimary,
     errorContainer: AppColors.overdueBg,
@@ -99,10 +100,11 @@ abstract final class AppTheme {
         thickness: 1,
         space: 1,
       ),
+      // Sem cores: o estilo do tema vale para FilledButton e
+      // FilledButton.tonal, e cada variante pega as suas do colorScheme
+      // (primary/onPrimary e secondaryContainer/onSecondaryContainer).
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.onPrimary,
           minimumSize: buttonSize,
           padding: buttonPadding,
           shape: buttonShape,

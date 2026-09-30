@@ -68,6 +68,13 @@ void main() {
       }
     });
 
+    test('texto do botão tonal tem contraste de pelo menos 4,5:1', () {
+      expect(
+        _contrast(AppColors.primary, AppColors.primarySoft),
+        greaterThanOrEqualTo(4.5),
+      );
+    });
+
     test('bordas de campo e placeholder são distinguíveis', () {
       expect(
         _contrast(AppColors.borderStrong, AppColors.surface),
@@ -113,5 +120,55 @@ void main() {
     final text = tester.widget<Text>(find.text('Vencido'));
     expect(text.style?.color, AppColors.overdue);
     expect(find.byIcon(Icons.cancel_outlined), findsOneWidget);
+  });
+
+  group('FilledButton', () {
+    Future<Material> pumpButton(WidgetTester tester, Widget button) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light,
+          home: Scaffold(body: Center(child: button)),
+        ),
+      );
+      return tester.widget<Material>(
+        find.descendant(
+          of: find.byWidget(button),
+          matching: find.byType(Material),
+        ),
+      );
+    }
+
+    testWidgets('primário: petróleo com texto branco', (tester) async {
+      final material = await pumpButton(
+        tester,
+        FilledButton(onPressed: () {}, child: const Text('Salvar')),
+      );
+      expect(material.color, AppColors.primary);
+      expect(material.textStyle?.color, AppColors.onPrimary);
+    });
+
+    testWidgets('tonal: petróleo claro com texto petróleo', (tester) async {
+      final material = await pumpButton(
+        tester,
+        FilledButton.tonal(onPressed: () {}, child: const Text('Ver')),
+      );
+      expect(material.color, AppColors.primarySoft);
+      expect(material.textStyle?.color, AppColors.primary);
+    });
+
+    testWidgets('desabilitados ficam com a cor de desabilitado', (
+      tester,
+    ) async {
+      for (final button in [
+        const FilledButton(onPressed: null, child: Text('A')),
+        const FilledButton.tonal(onPressed: null, child: Text('B')),
+      ]) {
+        final material = await pumpButton(tester, button);
+        // Padrão do Material 3: onSurface com 12% de opacidade.
+        final color = material.color!;
+        expect(color.a, closeTo(0.12, 0.01), reason: '$button');
+        expect(color.withValues(alpha: 1), AppColors.ink, reason: '$button');
+      }
+    });
   });
 }

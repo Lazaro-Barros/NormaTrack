@@ -37,3 +37,20 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Pendente / dúvidas**
 - Aprovação da usuária. Aprovado: copiar para `docs/design/wireframes/` (`PrazoForm` e um novo `PrazoLembrete`) e escrever o plano.
+
+## 2026-09-30 — Protótipo aprovado e plano escrito
+
+**Feito**
+- Usuária aprovou o protótipo. `docs/design/wireframes/PrazoForm.dc.html` substituído e `PrazoLembrete.dc.html` criado.
+- `plan.md` escrito, conferido contra o código de empresas (formulário, sheet de órgão, detalhe, lista), o tema e os helpers de teste. Datas de exemplo calculadas por script a partir de `testNow` (29/09/2026). Critérios de aceite no README. Status → `planejada`.
+
+**Decidido**
+- Rotas aninhadas na empresa: `/empresas/:id/modulos/:modulo[/prazos/novo | /prazos/:prazo/editar]`, com slug pt-BR do módulo (`ambiental`, `produtos-controlados`, `controle-de-qualidade`).
+- Categoria no segmentado da faixa, como no protótipo: componente novo `BandSegmentedButton` e cor `onBandSegment` (`#307179`, branco a 14 % sobre o petróleo), com teste de contraste.
+- Componentes pequenos que faltavam: `AppTextField.helperText`, `FieldErrorText` (erro fora de campo) e `AppDropdownField.noneLabel` ("Nenhum" para órgão).
+- Texto relativo do card: "Venceu ontem / há n dias", "Vence hoje / amanhã / em n dias", vigente "Em n dias" até 365 e "Em n anos" acima. Ano no bloco de data só quando não é o ano corrente. Decisão de interface, não regra de negócio.
+- Pendências no detalhe da empresa: vencidos têm prioridade sobre a vencer; só vigentes não mostram nada.
+- `pumpApp` passa a sobrescrever `deadlineRepositoryProvider` com um fake por padrão (senão os testes de widget tentariam abrir o banco real).
+
+**Pendente / dúvidas**
+- Revisão do plano pela usuária antes de implementar.

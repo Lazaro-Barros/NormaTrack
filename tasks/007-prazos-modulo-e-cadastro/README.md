@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| **Status** | rascunho |
+| **Status** | planejada |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-01, RF-PRZ-02 · RF-AMB-01, RF-AMB-05, RF-AMB-06, RF-PCT-01 · RF-EMP-03 (pendências por módulo) |
 | **Depende de** | 006 (concluída) |
-| **Wireframe** | [ModuloAmbiental](../../docs/design/wireframes/ModuloAmbiental.dc.html) · [PrazoForm](../../docs/design/wireframes/PrazoForm.dc.html) (a lista de lembretes muda o formulário: ver [protótipo](prototypes/)) |
+| **Wireframe** | [ModuloAmbiental](../../docs/design/wireframes/ModuloAmbiental.dc.html) · [PrazoForm](../../docs/design/wireframes/PrazoForm.dc.html) (atualizado com a lista de lembretes) · [PrazoLembrete](../../docs/design/wireframes/PrazoLembrete.dc.html) |
 
 ## Objetivo
 
@@ -26,7 +26,7 @@ A usuária abre um módulo habilitado a partir do detalhe da empresa, vê os pra
 - **Componente `DeadlineCard`** em `lib/app/widgets/` (genérico, com teste): bloco de data na cor forte da situação, título, linha de contexto e texto relativo.
 - **`EmptyState` dentro de card** (resolve a pendência da task 005: o botão tonal some sobre o fundo tingido). Vale para todas as telas que usam o componente.
 - **Pendências no detalhe da empresa** (RF-EMP-03): a linha de cada módulo mostra a pior situação dos prazos em aberto com a contagem (ex.: "1 vencido") em `StatusText`; nada quando tudo está vigente.
-- Protótipo do formulário aprovado vira o wireframe oficial (`docs/design/wireframes/PrazoForm.dc.html`).
+- Componentes novos ou estendidos: `BandSegmentedButton` (categoria na faixa), `FieldErrorText`, `AppTextField.helperText`, `AppDropdownField.noneLabel`.
 
 ## Fora de escopo
 
@@ -37,8 +37,18 @@ A usuária abre um módulo habilitado a partir do detalhe da empresa, vê os pra
 
 ## Critérios de aceite
 
-- [ ] A definir no plano, depois da aprovação do protótipo.
+- [ ] No detalhe da empresa, cada módulo abre a tela do módulo e mostra a pior situação dos prazos em aberto ("1 vencido", "2 a vencer"); nada quando só há vigentes.
+- [ ] A tela do módulo lista os prazos em aberto em seções Licenças → Laudos → Manutenções (sem seção vazia), por vencimento, com `DeadlineCard` (bloco de data na cor da situação, título, categoria · órgão e texto relativo). Estados: vazio com "Cadastrar prazo", módulo desligado, empresa ou módulo inexistente.
+- [ ] "Novo prazo" (FAB) e o toque num prazo abrem o formulário de criação e de edição.
+- [ ] O formulário tem a categoria na faixa, título*, órgão (opcional), vencimento* e a lista de lembretes com a data de cada um e "Alertas a partir de …". A lista vem do padrão da categoria e é reposta ao trocar de categoria enquanto não foi editada.
+- [ ] O sheet "Adicionar lembrete" tem atalhos (sem os que já estão na lista), campo de dias com a data do aviso, 0 = no dia, e recusa repetido ou vazio.
+- [ ] Salvar valida (título, vencimento, ao menos um lembrete), rola até o erro, grava pelo repositório e volta com "Prazo salvo"; fechar com alterações pede confirmação.
+- [ ] `DeadlineCard`, `BandSegmentedButton` e `FieldErrorText` em `lib/app/widgets/` com teste; `EmptyState` dentro de card; `docs/07-design-system.md` atualizado.
 - [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros
+
+## Para quem vai implementar
+
+Comece pelo [plano](plan.md): ele é autocontido (rotas, componentes, regras de texto, estados, testes e como verificar). Depois leia o fim do [journal](journal.md).
 
 ## Links
 

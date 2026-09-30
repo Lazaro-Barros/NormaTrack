@@ -8,6 +8,10 @@ import 'deadline_status.dart';
 
 const _listEquality = ListEquality<int>();
 
+/// Data do lembrete [daysBefore] dias antes de [dueDate], em calendário.
+DateTime reminderDate(DateTime dueDate, int daysBefore) =>
+    DateTime(dueDate.year, dueDate.month, dueDate.day - daysBefore);
+
 /// Dados editáveis do prazo. Usado para criar e para editar.
 @immutable
 class DeadlineInput {
@@ -111,11 +115,12 @@ class Deadline {
   int get alertDaysBefore => reminderDays.first;
 
   /// Primeiro dia da janela "a vencer".
-  DateTime get alertStartDate => _daysBeforeDue(alertDaysBefore);
+  DateTime get alertStartDate => reminderDate(dueDate, alertDaysBefore);
 
   /// Uma data por lembrete, na ordem de [reminderDays] (mais cedo primeiro).
-  List<DateTime> get reminderDates =>
-      List.unmodifiable(reminderDays.map(_daysBeforeDue));
+  List<DateTime> get reminderDates => List.unmodifiable([
+    for (final d in reminderDays) reminderDate(dueDate, d),
+  ]);
 
   bool get isOpen => status == DeadlineStatus.active;
 
@@ -154,9 +159,6 @@ class Deadline {
     dueDate: dueDate,
     reminderDays: reminderDays,
   );
-
-  DateTime _daysBeforeDue(int days) =>
-      DateTime(dueDate.year, dueDate.month, dueDate.day - days);
 
   @override
   bool operator ==(Object other) =>

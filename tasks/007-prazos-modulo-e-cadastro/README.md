@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | em andamento |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-01, RF-PRZ-02 · RF-AMB-01, RF-AMB-05, RF-AMB-06, RF-PCT-01 · RF-EMP-03 (pendências por módulo) |
 | **Depende de** | 006 (concluída) |

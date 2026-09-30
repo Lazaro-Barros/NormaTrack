@@ -59,9 +59,14 @@ class LocalCompanyRepository implements CompanyRepository {
     return (await _assemble([row])).single;
   }
 
-  /// Reexecuta [load] sempre que qualquer uma das três tabelas muda.
+  /// Reexecuta [load] sempre que qualquer uma das três tabelas muda. O SQL
+  /// precisa ser único no app: o drift reaproveita streams com o mesmo SQL e
+  /// variáveis, sem olhar `readsFrom` (D008).
   Stream<T> _watch<T>(Future<T> Function() load) => _db
-      .customSelect('SELECT 1', readsFrom: {_companies, _modules, _authorities})
+      .customSelect(
+        'SELECT 1 AS companies_changed',
+        readsFrom: {_companies, _modules, _authorities},
+      )
       .watch()
       .asyncMap((_) => load());
 

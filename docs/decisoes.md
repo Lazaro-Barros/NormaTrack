@@ -61,7 +61,7 @@ O `applicationId` é `br.com.normatrack.app`. Por enquanto o app não será publ
 - Toda tabela usa o mixin `EntityColumns` (`lib/core/database/converters.dart`): `id` texto (UUID v7 gerado no app) como chave primária, `createdAt`, `updatedAt` e `deletedAt`.
 - A classe de linha gerada leva o sufixo `Row` (`@DataClassName('CompanyRow')`), para não colidir com a entidade do domínio. Linhas não saem de `features/*/data`: o mapper converte para entidade.
 - Datas-hora em ISO-8601 UTC (`store_date_time_values_as_text`); datas sem hora como texto `AAAA-MM-DD` (`DateOnlyConverter`). Enums gravados pelo `code` (D007), sem `textEnum`.
-- Repositórios que expõem agregados de várias tabelas observam todas elas com uma consulta-gatilho (`customSelect(..., readsFrom: {...}).watch()`) e recarregam o agregado.
+- Repositórios que expõem agregados de várias tabelas observam todas elas com uma consulta-gatilho (`customSelect(..., readsFrom: {...}).watch()`) e recarregam o agregado. O SQL da consulta-gatilho é **único por repositório** (`SELECT 1 AS companies_changed`, `SELECT 1 AS deadlines_changed`): o drift reaproveita streams com o mesmo SQL e variáveis sem comparar `readsFrom`, e uma consulta repetida passaria a ouvir só as tabelas da primeira (bug achado na task 007).
 - *Por quê:* regras do `CLAUDE.md` (UUID, exclusão lógica) num único lugar, e datas que não mudam de dia por fuso.
 
 ## D009 — Design system v0.2

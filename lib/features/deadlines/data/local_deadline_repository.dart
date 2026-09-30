@@ -103,9 +103,11 @@ class LocalDeadlineRepository implements DeadlineRepository {
           .distinct(const ListEquality<Deadline>().equals);
 
   /// Reexecuta [load] sempre que prazos, lembretes, empresas ou módulos mudam.
+  /// O SQL precisa ser único no app: o drift reaproveita streams com o mesmo
+  /// SQL e variáveis, sem olhar `readsFrom` (D008).
   Stream<T> _watch<T>(Future<T> Function() load) => _db
       .customSelect(
-        'SELECT 1',
+        'SELECT 1 AS deadlines_changed',
         readsFrom: {_deadlines, _reminders, _companies, _modules},
       )
       .watch()

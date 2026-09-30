@@ -8,6 +8,9 @@ import 'package:normatrack/features/companies/domain/company.dart';
 import 'package:normatrack/features/companies/domain/company_repository.dart';
 import 'package:normatrack/features/companies/domain/company_validation.dart';
 import 'package:normatrack/features/companies/domain/module_type.dart';
+import 'package:normatrack/features/deadlines/data/local_deadline_repository.dart';
+import 'package:normatrack/features/deadlines/domain/deadline.dart';
+import 'package:normatrack/features/deadlines/domain/deadline_category.dart';
 
 void main() {
   late AppDatabase db;
@@ -501,5 +504,49 @@ void main() {
     expect(company.deletedAt, now);
     expect(module.deletedAt, now);
     expect(authority.deletedAt, now);
+  });
+
+  test('delete exclui os prazos e lembretes só da empresa', () async {
+    final deadlines = LocalDeadlineRepository(
+      db,
+      clock: () => now,
+      newId: () => 'id-${++nextId}',
+    );
+    Future<String> withDeadline(String name) async {
+      final c = await repo.create(
+        CompanyInput(
+          legalName: name,
+          enabledModules: {ModuleType.environmental},
+        ),
+      );
+      await deadlines.create(
+        c.id,
+        DeadlineInput(
+          module: ModuleType.environmental,
+          category: DeadlineCategory.license,
+          title: 'Licença',
+          dueDate: DateTime(2026, 10, 31),
+        ),
+      );
+      return c.id;
+    }
+
+    final a = await withDeadline('A');
+    final b = await withDeadline('B');
+    tick();
+    await repo.delete(a);
+
+    final rows = await db.select(db.deadlines).get();
+    final byCompany = {for (final r in rows) r.companyId: r};
+    expect(byCompany[a]!.deletedAt, now);
+    expect(byCompany[b]!.deletedAt, isNull);
+    final reminders = await db.select(db.deadlineReminders).get();
+    for (final r in reminders) {
+      expect(
+        r.deletedAt,
+        r.deadlineId == byCompany[a]!.id ? now : isNull,
+        reason: r.deadlineId,
+      );
+    }
   });
 }

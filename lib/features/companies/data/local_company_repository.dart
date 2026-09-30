@@ -212,7 +212,27 @@ class LocalCompanyRepository implements CompanyRepository {
     )..where((a) => a.companyId.equals(id) & a.deletedAt.isNull())).write(
       CompanyAuthoritiesCompanion(deletedAt: Value(now), updatedAt: Value(now)),
     );
+    await _deleteDeadlines(id, now);
   });
+
+  /// Prazos da empresa e os lembretes deles (task 006).
+  Future<void> _deleteDeadlines(String companyId, DateTime now) async {
+    final deadlines = _db.deadlines;
+    final reminders = _db.deadlineReminders;
+    final ids = _db.selectOnly(deadlines)
+      ..addColumns([deadlines.id])
+      ..where(deadlines.companyId.equals(companyId));
+    await (_db.update(
+      reminders,
+    )..where((r) => r.deadlineId.isInQuery(ids) & r.deletedAt.isNull())).write(
+      DeadlineRemindersCompanion(deletedAt: Value(now), updatedAt: Value(now)),
+    );
+    await (_db.update(deadlines)
+          ..where((d) => d.companyId.equals(companyId) & d.deletedAt.isNull()))
+        .write(
+          DeadlinesCompanion(deletedAt: Value(now), updatedAt: Value(now)),
+        );
+  }
 
   Future<void> _setArchived(String id, {required bool archived}) =>
       _db.transaction(() async {

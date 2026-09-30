@@ -24,6 +24,7 @@ class AppTextField extends StatelessWidget {
     this.onChanged,
     this.textInputAction,
     this.tabular = false,
+    this.helperText,
   });
 
   final String label;
@@ -42,6 +43,9 @@ class AppTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final TextInputAction? textInputAction;
   final bool tabular;
+
+  /// Ajuda abaixo do campo. Some quando há erro.
+  final String? helperText;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +66,8 @@ class AppTextField extends StatelessWidget {
         style: tabular ? AppTypography.tabular(style) : style,
         decoration: InputDecoration(
           hintText: hint,
+          helperText: helperText,
+          helperMaxLines: 2,
           suffixIcon: suffixIcon,
           error: FieldParts.error(context, errorText),
         ),

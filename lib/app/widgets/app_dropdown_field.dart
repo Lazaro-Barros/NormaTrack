@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'field_parts.dart';
 
 /// Lista de opções com o layout do `AppTextField`. O primeiro item,
-/// "Nenhuma", limpa o valor.
+/// [noneLabel], limpa o valor.
 class AppDropdownField<T> extends StatelessWidget {
   const AppDropdownField({
     super.key,
@@ -13,6 +13,7 @@ class AppDropdownField<T> extends StatelessWidget {
     required this.itemLabel,
     this.selectedLabel,
     this.hint,
+    this.noneLabel = 'Nenhuma',
     required this.onChanged,
   });
 
@@ -24,6 +25,9 @@ class AppDropdownField<T> extends StatelessWidget {
   /// Texto do valor escolhido no campo fechado. Padrão: [itemLabel].
   final String Function(T)? selectedLabel;
   final String? hint;
+
+  /// Rótulo do item que limpa o valor, no gênero do campo.
+  final String noneLabel;
   final ValueChanged<T?> onChanged;
 
   @override
@@ -41,7 +45,7 @@ class AppDropdownField<T> extends StatelessWidget {
         isExpanded: true,
         hint: hint == null ? null : ellipsis(hint),
         items: [
-          DropdownMenuItem<T?>(value: null, child: ellipsis('Nenhuma')),
+          DropdownMenuItem<T?>(value: null, child: ellipsis(noneLabel)),
           for (final item in items)
             DropdownMenuItem<T?>(value: item, child: ellipsis(itemLabel(item))),
         ],

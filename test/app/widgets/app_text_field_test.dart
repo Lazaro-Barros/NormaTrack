@@ -37,4 +37,24 @@ void main() {
     expect(find.byIcon(Icons.error_outline), findsNothing);
     expect(find.text('CNPJ', findRichText: true), findsOneWidget);
   });
+
+  testWidgets('helperText aparece e some quando há erro', (tester) async {
+    await pumpComponent(
+      tester,
+      const AppTextField(label: 'Dias', helperText: 'Use 0 para o dia.'),
+    );
+    expect(find.text('Use 0 para o dia.'), findsOneWidget);
+
+    await pumpComponent(
+      tester,
+      const AppTextField(
+        label: 'Dias',
+        helperText: 'Use 0 para o dia.',
+        errorText: 'Informe os dias',
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Use 0 para o dia.'), findsNothing);
+    expect(find.text('Informe os dias'), findsOneWidget);
+  });
 }

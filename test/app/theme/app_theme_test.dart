@@ -89,6 +89,14 @@ void main() {
     test('registra a extensão da faixa com onBandMuted', () {
       expect(theme.extension<BandColors>(), BandColors.light);
       expect(BandColors.light.muted, AppColors.onBandMuted);
+      expect(BandColors.light.segment, AppColors.onBandSegment);
+    });
+
+    test('segmentado da faixa tem contraste de pelo menos 4,5:1', () {
+      expect(
+        _contrast(AppColors.onPrimary, AppColors.onBandSegment),
+        greaterThanOrEqualTo(4.5),
+      );
     });
 
     test('busca da faixa é branca', () {

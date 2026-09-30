@@ -6,8 +6,11 @@ import 'package:normatrack/features/companies/domain/authority.dart';
 import 'package:normatrack/features/companies/domain/brazilian_state.dart';
 import 'package:normatrack/features/companies/domain/company.dart';
 import 'package:normatrack/features/companies/domain/module_type.dart';
+import 'package:normatrack/features/deadlines/domain/deadline.dart';
+import 'package:normatrack/features/deadlines/domain/deadline_category.dart';
 
 import '../../../helpers/fake_company_repository.dart';
+import '../../../helpers/fake_deadline_repository.dart';
 import '../../../helpers/pump_app.dart';
 
 void main() {
@@ -224,5 +227,54 @@ void main() {
     await tester.tap(find.byTooltip('Editar empresa'));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(BandTitle, 'Editar empresa'), findsOne);
+  });
+
+  group('pendências por módulo', () {
+    Future<void> pumpWith(WidgetTester tester, List<DateTime> dueDates) async {
+      final repo = FakeCompanyRepository(now: testNow);
+      final company = await repo.seed(alfa);
+      final deadlines = FakeDeadlineRepository(now: testNow, companies: repo);
+      for (final (i, due) in dueDates.indexed) {
+        await deadlines.seed(
+          company.id,
+          DeadlineInput(
+            module: ModuleType.environmental,
+            category: DeadlineCategory.license,
+            title: 'Licença $i',
+            dueDate: due,
+          ),
+        );
+      }
+      await pumpApp(
+        tester,
+        repository: repo,
+        deadlineRepository: deadlines,
+        initialLocation: AppRoutes.company(company.id),
+      );
+    }
+
+    testWidgets('vencido tem prioridade sobre a vencer', (tester) async {
+      await pumpWith(tester, [DateTime(2026, 9, 26), DateTime(2026, 10, 31)]);
+      expect(find.text('1 vencido'), findsOneWidget);
+      expect(find.textContaining('a vencer'), findsNothing);
+    });
+
+    testWidgets('só a vencer', (tester) async {
+      await pumpWith(tester, [DateTime(2026, 10, 31), DateTime(2026, 9, 30)]);
+      expect(find.text('2 a vencer'), findsOneWidget);
+    });
+
+    testWidgets('só vigentes não mostram nada; tocar abre o módulo', (
+      tester,
+    ) async {
+      await pumpWith(tester, [DateTime(2028, 3, 15)]);
+      expect(find.textContaining('vencid'), findsNothing);
+      expect(find.textContaining('a vencer'), findsNothing);
+
+      await tester.tap(find.text('Ambiental'));
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(BandTitle, 'Ambiental'), findsOne);
+      expect(find.text('Licença 0'), findsOneWidget);
+    });
   });
 }

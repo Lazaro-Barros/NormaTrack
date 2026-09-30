@@ -34,14 +34,21 @@ class SectionCard extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Expanded(child: Text(title, style: text.titleMedium)),
-                  if (caption != null)
-                    Text(
-                      caption,
-                      style: AppTypography.tabular(text.bodyMedium),
-                    ),
-                ],
+                // Com legenda, o título fica no tamanho natural e a legenda
+                // quebra linha se não couber (em vez de estourar).
+                children: caption == null
+                    ? [Expanded(child: Text(title, style: text.titleMedium))]
+                    : [
+                        Text(title, style: text.titleMedium),
+                        const SizedBox(width: AppSpacing.sm),
+                        Expanded(
+                          child: Text(
+                            caption,
+                            textAlign: TextAlign.end,
+                            style: AppTypography.tabular(text.bodyMedium),
+                          ),
+                        ),
+                      ],
               ),
               if (description != null) ...[
                 const SizedBox(height: AppSpacing.xs),

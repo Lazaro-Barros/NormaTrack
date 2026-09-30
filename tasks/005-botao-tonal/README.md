@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RNF-06 |
 | **Depende de** | [001](../001-design-system-e-tema/), [004](../004-refinamento-visual/) |
@@ -27,12 +27,12 @@ O `FilledButton.tonal` (ação secundária de destaque) aparece com fundo petró
 
 ## Critérios de aceite
 
-- [ ] `FilledButton` continua petróleo (`primary`) com texto branco
-- [ ] `FilledButton.tonal` tem fundo `primarySoft` e texto `primary`, com contraste de pelo menos 4,5:1 (teste)
-- [ ] Botões desabilitados continuam com a aparência padrão de desabilitado
-- [ ] `docs/07-design-system.md` descreve as cores do tonal
-- [ ] Conferido no emulador (ação do `EmptyState` no Painel e em Empresas)
-- [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros
+- [x] `FilledButton` continua petróleo (`primary`) com texto branco
+- [x] `FilledButton.tonal` tem fundo `primarySoft` e texto `primary`, com contraste de pelo menos 4,5:1 (teste)
+- [x] Botões desabilitados continuam com a aparência padrão de desabilitado
+- [x] `docs/07-design-system.md` descreve as cores do tonal
+- [x] Conferido no emulador (ação do `EmptyState` no Painel; ver journal)
+- [x] `dart format .`, `flutter analyze` e `flutter test` sem erros
 
 ## Links
 

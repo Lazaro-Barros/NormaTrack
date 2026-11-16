@@ -135,4 +135,62 @@ void main() {
     );
     expect(find.text('Empresa não encontrada'), findsOneWidget);
   });
+
+  testWidgets('Encerrados: concluído e cancelado, sem renovados nem FAB', (
+    tester,
+  ) async {
+    final laudo = await deadlines.seed(
+      companyId,
+      input(
+        'Laudo da ETE',
+        DateTime(2026, 8, 10),
+        category: DeadlineCategory.labReport,
+      ),
+    );
+    final lo = await deadlines.seed(
+      companyId,
+      input('Licença de Operação', DateTime(2026, 9, 26)),
+    );
+    final renovada = await deadlines.seed(
+      companyId,
+      input('Licença Antiga', DateTime(2026, 7, 1)),
+    );
+    await deadlines.complete(laudo.id, completedOn: DateTime(2026, 8, 5));
+    await deadlines.cancel(lo.id);
+    await deadlines.renew(renovada.id, newDueDate: DateTime(2027, 7, 1));
+    await pumpModule(tester);
+
+    expect(find.text('Novo prazo'), findsOneWidget);
+    await tester.tap(find.text('Encerrados'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Novo prazo'), findsNothing);
+    expect(find.byType(DeadlineCard), findsNWidgets(2));
+    expect(find.text('Licença Antiga'), findsNothing);
+    expect(find.text('Concluído'), findsOneWidget);
+    expect(find.text('Cancelado'), findsOneWidget);
+    // Mais recente primeiro.
+    expect(
+      tester.getTopLeft(find.text('Licença de Operação')).dy,
+      lessThan(tester.getTopLeft(find.text('Laudo da ETE')).dy),
+    );
+
+    await tester.tap(find.text('Laudo da ETE'));
+    await tester.pumpAndSettle();
+    expect(find.text('Concluído em 05/08/2026'), findsOneWidget);
+    await tester.tap(find.byTooltip('Voltar'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Em aberto'));
+    await tester.pumpAndSettle();
+    expect(find.text('Novo prazo'), findsOneWidget);
+    expect(find.text('Licença Antiga'), findsOneWidget);
+  });
+
+  testWidgets('Encerrados vazio', (tester) async {
+    await pumpModule(tester);
+    await tester.tap(find.text('Encerrados'));
+    await tester.pumpAndSettle();
+    expect(find.text('Nenhum prazo encerrado'), findsOneWidget);
+  });
 }

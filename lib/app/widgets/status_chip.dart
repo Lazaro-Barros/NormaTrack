@@ -10,11 +10,15 @@ class StatusChip extends StatelessWidget {
     required this.tone,
     required this.label,
     this.compact = false,
+    this.icon,
   });
 
   final StatusTone tone;
   final String label;
   final bool compact;
+
+  /// Ícone próprio; padrão: o do tom.
+  final IconData? icon;
 
   static IconData iconFor(StatusTone tone) => switch (tone) {
     StatusTone.overdue => Icons.cancel_outlined,
@@ -42,7 +46,7 @@ class StatusChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(iconFor(tone), size: 16, color: style.foreground),
+              Icon(icon ?? iconFor(tone), size: 16, color: style.foreground),
               const SizedBox(width: AppSpacing.xs),
               Text(
                 label,

@@ -53,4 +53,29 @@ void main() {
     expect(result, isTrue);
     expect(find.text('Arquivar empresa?'), findsNothing);
   });
+
+  testWidgets('dismissLabel troca o texto e devolve false', (tester) async {
+    bool? result;
+    await pumpComponent(
+      tester,
+      Builder(
+        builder: (context) => TextButton(
+          onPressed: () async => result = await showConfirmDialog(
+            context,
+            title: 'Cancelar este prazo?',
+            message: 'Dá para reabrir.',
+            confirmLabel: 'Cancelar prazo',
+            dismissLabel: 'Voltar',
+          ),
+          child: const Text('abrir'),
+        ),
+      ),
+    );
+    await tester.tap(find.text('abrir'));
+    await tester.pumpAndSettle();
+    expect(find.text('Cancelar'), findsNothing);
+    await tester.tap(find.text('Voltar'));
+    await tester.pumpAndSettle();
+    expect(result, isFalse);
+  });
 }

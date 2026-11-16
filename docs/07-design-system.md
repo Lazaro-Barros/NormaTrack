@@ -55,7 +55,7 @@ A situação é derivada de `dueDate`, do maior lembrete e do estado do prazo (v
 | Vigente | `statusOk` | `#1D6B45` | `#E2F1E8` | check em círculo |
 | Renovado | `statusClosed` | `#4A5055` | `#E9ECEB` | setas de renovação |
 
-Concluído e cancelado (task 006) também usam `statusClosed`; o ícone de cada um fica para a task das telas de prazo.
+Concluído e cancelado (task 006) também usam `statusClosed`, com ícones próprios (task 008): concluído `Icons.task_alt` (check em círculo cheio), cancelado `Icons.block` (círculo cortado). `StatusChip` aceita `icon` para isso.
 
 Implementado como `ThemeExtension` em `StatusColors` (`StatusColors.of(context).resolve(StatusTone.overdue)`).
 
@@ -120,7 +120,8 @@ Botões, campos, chips, segmentado, interruptores, navegação inferior, snackba
 | `PendingRow` | Lançamento periódico a fazer, com botão tonal "Lançar" |
 | `NavRow` / `SwitchRow` ✅ | Linhas dentro de um card, separadas por `divider`. A navegável tem chevron; situação em texto colorido à direita. O interruptor aplica na hora |
 | `AppTextField` ✅ | Rótulo acima (obrigatório com `*`), nunca só placeholder. Ajuda opcional abaixo (`helperText`). Erro com ícone e texto. Formulários longos em seções, cada uma num card |
-| `StatusBanner` | Aviso no topo do conteúdo, na cor suave da situação (prazo vencido, sem backup) |
+| `StatusBanner` ✅ | Situação em destaque no topo do detalhe do prazo, na cor suave: `DateBlock` + título (a situação em texto, na cor forte) + mensagem. Serve a todas as situações, não só vencido. Altura fixa 76 (`StatusBanner.height`), para ir no `AppBar.bottom` |
+| `DateBlock` ✅ | Bloco de data 48 × 52 na cor forte da situação (dia e mês; ano de 2 dígitos com `showYear`). Usado pelo `DeadlineCard` e pelo `StatusBanner` |
 | `EmptyState` ✅ | Explica o próximo passo e oferece a ação (`FilledButton.tonal`, opcional), dentro de um card branco (onde o tonal tem contraste) |
 | `BandSegmentedButton` ✅ | Segmentado claro na faixa de cabeçalho (`AppBar.bottom`): segmentos em `onBandSegment` com texto branco, selecionado branco com texto petróleo. Ex.: categoria no formulário de prazo |
 | `FieldErrorText` ✅ | Erro com ícone fora de um campo (ex.: abaixo da lista de lembretes) |
@@ -143,8 +144,8 @@ A navegação inferior tem 3 destinos: **Painel**, **Empresas** e **Ajustes**. N
 | Empresa | RF-EMP-03/05 | Resumo de situação na faixa; módulos habilitados; órgãos que se aplicam com situação do registro; dados cadastrais; gerar relatório e arquivar |
 | Nova/editar empresa | RF-EMP-01/02/04/05 | Tela rolável em seções: Identificação · Endereço · Contato · Responsável legal · Módulos · Órgãos. Só a razão social é obrigatória |
 | Registro em órgão | RF-EMP-05 | Bottom sheet aberto a partir de um órgão no formulário: situação (não se aplica / possui / precisa obter), nº, validade e observações |
-| Módulo (ex.: Ambiental) | RF-AMB-01/05/06 | Prazos em aberto em seções por categoria (Licenças, Laudos, Manutenções), com `DeadlineCard` e FAB "Novo prazo". Sem abas até existirem lançamentos e relatórios (fases 2 e 3); o wireframe mostra as abas e o agrupamento por estação (ETE/ETA) previstos |
-| Detalhe do prazo | RF-PRZ-01/04 | Situação em destaque, dados, histórico de ciclos, renovação |
+| Módulo (ex.: Ambiental) | RF-AMB-01/05/06 | Prazos em aberto em seções por categoria (Licenças, Laudos, Manutenções), com `DeadlineCard` e FAB "Novo prazo". Segmentado "Em aberto | Encerrados" na faixa (Encerrados: concluídos e cancelados, lista plana). Sem abas até existirem lançamentos e relatórios (fases 2 e 3); o wireframe mostra as abas e o agrupamento por estação (ETE/ETA) previstos |
+| Detalhe do prazo | RF-PRZ-01/04 | Faixa com título, "Empresa · Módulo", menu ⋮ e `StatusBanner`. Card de dados (categoria, órgão, um lembrete por linha) e seção "Histórico" com os ciclos (do mais novo ao mais antigo, `StatusChip` em cada). Barra: Editar + primário (Registrar renovação na licença; Concluir em laudo/manutenção; Reabrir em concluído/cancelado). Renovado é só leitura. **Sem "Nº do documento"** (C5/C13) |
 | Novo prazo | RF-PRZ-01/02 | Categoria no segmentado da faixa; título, órgão, vencimento; lista de lembretes com a data de cada um e "Alertas a partir de …" (task 007) |
 | Lembrete (sheet) | RF-PRZ-02 | Atalhos (sem os já escolhidos), dias antes do vencimento com a data do aviso, 0 = no dia |
 | Lançamento periódico (ex.: Ruídos) | RF-AMB-02 | Navegação por período, um campo por ponto/parâmetro, valor anterior como referência |
@@ -157,4 +158,4 @@ Ainda não desenhadas: lançamento mensal de produtos controlados (Fase 3) e lot
 
 - Unidade dos ruídos em dB(A) — pergunta C6.
 - ~~CNPJ opcional no cadastro de empresa — pergunta C5.~~ Confirmado em 2026-09-24: só a razão social é obrigatória (RF-EMP-04). O formulário ganha seções de endereço, contato, responsável legal e órgãos (task 003).
-- Campo "Nº do documento" no prazo, que não está no modelo — incluir em `Deadline` se a cliente confirmar (C5/C13).
+- Campo "Nº do documento" no prazo: fora do modelo e do detalhe (task 008); incluir em `Deadline` se a cliente confirmar (C5/C13).

@@ -62,7 +62,7 @@ class FakeDeadlineRepository implements DeadlineRepository {
   Future<Deadline?> findById(String id) async => _live(id);
 
   @override
-  Stream<List<Deadline>> watchHistory(String id) => _watch(() => [?_live(id)]);
+  Stream<List<Deadline>> watchHistory(String id) => _watch(() => _chain(id));
 
   @override
   Future<Deadline> create(String companyId, DeadlineInput input) async {
@@ -101,6 +101,21 @@ class FakeDeadlineRepository implements DeadlineRepository {
   @override
   Future<Deadline> renew(String id, {required DateTime newDueDate}) async {
     final current = _require(id);
+    if (current.status != DeadlineStatus.active) {
+      throw InvalidDeadlineTransitionException(
+        id,
+        current.status,
+        DeadlineAction.renew,
+      );
+    }
+    if (!newDueDate.isAfter(current.dueDate)) {
+      throw const DeadlineValidationException([
+        DeadlineFieldError(
+          DeadlineField.dueDate,
+          DeadlineFieldErrorType.notAfterPrevious,
+        ),
+      ]);
+    }
     _setStatus(current, DeadlineStatus.renewed);
     final input = current.toInput();
     final nextId = 'd${_nextId++}';
@@ -122,21 +137,57 @@ class FakeDeadlineRepository implements DeadlineRepository {
   }
 
   @override
-  Future<void> complete(String id, {required DateTime completedOn}) async =>
-      _setStatus(_require(id), DeadlineStatus.completed, completedOn);
+  Future<void> complete(String id, {required DateTime completedOn}) async {
+    final d = _require(id);
+    if (d.status != DeadlineStatus.active || !d.category.canBeCompleted) {
+      throw InvalidDeadlineTransitionException(
+        id,
+        d.status,
+        DeadlineAction.complete,
+      );
+    }
+    _setStatus(d, DeadlineStatus.completed, completedOn);
+  }
 
   @override
-  Future<void> cancel(String id) async =>
-      _setStatus(_require(id), DeadlineStatus.cancelled);
+  Future<void> cancel(String id) async {
+    final d = _require(id);
+    if (d.status != DeadlineStatus.active) {
+      throw InvalidDeadlineTransitionException(
+        id,
+        d.status,
+        DeadlineAction.cancel,
+      );
+    }
+    _setStatus(d, DeadlineStatus.cancelled);
+  }
 
   @override
-  Future<void> reopen(String id) async =>
-      _setStatus(_require(id), DeadlineStatus.active);
+  Future<void> reopen(String id) async {
+    final d = _require(id);
+    if (d.status != DeadlineStatus.completed &&
+        d.status != DeadlineStatus.cancelled) {
+      throw InvalidDeadlineTransitionException(
+        id,
+        d.status,
+        DeadlineAction.reopen,
+      );
+    }
+    _setStatus(d, DeadlineStatus.active);
+  }
 
   @override
   Future<void> delete(String id) async {
-    _require(id);
+    final d = _require(id);
     _deleted.add(id);
+    final prevId = d.previousDeadlineId;
+    if (d.status == DeadlineStatus.active && prevId != null) {
+      final prev = _live(prevId);
+      if (prev != null && prev.status == DeadlineStatus.renewed) {
+        _setStatus(prev, DeadlineStatus.active);
+        return;
+      }
+    }
     _notify();
   }
 
@@ -156,6 +207,29 @@ class FakeDeadlineRepository implements DeadlineRepository {
   }
 
   void _notify() => _changes.add(null);
+
+  /// Cadeia que contém [id], do mais novo para o mais antigo.
+  List<Deadline> _chain(String id) {
+    final start = _live(id);
+    if (start == null) return const [];
+    final older = <Deadline>[];
+    var cur = start;
+    while (cur.previousDeadlineId != null) {
+      final prev = _live(cur.previousDeadlineId!);
+      if (prev == null) break;
+      older.add(prev);
+      cur = prev;
+    }
+    final newer = <Deadline>[];
+    cur = start;
+    while (true) {
+      final next = all.where((d) => d.previousDeadlineId == cur.id);
+      if (next.isEmpty) break;
+      cur = next.first;
+      newer.add(cur);
+    }
+    return [...newer.reversed, start, ...older];
+  }
 
   Deadline? _live(String id) => _deleted.contains(id) ? null : _deadlines[id];
 

@@ -31,7 +31,7 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | C10 | Produtos controlados: o estoque final é informado ou deve ser calculado a partir do estoque anterior + entradas − uso? | 🟡 Fase 3 | |
 | C11 | Controle de qualidade: a compra de matéria-prima se vincula a um produto específico ou é da empresa como um todo? | 🟡 Fase 4 | |
 | C12 | Laudos de análise: quais parâmetros por tipo de produto? Existem limites de referência? | ⚪ Fase 4 | |
-| C13 | Precisa anexar arquivos (PDF de licenças, laudos, notas fiscais, fotos)? | 🟡 Fase 1 | |
+| C13 | Precisa anexar arquivos (PDF de licenças, laudos, notas fiscais, fotos)? | 🟡 Fase 1 | 2026-11-16 (task 008): suposição — sem anexos e sem "Nº do documento" no prazo por enquanto. Levar à cliente. |
 | C14 | O que é "Controle de Processos"? Entra no escopo inicial? | ⚪ | |
 | C15 | Quais órgãos se ligam a quais módulos (ex.: SEMACE/IBAMA/Sec. Meio Ambiente → Ambiental; ANVISA/MAPA → Qualidade)? Um registro deve habilitar ou sugerir o módulo? | 🟡 Fase 1 | |
 | C16 | A validade do registro no órgão deve gerar um prazo com alerta, como as licenças? | 🟡 Fase 1 | |
@@ -39,7 +39,8 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | C18 | Confirmar as suposições do cadastro de empresa (task 002): um telefone e um e-mail por empresa, com 10 ou 11 dígitos; nenhum módulo habilitado por padrão; o registro no órgão vale até o dia da validade, inclusive. | ⚪ Fase 1 | |
 | C19 | No cadastro de empresa, a UF deve vir pré-selecionada (ex.: CE, onde estão as empresas de hoje)? | ⚪ Fase 1 | Suposição (task 003): sem valor padrão; a usuária escolhe. |
 | C20 | Confirmar as suposições dos prazos (task 006): qualquer categoria (licença, laudo, manutenção) em qualquer módulo; a nova data de uma renovação é sempre posterior à anterior; excluir o ciclo atual desfaz a renovação e reabre o anterior; prazos de módulo desabilitado somem do painel. | ⚪ Fase 1 | |
-| C21 | Um ciclo de prazo tem data de início ou de emissão própria (ex.: data de emissão da licença)? Hoje o início é o vencimento do ciclo anterior, e o primeiro ciclo não tem início. | ⚪ Fase 1 | |
+| C21 | Um ciclo de prazo tem data de início ou de emissão própria (ex.: data de emissão da licença)? Hoje o início é o vencimento do ciclo anterior, e o primeiro ciclo não tem início. | ⚪ Fase 1 | 2026-11-16 (task 008): suposição — mantém assim; o histórico mostra "início → vencimento" nos ciclos com anterior e só "Vencimento em …" no mais antigo. |
+| C22 | Confirmar as suposições do detalhe do prazo (task 008): a data sugerida ao renovar repete o intervalo do ciclo anterior em meses (sem anterior, um ano); prazos renovados aparecem só no histórico do ciclo atual, não em "Encerrados"; a data de conclusão não pode ser futura; só laudo e manutenção se concluem (licença só se renova ou se cancela). | ⚪ Fase 1 | Suposição adotada (2026-11-16). |
 
 ## Pendências de material
 

@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../../app/theme/app_theme.dart';
+import '../../../app/widgets/app_action_bar.dart';
 import '../../../app/widgets/band_title.dart';
+import '../../../app/widgets/confirm_dialog.dart';
 import '../../../app/widgets/empty_state.dart';
 import '../../../app/widgets/info_row.dart';
 import '../../../app/widgets/section_card.dart';
@@ -16,7 +18,13 @@ import '../../companies/domain/company.dart';
 import '../../companies/domain/module_type.dart';
 import '../../companies/presentation/company_labels.dart';
 import '../../companies/presentation/company_providers.dart';
+import '../data/local_deadline_repository.dart' show deadlineRepositoryProvider;
 import '../domain/deadline.dart';
+import '../domain/deadline_repository.dart';
+import '../domain/deadline_status.dart';
+import '../domain/deadline_validation.dart';
+import '../domain/renewal.dart';
+import 'deadline_action_sheets.dart';
 import 'deadline_labels.dart';
 import 'deadline_providers.dart';
 
@@ -130,6 +138,8 @@ class _Loaded extends ConsumerWidget {
   }
 }
 
+enum _Action { renew, complete, cancel, reopen, delete }
+
 class _Detail extends ConsumerWidget {
   const _Detail({
     required this.company,
@@ -154,6 +164,30 @@ class _Detail extends ConsumerWidget {
           title: d.title,
           subtitle: '${company.displayName} · ${module.label}',
         ),
+        actions: [
+          if (d.status != DeadlineStatus.renewed)
+            PopupMenuButton<_Action>(
+              icon: const Icon(Icons.more_vert),
+              tooltip: 'Mais opções',
+              onSelected: (a) => _run(context, ref, a, today),
+              itemBuilder: (_) => [
+                if (d.isOpen && d.category.canBeCompleted)
+                  const PopupMenuItem(
+                    value: _Action.renew,
+                    child: Text('Registrar renovação'),
+                  ),
+                if (d.isOpen)
+                  const PopupMenuItem(
+                    value: _Action.cancel,
+                    child: Text('Cancelar prazo'),
+                  ),
+                const PopupMenuItem(
+                  value: _Action.delete,
+                  child: Text('Excluir prazo'),
+                ),
+              ],
+            ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(
             StatusBanner.height + AppSpacing.lg,
@@ -175,6 +209,9 @@ class _Detail extends ConsumerWidget {
           ),
         ),
       ),
+      bottomNavigationBar: d.status == DeadlineStatus.renewed
+          ? null
+          : _bar(context, ref, today),
       body: ListView(
         padding: AppSpacing.screen.copyWith(
           top: AppSpacing.lg,
@@ -203,6 +240,117 @@ class _Detail extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Widget _bar(BuildContext context, WidgetRef ref, DateTime today) {
+    final d = deadline;
+    final (action, label, icon) = !d.isOpen
+        ? (_Action.reopen, 'Reabrir', Icons.undo)
+        : d.category.canBeCompleted
+        ? (_Action.complete, 'Concluir', Icons.task_alt)
+        : (_Action.renew, 'Registrar renovação', Icons.autorenew);
+    return AppActionBar(
+      children: [
+        OutlinedButton.icon(
+          icon: const Icon(Icons.edit_outlined),
+          label: const Text('Editar'),
+          onPressed: () =>
+              context.go(AppRoutes.editDeadline(company.id, module, d.id)),
+        ),
+        Expanded(
+          child: FilledButton.icon(
+            icon: Icon(icon),
+            label: Text(label),
+            onPressed: () => _run(context, ref, action, today),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _run(
+    BuildContext context,
+    WidgetRef ref,
+    _Action action,
+    DateTime today,
+  ) async {
+    final d = deadline;
+    final repo = ref.read(deadlineRepositoryProvider);
+    final history = ref.read(deadlineHistoryProvider(d.id)).value ?? const [];
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+    void say(String message) => messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+    try {
+      switch (action) {
+        case _Action.renew:
+          final suggested = suggestedRenewalDate(
+            d.dueDate,
+            previousDueDate: history.length > 1 ? history[1].dueDate : null,
+          );
+          final date = await showRenewSheet(
+            context,
+            deadline: d,
+            suggested: suggested,
+          );
+          if (date == null) return;
+          final next = await repo.renew(d.id, newDueDate: date);
+          say('Prazo renovado');
+          router.go(AppRoutes.deadline(company.id, module, next.id));
+        case _Action.complete:
+          final date = await showCompleteSheet(context, today: today);
+          if (date == null) return;
+          await repo.complete(d.id, completedOn: date);
+          say('Prazo concluído');
+        case _Action.cancel:
+          final ok = await showConfirmDialog(
+            context,
+            title: 'Cancelar este prazo?',
+            message:
+                '“${d.title}” sai da lista de em aberto e deixa de gerar '
+                'alertas. Dá para reabrir em Encerrados.',
+            confirmLabel: 'Cancelar prazo',
+            dismissLabel: 'Voltar',
+          );
+          if (!ok) return;
+          await repo.cancel(d.id);
+          say('Prazo cancelado');
+        case _Action.reopen:
+          await repo.reopen(d.id);
+          say('Prazo reaberto');
+        case _Action.delete:
+          final reopensPrevious =
+              d.isOpen &&
+              history.length > 1 &&
+              history[1].status == DeadlineStatus.renewed;
+          final ok = await showConfirmDialog(
+            context,
+            title: 'Excluir este prazo?',
+            message:
+                '“${d.title}” e os lembretes serão excluídos. Não dá para '
+                'desfazer.'
+                '${reopensPrevious ? ' O ciclo anterior volta a ficar em aberto.' : ''}',
+            confirmLabel: 'Excluir',
+            destructive: true,
+          );
+          if (!ok) return;
+          await repo.delete(d.id);
+          say('Prazo excluído');
+          router.go(AppRoutes.module(company.id, module));
+      }
+    } on DeadlineNotFoundException {
+      // O stream já mostra "Prazo não encontrado".
+    } on DeadlineValidationException catch (e) {
+      final field = e.errors.where((x) => x.field == DeadlineField.dueDate);
+      say(
+        field.isEmpty
+            ? 'Não foi possível concluir a ação. Tente de novo.'
+            : deadlineFieldMessage(field.first),
+      );
+    } on DeadlineException {
+      say('Não foi possível concluir a ação. Tente de novo.');
+    }
   }
 
   Widget _dataCard(Deadline d) {

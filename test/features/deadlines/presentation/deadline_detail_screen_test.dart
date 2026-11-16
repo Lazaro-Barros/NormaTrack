@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/router.dart';
 import 'package:normatrack/app/widgets/band_title.dart';
@@ -114,6 +115,203 @@ void main() {
       initialLocation: AppRoutes.module(companyId, ModuleType.environmental),
     );
     await tester.tap(find.text('Licença de Operação'));
+    await tester.pumpAndSettle();
+    expect(find.byType(StatusBanner), findsOneWidget);
+  });
+
+  // ---- ações ---------------------------------------------------------------
+
+  Finder menuItem(String label) => find.descendant(
+    of: find.byWidgetPredicate((w) => w is PopupMenuItem),
+    matching: find.text(label),
+  );
+
+  Future<void> openMenu(WidgetTester tester) async {
+    await tester.tap(find.byTooltip('Mais opções'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('licença em aberto: barra e menu', (tester) async {
+    final d = await seed();
+    await pumpDetail(tester, d.id);
+    expect(find.widgetWithText(OutlinedButton, 'Editar'), findsOneWidget);
+    expect(
+      find.widgetWithText(FilledButton, 'Registrar renovação'),
+      findsOneWidget,
+    );
+    expect(find.text('Concluir'), findsNothing);
+    await openMenu(tester);
+    expect(menuItem('Cancelar prazo'), findsOneWidget);
+    expect(menuItem('Excluir prazo'), findsOneWidget);
+    expect(menuItem('Registrar renovação'), findsNothing);
+  });
+
+  testWidgets('laudo em aberto: Concluir primário, renovar no menu', (
+    tester,
+  ) async {
+    final d = await seed(
+      title: 'Laudo da ETE',
+      category: DeadlineCategory.labReport,
+    );
+    await pumpDetail(tester, d.id);
+    expect(find.widgetWithText(FilledButton, 'Concluir'), findsOneWidget);
+    await openMenu(tester);
+    expect(menuItem('Registrar renovação'), findsOneWidget);
+  });
+
+  testWidgets('renovar duas vezes, com sugestão e histórico', (tester) async {
+    final d = await seed();
+    await pumpDetail(tester, d.id);
+    await tester.tap(find.widgetWithText(FilledButton, 'Registrar renovação'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Novo vencimento'), findsOneWidget);
+    expect(find.text('26/09/2027'), findsOneWidget);
+    expect(find.text('Alertas a partir de 29/04/2027'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Renovar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Prazo renovado'), findsOneWidget);
+    expect(find.text('Em 362 dias'), findsOneWidget);
+    expect(find.text('Ciclo atual'), findsOneWidget);
+    expect(find.text('26/09/2026 → 26/09/2027'), findsOneWidget);
+    expect(find.text('Vigente'), findsOneWidget);
+    expect(find.text('Ciclo anterior'), findsOneWidget);
+    expect(find.text('Vencimento em 26/09/2026'), findsOneWidget);
+    expect(find.text('Renovado'), findsOneWidget);
+
+    // Segunda renovação: o intervalo (12 meses) se repete.
+    await tester.tap(find.widgetWithText(FilledButton, 'Registrar renovação'));
+    await tester.pumpAndSettle();
+    expect(find.text('26/09/2028'), findsOneWidget);
+  });
+
+  testWidgets('fechar o sheet de renovação não muda nada', (tester) async {
+    final d = await seed();
+    await pumpDetail(tester, d.id);
+    await tester.tap(find.widgetWithText(FilledButton, 'Registrar renovação'));
+    await tester.pumpAndSettle();
+    await tester.tapAt(const Offset(20, 20));
+    await tester.pumpAndSettle();
+    expect(deadlines.all.length, 1);
+    expect(find.text('Venceu há 3 dias'), findsOneWidget);
+  });
+
+  testWidgets('concluir e reabrir', (tester) async {
+    final d = await seed(
+      title: 'Laudo da ETE',
+      category: DeadlineCategory.labReport,
+    );
+    await pumpDetail(tester, d.id);
+    await tester.tap(find.widgetWithText(FilledButton, 'Concluir'));
+    await tester.pumpAndSettle();
+    expect(find.text('Concluir prazo'), findsOneWidget);
+    expect(find.text('29/09/2026'), findsOneWidget);
+    await tester.tap(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.widgetWithText(FilledButton, 'Concluir'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Prazo concluído'), findsOneWidget);
+    expect(find.text('Concluído em 29/09/2026'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Reabrir'), findsOneWidget);
+    await openMenu(tester);
+    expect(menuItem('Excluir prazo'), findsOneWidget);
+    expect(menuItem('Cancelar prazo'), findsNothing);
+    await tester.tapAt(const Offset(20, 400));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Reabrir'));
+    await tester.pumpAndSettle();
+    expect(find.text('Prazo reaberto'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Concluir'), findsOneWidget);
+  });
+
+  testWidgets('cancelar: Voltar não muda; confirmar cancela', (tester) async {
+    final d = await seed();
+    await pumpDetail(tester, d.id);
+    await openMenu(tester);
+    await tester.tap(menuItem('Cancelar prazo'));
+    await tester.pumpAndSettle();
+    expect(find.text('Cancelar este prazo?'), findsOneWidget);
+    await tester.tap(find.text('Voltar'));
+    await tester.pumpAndSettle();
+    expect(find.text('Venceu há 3 dias'), findsOneWidget);
+
+    await openMenu(tester);
+    await tester.tap(menuItem('Cancelar prazo'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, 'Cancelar prazo'));
+    await tester.pumpAndSettle();
+    expect(find.text('Prazo cancelado'), findsOneWidget);
+    expect(find.text('Cancelado'), findsWidgets);
+    expect(find.widgetWithText(FilledButton, 'Reabrir'), findsOneWidget);
+  });
+
+  testWidgets('excluir ciclo renovado avisa e reabre o anterior', (
+    tester,
+  ) async {
+    final d = await seed();
+    final next = await deadlines.renew(d.id, newDueDate: DateTime(2027, 9, 26));
+    await pumpApp(
+      tester,
+      repository: companies,
+      deadlineRepository: deadlines,
+      initialLocation: AppRoutes.deadline(
+        companyId,
+        ModuleType.environmental,
+        next.id,
+      ),
+    );
+    await openMenu(tester);
+    await tester.tap(menuItem('Excluir prazo'));
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('O ciclo anterior volta a ficar em aberto.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.widgetWithText(TextButton, 'Excluir'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Prazo excluído'), findsOneWidget);
+    expect(find.byType(StatusBanner), findsNothing);
+    expect(find.text('Licença de Operação'), findsOneWidget); // na lista
+    expect(find.text('Nenhum prazo em aberto'), findsNothing);
+  });
+
+  testWidgets('excluir prazo sem anterior não traz o aviso', (tester) async {
+    final d = await seed();
+    await pumpDetail(tester, d.id);
+    await openMenu(tester);
+    await tester.tap(menuItem('Excluir prazo'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('ciclo anterior'), findsNothing);
+    await tester.tap(find.widgetWithText(TextButton, 'Excluir'));
+    await tester.pumpAndSettle();
+    expect(find.text('Nenhum prazo em aberto'), findsOneWidget);
+  });
+
+  testWidgets('renovado aberto por URL: somente leitura', (tester) async {
+    final d = await seed();
+    await deadlines.renew(d.id, newDueDate: DateTime(2027, 9, 26));
+    await pumpDetail(tester, d.id);
+    expect(find.text('Renovado'), findsWidgets);
+    expect(find.byTooltip('Mais opções'), findsNothing);
+    expect(find.text('Editar'), findsNothing);
+  });
+
+  testWidgets('Editar abre o formulário e salvar volta ao detalhe', (
+    tester,
+  ) async {
+    final d = await seed();
+    await pumpDetail(tester, d.id);
+    await tester.tap(find.text('Editar'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(BandTitle, 'Editar prazo'), findsOne);
+    await tester.tap(find.text('Salvar prazo'));
     await tester.pumpAndSettle();
     expect(find.byType(StatusBanner), findsOneWidget);
   });

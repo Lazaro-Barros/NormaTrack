@@ -95,7 +95,7 @@ void main() {
     expect(find.widgetWithText(BandTitle, 'Novo prazo'), findsOne);
   });
 
-  testWidgets('FAB abre novo prazo e o card abre a edição', (tester) async {
+  testWidgets('FAB abre novo prazo e o card abre o detalhe', (tester) async {
     await deadlines.seed(
       companyId,
       input('Licença de Operação', DateTime(2026, 10, 31)),
@@ -110,7 +110,8 @@ void main() {
 
     await tester.tap(find.byType(DeadlineCard));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(BandTitle, 'Editar prazo'), findsOne);
+    expect(find.widgetWithText(BandTitle, 'Licença de Operação'), findsOne);
+    expect(find.text('Categoria'), findsOneWidget);
   });
 
   testWidgets('módulo desligado', (tester) async {

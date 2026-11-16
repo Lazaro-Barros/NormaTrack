@@ -194,10 +194,8 @@ void main() {
       tester,
       repository: companies,
       deadlineRepository: deadlines,
-      initialLocation: AppRoutes.module(companyId, env),
+      initialLocation: AppRoutes.editDeadline(companyId, env, d.id),
     );
-    await tester.tap(find.text('Laudo da ETE'));
-    await tester.pumpAndSettle();
 
     expect(find.widgetWithText(BandTitle, 'Editar prazo'), findsOne);
     expect(fieldText(tester, fieldLabeled('Título')), 'Laudo da ETE');

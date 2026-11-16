@@ -29,3 +29,15 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Nenhuma que bloqueie. Levar C13, C21 e C22 à cliente quando possível.
 
 **Próximo:** implementar pelo passo 1 do plano, na branch `task/008-prazo-detalhe`.
+
+## 2026-11-16 — Implementação, passos 1 a 5
+
+**Feito**
+- Branch `task/008-prazo-detalhe`. Passo 1: `FakeDeadlineRepository` agora valida como o real (histórico por cadeia, `renew` com data posterior, transições inválidas, `delete` que reabre o anterior). Passo 2: `suggestedRenewalDate`. Passo 3: `DateBlock`, `StatusBanner`, `StatusChip.icon`, `showConfirmDialog(dismissLabel:)` + `docs/07-design-system.md`. Passo 4: providers e rótulos. Passo 5: rota `prazos/:prazo` (com `editar` aninhada) e `DeadlineDetailScreen` somente leitura; o card do módulo abre o detalhe.
+- Suíte: 274 testes verdes.
+
+**Decidido**
+- A linha vertical de 2 px entre os círculos do histórico (plan.md) ficou de fora: o `SectionCard` já separa os ciclos com `Divider` e a linha ficaria cortada. Sem impacto funcional.
+- O teste de edição do formulário passou a abrir direto em `editDeadline(...)`; o fluxo pelo botão Editar é testado no passo 6.
+- `deadlineBanner` não usa `!` em `completedOn`: sem data, o título cai em "Concluído".
+

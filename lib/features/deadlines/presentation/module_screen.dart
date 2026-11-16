@@ -161,8 +161,7 @@ class _Deadlines extends ConsumerWidget {
       tone: display.tone,
       statusLead: display.lead,
       statusText: display.text,
-      // TODO(RF-PRZ-04): abrir o detalhe do prazo (task 008).
-      onTap: () => context.go(AppRoutes.editDeadline(company.id, module, d.id)),
+      onTap: () => context.go(AppRoutes.deadline(company.id, module, d.id)),
     );
   }
 }

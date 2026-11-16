@@ -1,4 +1,8 @@
+import 'package:flutter/material.dart' show IconData, Icons;
+
 import '../../../app/theme/app_theme.dart';
+import '../../../app/widgets/status_chip.dart';
+import '../../../core/utils/date_format.dart';
 import '../domain/deadline.dart';
 import '../domain/deadline_category.dart';
 import '../domain/deadline_status.dart';
@@ -110,3 +114,74 @@ String deadlineFieldMessage(DeadlineFieldError e) =>
   }
   return null;
 }
+
+/// Rótulo do chip de situação.
+String situationLabel(DeadlineSituation s) => switch (s) {
+  DeadlineSituation.current => 'Vigente',
+  DeadlineSituation.dueSoon => 'A vencer',
+  DeadlineSituation.overdue => 'Vencido',
+  DeadlineSituation.renewed => 'Renovado',
+  DeadlineSituation.completed => 'Concluído',
+  DeadlineSituation.cancelled => 'Cancelado',
+};
+
+/// Ícone da situação: o do tom, exceto renovado, concluído e cancelado.
+IconData situationIcon(DeadlineSituation s) => switch (s) {
+  DeadlineSituation.renewed => Icons.autorenew,
+  DeadlineSituation.completed => Icons.task_alt,
+  DeadlineSituation.cancelled => Icons.block,
+  _ => StatusChip.iconFor(deadlineTone(s)),
+};
+
+DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+/// "Alertas a partir de 29/04/2026" (início no futuro) ou "Alertas desde …".
+String alertCaption(Deadline d, DateTime today) =>
+    _dateOnly(d.alertStartDate).isAfter(_dateOnly(today))
+    ? 'Alertas a partir de ${formatDate(d.alertStartDate)}'
+    : 'Alertas desde ${formatDate(d.alertStartDate)}';
+
+/// Conteúdo do `StatusBanner` do detalhe.
+({StatusTone tone, String title, String? message}) deadlineBanner(
+  Deadline d,
+  DateTime today,
+) {
+  final situation = d.situationOn(today);
+  final tone = deadlineTone(situation);
+  final due = 'Vencimento em ${formatDate(d.dueDate)}';
+  return switch (situation) {
+    DeadlineSituation.overdue ||
+    DeadlineSituation.dueSoon ||
+    DeadlineSituation.current => (
+      tone: tone,
+      title: () {
+        final x = deadlineDisplay(d, today);
+        return [?x.lead, x.text].join(' ');
+      }(),
+      message: alertCaption(d, today),
+    ),
+    DeadlineSituation.completed => (
+      tone: tone,
+      title: d.completedOn == null
+          ? d.status.label
+          : 'Concluído em ${formatDate(d.completedOn!)}',
+      message: due,
+    ),
+    DeadlineSituation.cancelled || DeadlineSituation.renewed => (
+      tone: tone,
+      title: d.status.label,
+      message: due,
+    ),
+  };
+}
+
+/// Com início (vencimento do ciclo anterior): "21/09/2022 → 21/09/2026".
+/// Sem: "Vencimento em 21/09/2018".
+String cycleRangeLabel(Deadline cycle, DateTime? previousDueDate) =>
+    previousDueDate == null
+    ? 'Vencimento em ${formatDate(cycle.dueDate)}'
+    : '${formatDate(previousDueDate)} → ${formatDate(cycle.dueDate)}';
+
+/// "Ciclo atual" para o primeiro da lista (mais novo); "Ciclo anterior" nos
+/// demais.
+String cycleTitle(int index) => index == 0 ? 'Ciclo atual' : 'Ciclo anterior';

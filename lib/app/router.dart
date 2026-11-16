@@ -7,6 +7,7 @@ import '../features/companies/presentation/company_form_screen.dart';
 import '../features/companies/presentation/company_list_screen.dart';
 import '../features/companies/domain/module_type.dart';
 import '../features/companies/presentation/company_labels.dart';
+import '../features/deadlines/presentation/deadline_detail_screen.dart';
 import '../features/deadlines/presentation/deadline_form_screen.dart';
 import '../features/deadlines/presentation/module_screen.dart';
 import 'app_shell.dart';
@@ -22,8 +23,10 @@ abstract final class AppRoutes {
       '/empresas/$companyId/modulos/${module.slug}';
   static String newDeadline(String companyId, ModuleType module) =>
       '${AppRoutes.module(companyId, module)}/prazos/novo';
+  static String deadline(String companyId, ModuleType module, String id) =>
+      '${AppRoutes.module(companyId, module)}/prazos/$id';
   static String editDeadline(String companyId, ModuleType module, String id) =>
-      '${AppRoutes.module(companyId, module)}/prazos/$id/editar';
+      '${deadline(companyId, module, id)}/editar';
   static const settings = '/ajustes';
 }
 
@@ -98,13 +101,24 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.dashboard}) {
                             ),
                           ),
                           GoRoute(
-                            path: 'prazos/:prazo/editar',
+                            path: 'prazos/:prazo',
                             parentNavigatorKey: rootKey,
-                            builder: (context, state) => DeadlineFormScreen(
+                            builder: (context, state) => DeadlineDetailScreen(
                               companyId: state.pathParameters['id']!,
                               slug: state.pathParameters['modulo']!,
-                              deadlineId: state.pathParameters['prazo'],
+                              deadlineId: state.pathParameters['prazo']!,
                             ),
+                            routes: [
+                              GoRoute(
+                                path: 'editar',
+                                parentNavigatorKey: rootKey,
+                                builder: (context, state) => DeadlineFormScreen(
+                                  companyId: state.pathParameters['id']!,
+                                  slug: state.pathParameters['modulo']!,
+                                  deadlineId: state.pathParameters['prazo'],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

@@ -8,6 +8,7 @@ Future<bool> showConfirmDialog(
   required String message,
   required String confirmLabel,
   bool destructive = false,
+  String dismissLabel = 'Cancelar',
 }) async {
   final confirmed = await showDialog<bool>(
     context: context,
@@ -19,7 +20,7 @@ Future<bool> showConfirmDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancelar'),
+            child: Text(dismissLabel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),

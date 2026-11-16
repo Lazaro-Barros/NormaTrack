@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../../app/theme/app_theme.dart';
+import '../../../app/widgets/band_segmented_button.dart';
 import '../../../app/widgets/band_title.dart';
 import '../../../app/widgets/deadline_card.dart';
 import '../../../app/widgets/empty_state.dart';
@@ -84,26 +85,61 @@ class ModuleScreen extends ConsumerWidget {
   );
 }
 
-class _Deadlines extends ConsumerWidget {
+class _Deadlines extends ConsumerStatefulWidget {
   const _Deadlines({required this.company, required this.module});
 
   final Company company;
   final ModuleType module;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_Deadlines> createState() => _DeadlinesState();
+}
+
+class _DeadlinesState extends ConsumerState<_Deadlines> {
+  bool _closed = false;
+
+  Company get company => widget.company;
+  ModuleType get module => widget.module;
+
+  @override
+  Widget build(BuildContext context) {
     final today = ref.read(clockProvider)().toLocal();
-    final deadlines = ref.watch(
-      moduleDeadlinesProvider((companyId: company.id, module: module)),
-    );
+    final key = (companyId: company.id, module: module);
+    final deadlines = _closed
+        ? ref.watch(moduleClosedDeadlinesProvider(key))
+        : ref.watch(moduleDeadlinesProvider(key));
     void create() => context.go(AppRoutes.newDeadline(company.id, module));
-    final list = deadlines.value;
+    // Encerrados: do vencimento mais recente para o mais antigo.
+    final list = _closed ? deadlines.value?.reversed.toList() : deadlines.value;
 
     return Scaffold(
       appBar: AppBar(
         title: BandTitle(title: module.label, subtitle: company.displayName),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(
+            AppSpacing.minTouch + AppSpacing.lg,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              0,
+              AppSpacing.lg,
+              AppSpacing.lg,
+            ),
+            child: BandSegmentedButton<bool>(
+              segments: const [(false, 'Em aberto'), (true, 'Encerrados')],
+              selected: _closed,
+              onChanged: (v) => setState(() => _closed = v),
+            ),
+          ),
+        ),
       ),
       body: switch (deadlines) {
+        _ when list != null && list.isEmpty && _closed => const EmptyState(
+          icon: Icons.inventory_2_outlined,
+          title: 'Nenhum prazo encerrado',
+          message: 'Prazos concluídos ou cancelados aparecem aqui.',
+        ),
         _ when list != null && list.isEmpty => EmptyState(
           icon: module.icon,
           title: 'Nenhum prazo em aberto',
@@ -113,6 +149,7 @@ class _Deadlines extends ConsumerWidget {
           actionLabel: 'Cadastrar prazo',
           onAction: create,
         ),
+        _ when list != null && _closed => _flat(context, list, today),
         _ when list != null => _list(context, list, today),
         AsyncValue(hasError: true) => const EmptyState(
           icon: Icons.error_outline,
@@ -121,13 +158,29 @@ class _Deadlines extends ConsumerWidget {
         ),
         _ => const Center(child: CircularProgressIndicator()),
       },
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.add),
-        label: const Text('Novo prazo'),
-        onPressed: create,
-      ),
+      floatingActionButton: _closed
+          ? null
+          : FloatingActionButton.extended(
+              icon: const Icon(Icons.add),
+              label: const Text('Novo prazo'),
+              onPressed: create,
+            ),
     );
   }
+
+  Widget _flat(BuildContext context, List<Deadline> list, DateTime today) =>
+      ListView(
+        padding: AppSpacing.screen.copyWith(
+          top: AppSpacing.lg,
+          bottom: AppSpacing.xl,
+        ),
+        children: [
+          for (final (i, d) in list.indexed) ...[
+            if (i > 0) const SizedBox(height: AppSpacing.sm),
+            _card(context, d, today),
+          ],
+        ],
+      );
 
   Widget _list(BuildContext context, List<Deadline> list, DateTime today) {
     final text = Theme.of(context).textTheme;
@@ -161,8 +214,7 @@ class _Deadlines extends ConsumerWidget {
       tone: display.tone,
       statusLead: display.lead,
       statusText: display.text,
-      // TODO(RF-PRZ-04): abrir o detalhe do prazo (task 008).
-      onTap: () => context.go(AppRoutes.editDeadline(company.id, module, d.id)),
+      onTap: () => context.go(AppRoutes.deadline(company.id, module, d.id)),
     );
   }
 }

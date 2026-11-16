@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show Icons;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/theme/app_theme.dart';
 import 'package:normatrack/features/companies/domain/authority.dart';
@@ -194,5 +195,80 @@ void main() {
     }
     expect(ModuleType.controlledProducts.slug, 'produtos-controlados');
     expect(moduleFromSlug('nada'), isNull);
+  });
+
+  group('situação, banner e ciclos', () {
+    test('situationLabel e situationIcon cobrem as seis situações', () {
+      for (final s in DeadlineSituation.values) {
+        expect(situationLabel(s), isNotEmpty);
+        expect(situationIcon(s), isNotNull);
+      }
+      expect(situationLabel(DeadlineSituation.overdue), 'Vencido');
+      expect(situationLabel(DeadlineSituation.completed), 'Concluído');
+      expect(situationIcon(DeadlineSituation.completed), Icons.task_alt);
+      expect(situationIcon(DeadlineSituation.cancelled), Icons.block);
+      expect(situationIcon(DeadlineSituation.renewed), Icons.autorenew);
+    });
+
+    test('banner de vencido', () {
+      final b = deadlineBanner(deadline(DateTime(2026, 9, 26)), today);
+      expect(b.tone, StatusTone.overdue);
+      expect(b.title, 'Venceu há 3 dias');
+      expect(b.message, 'Alertas desde 29/04/2026');
+    });
+
+    test('banner de a vencer', () {
+      final b = deadlineBanner(deadline(DateTime(2026, 10, 9)), today);
+      expect(b.tone, StatusTone.dueSoon);
+      expect(b.title, 'Vence em 10 dias');
+    });
+
+    test('banner de vigente com alerta no futuro', () {
+      final b = deadlineBanner(deadline(DateTime(2027, 3, 29)), today);
+      expect(b.tone, StatusTone.ok);
+      expect(b.title, 'Em 181 dias');
+      expect(b.message, 'Alertas a partir de 30/10/2026');
+    });
+
+    test('banner de concluído, cancelado e renovado', () {
+      final done = Deadline(
+        id: 'd',
+        companyId: 'c',
+        module: ModuleType.environmental,
+        category: DeadlineCategory.labReport,
+        title: 'Laudo',
+        dueDate: DateTime(2026, 9, 26),
+        reminderDays: const [30],
+        status: DeadlineStatus.completed,
+        completedOn: DateTime(2026, 9, 20),
+        createdAt: at,
+        updatedAt: at,
+      );
+      final b = deadlineBanner(done, today);
+      expect(b.title, 'Concluído em 20/09/2026');
+      expect(b.message, 'Vencimento em 26/09/2026');
+      final c = deadlineBanner(
+        deadline(DateTime(2026, 9, 26), status: DeadlineStatus.cancelled),
+        today,
+      );
+      expect(c.title, 'Cancelado');
+      expect(c.message, 'Vencimento em 26/09/2026');
+      final r = deadlineBanner(
+        deadline(DateTime(2026, 9, 26), status: DeadlineStatus.renewed),
+        today,
+      );
+      expect(r.title, 'Renovado');
+    });
+
+    test('cycleRangeLabel e cycleTitle', () {
+      final d = deadline(DateTime(2026, 9, 21));
+      expect(
+        cycleRangeLabel(d, DateTime(2022, 9, 21)),
+        '21/09/2022 → 21/09/2026',
+      );
+      expect(cycleRangeLabel(d, null), 'Vencimento em 21/09/2026');
+      expect(cycleTitle(0), 'Ciclo atual');
+      expect(cycleTitle(2), 'Ciclo anterior');
+    });
   });
 }

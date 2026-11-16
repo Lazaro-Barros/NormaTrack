@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/utils/date_format.dart';
 import '../theme/app_theme.dart';
+import 'date_block.dart';
 
 /// Prazo numa lista: bloco de data na cor forte da situação, título, linha de
 /// contexto e texto relativo na mesma cor. A situação nunca fica só na cor: o
@@ -40,13 +41,8 @@ class DeadlineCard extends StatelessWidget {
     final theme = Theme.of(context);
     final text = theme.textTheme;
     final color = StatusColors.of(context).resolve(tone).foreground;
-    final onBlock = theme.colorScheme.onPrimary;
     final subtitle = this.subtitle;
     final statusLead = this.statusLead;
-    final year = (date.year % 100).toString().padLeft(2, '0');
-    final month = showYear
-        ? '${formatMonthAbbr(date)} $year'
-        : formatMonthAbbr(date);
     final statusStyle = AppTypography.tabular(text.labelMedium)
         .copyWith(color: color);
 
@@ -72,30 +68,7 @@ class DeadlineCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Container(
-                    width: AppSpacing.minTouch,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: color,
-                      borderRadius: AppRadius.mdAll,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${date.day}'.padLeft(2, '0'),
-                          style: AppTypography.tabular(text.titleLarge)
-                              .copyWith(color: onBlock),
-                        ),
-                        Text(
-                          month,
-                          maxLines: 1,
-                          style: AppTypography.tabular(text.labelSmall)
-                              .copyWith(color: onBlock),
-                        ),
-                      ],
-                    ),
-                  ),
+                  DateBlock(date: date, showYear: showYear, tone: tone),
                   const SizedBox(width: AppSpacing.md),
                   Expanded(
                     child: Column(

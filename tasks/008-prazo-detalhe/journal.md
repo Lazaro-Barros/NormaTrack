@@ -41,3 +41,17 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - O teste de edição do formulário passou a abrir direto em `editDeadline(...)`; o fluxo pelo botão Editar é testado no passo 6.
 - `deadlineBanner` não usa `!` em `completedOn`: sem data, o título cai em "Concluído".
 
+## 2026-11-16 — Passos 6 a 8 e fechamento
+
+**Feito**
+- Passo 6: `deadline_action_sheets.dart` (renovar e concluir), menu ⋮, barra Editar + primário, cancelar, reabrir e excluir com SnackBars; `say` esconde o SnackBar anterior antes de mostrar o novo (senão ficavam em fila). Passo 7: segmentado "Em aberto | Encerrados" no módulo (lista plana, sem FAB, vazio "Nenhum prazo encerrado").
+- `dart format .`, `flutter analyze` sem avisos e `flutter test` com 286 testes verdes.
+- Conferido no emulador (Medium_Phone_API_37.0, via adb): empresa → módulo → novo prazo → detalhe (banner "Venceu há 3 dias", lembretes, histórico) → renovar (sheet com 13/11/2027 e "Alertas a partir de 16/06/2027"; histórico com "Ciclo anterior … Renovado") → cancelar (Voltar não muda; confirmar) → reabrir → cancelar → Encerrados → abrir → excluir → volta ao módulo com "Prazo excluído".
+- Roadmap, `docs/07-design-system.md` (passo 3) e `tasks/README.md` atualizados. Sem decisão técnica nova para `docs/decisoes.md`.
+
+**Pendente / dúvidas**
+- Não conferidos no emulador: **Concluir** (laudo/manutenção) e excluir ciclo renovado reabrindo o anterior; ambos cobertos por teste de widget. Também não conferidos: sheet com teclado e fonte do sistema grande (banner de altura fixa; ver pendência de acessibilidade da 007).
+- C13, C21 e C22 seguem para a cliente (`docs/06-perguntas-em-aberto.md`).
+
+**Refs:** commits do passo 1 ao 7 na branch `task/008-prazo-detalhe`
+

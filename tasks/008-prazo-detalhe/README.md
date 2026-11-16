@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-01, RF-PRZ-04 · RF-AMB-06 |
 | **Depende de** | 006, 007 (concluídas) |
@@ -39,14 +39,14 @@ A usuária abre um prazo, vê a situação em destaque, os dados e o histórico 
 
 ## Critérios de aceite
 
-- [ ] Tocar num prazo na tela do módulo abre o detalhe: faixa com `StatusBanner` (data, "Venceu há 3 dias" / "Vence em 10 dias" / "Em 120 dias" / "Concluído em …", "Alertas desde …" ou "a partir de …"), card com categoria, órgão e lembretes, e o histórico de ciclos com `StatusChip` em cada um. Estados: carregando, erro e prazo, empresa ou módulo inexistente.
-- [ ] **Registrar renovação** abre o sheet com a data sugerida (mesmo intervalo do ciclo anterior em meses; sem anterior, +1 ano) editável, sem aceitar data até o vencimento atual; confirmar encerra o ciclo, abre o próximo, mostra "Prazo renovado" e navega para o detalhe do novo ciclo, em que o histórico traz o anterior como "Renovado".
-- [ ] **Concluir** (só laudo e manutenção, primário nesses casos) pede "Concluído em" (padrão hoje, nunca no futuro); o prazo vira "Concluído" e a barra passa a mostrar **Reabrir**.
-- [ ] **Cancelar prazo** pede confirmação (botões "Voltar" e "Cancelar prazo"); **Reabrir** volta o prazo a em aberto sem confirmação.
-- [ ] **Excluir prazo** pede confirmação destrutiva; avisa "O ciclo anterior volta a ficar em aberto" quando for o caso; depois volta ao módulo com "Prazo excluído".
-- [ ] A tela do módulo tem "Em aberto | Encerrados"; Encerrados lista concluídos e cancelados (mais recente primeiro) com o estado vazio "Nenhum prazo encerrado", e tocar abre o detalhe.
-- [ ] `StatusBanner` e `DateBlock` com teste e documentados em `docs/07-design-system.md` (tela Detalhe do prazo, ícones de concluído e cancelado, regra do "Nº do documento").
-- [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros
+- [x] Tocar num prazo na tela do módulo abre o detalhe: faixa com `StatusBanner` (data, "Venceu há 3 dias" / "Vence em 10 dias" / "Em 120 dias" / "Concluído em …", "Alertas desde …" ou "a partir de …"), card com categoria, órgão e lembretes, e o histórico de ciclos com `StatusChip` em cada um. Estados: carregando, erro e prazo, empresa ou módulo inexistente.
+- [x] **Registrar renovação** abre o sheet com a data sugerida (mesmo intervalo do ciclo anterior em meses; sem anterior, +1 ano) editável, sem aceitar data até o vencimento atual; confirmar encerra o ciclo, abre o próximo, mostra "Prazo renovado" e navega para o detalhe do novo ciclo, em que o histórico traz o anterior como "Renovado".
+- [x] **Concluir** (só laudo e manutenção, primário nesses casos) pede "Concluído em" (padrão hoje, nunca no futuro); o prazo vira "Concluído" e a barra passa a mostrar **Reabrir**.
+- [x] **Cancelar prazo** pede confirmação (botões "Voltar" e "Cancelar prazo"); **Reabrir** volta o prazo a em aberto sem confirmação.
+- [x] **Excluir prazo** pede confirmação destrutiva; avisa "O ciclo anterior volta a ficar em aberto" quando for o caso; depois volta ao módulo com "Prazo excluído".
+- [x] A tela do módulo tem "Em aberto | Encerrados"; Encerrados lista concluídos e cancelados (mais recente primeiro) com o estado vazio "Nenhum prazo encerrado", e tocar abre o detalhe.
+- [x] `StatusBanner` e `DateBlock` com teste e documentados em `docs/07-design-system.md` (tela Detalhe do prazo, ícones de concluído e cancelado, regra do "Nº do documento").
+- [x] `dart format .`, `flutter analyze` e `flutter test` sem erros
 
 ## Para quem vai implementar
 

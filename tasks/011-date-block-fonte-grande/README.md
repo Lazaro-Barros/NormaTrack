@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RNF-06 (design system) · RF-PRZ-05 (Painel) · RF-PRZ-01/04 (detalhe do prazo) |
 | **Depende de** | 009 (solução do `StatTile` para fonte grande) |
@@ -29,13 +29,13 @@ Com a fonte do sistema aumentada (Configurações › Tamanho da fonte), o bloco
 
 ## Critérios de aceite
 
-- [ ] Na escala 1, `DateBlock` mede 48 × 52 e `StatusBanner` mede 76 de altura (sem mudança visual).
-- [ ] Testes de widget de `DateBlock`, `StatusBanner` e `DeadlineCard` com `TextScaler.linear(1.3)`, `TextScaler.linear(2)` e um `TextScaler` não linear, sem exceção de overflow.
-- [ ] Acima de 1,5× o bloco e o banner param de crescer (escala limitada).
-- [ ] Detalhe do prazo usa `StatusBanner.heightOf(context)` no `AppBar.bottom`.
-- [ ] Conferido no emulador `Medium_Phone_API_37.0` em `font_scale` 1,3 e 2,0 (listas do módulo, Painel e detalhe), sem a faixa listrada de overflow; `font_scale` volta ao valor original (1.0).
-- [ ] `docs/07-design-system.md` atualizado.
-- [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros.
+- [x] Na escala 1, `DateBlock` mede 48 × 52 e `StatusBanner` mede 76 de altura (sem mudança visual).
+- [x] Testes de widget de `DateBlock`, `StatusBanner` e `DeadlineCard` com `TextScaler.linear(1.3)`, `TextScaler.linear(2)` e um `TextScaler` não linear, sem exceção de overflow.
+- [x] Acima de 1,5× o bloco e o banner param de crescer (escala limitada).
+- [x] Detalhe do prazo usa `StatusBanner.heightOf(context)` no `AppBar.bottom`.
+- [x] Conferido no emulador `Medium_Phone_API_37.0` em `font_scale` 1,3 e 2,0 (listas do módulo, Painel e detalhe), sem a faixa listrada de overflow; `font_scale` volta ao valor original (1.0).
+- [x] `docs/07-design-system.md` atualizado.
+- [x] `dart format .`, `flutter analyze` e `flutter test` sem erros.
 
 ## Links
 

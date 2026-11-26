@@ -16,4 +16,4 @@ Status: `rascunho` · `planejada` · `em andamento` · `concluída` · `bloquead
 | 008 | [Prazos: detalhe, histórico e renovação](008-prazo-detalhe/) | RF-PRZ-01/04 | 1 | concluída |
 | 009 | [Painel de próximos vencimentos](009-painel-vencimentos/) | RF-PRZ-05 | 1 | concluída |
 | 010 | [Notificações locais de prazo](010-notificacoes-locais/) | RF-PRZ-03 | 1 | rascunho |
-| 011 | [Bloco de data com a fonte do sistema grande](011-date-block-fonte-grande/) | RNF-06 | 1 | planejada |
+| 011 | [Bloco de data com a fonte do sistema grande](011-date-block-fonte-grande/) | RNF-06 | 1 | concluída |

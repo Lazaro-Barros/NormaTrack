@@ -132,6 +132,8 @@ Botões, campos, chips, segmentado, interruptores, navegação inferior, snackba
 | `InfoRow` ✅ | Dado cadastral: rótulo à esquerda, uma ou mais linhas à direita (1ª em destaque), algarismos tabulares |
 | `AppDropdownField` ✅ | Lista de opções com o layout do `AppTextField`; 1º item limpa o valor (`noneLabel`, padrão "Nenhuma"; "Nenhum" para órgão) |
 | `AppActionBar` ✅ | Barra de ações no rodapé das telas internas (`Scaffold.bottomNavigationBar`), branca com cantos superiores 24 |
+| `NoticeBanner` ✅ | Aviso dentro da tela, na cor **suave** de um `StatusTone`, com ícone e texto na cor forte; ênfase opcional em negrito (`labelMedium`) depois da mensagem. Sem altura fixa. Ex.: "Os dados ficam só neste aparelho. **Nenhum backup feito ainda.**" em Ajustes (task 012) |
+| `showProgressDialog` ✅ | Diálogo bloqueante com indicador e rótulo ("Restaurando…") enquanto uma operação longa corre; voltar e tocar fora não fecham. Devolve o resultado ou propaga o erro (task 012) |
 | `DestructiveButton` ✅ / `showConfirmDialog` ✅ | Ação destrutiva com contorno vermelho, sempre depois do diálogo de confirmação (`destructive: true` pinta o botão de confirmar de vermelho) |
 | Botões | `FilledButton` primário: um por tela, no rodapé. `FilledButton.tonal`: ação secundária de destaque, com fundo `primarySoft` e texto `primary` (o `filledButtonTheme` não fixa cores: cada variante usa as do `ColorScheme`). `OutlinedButton`: secundária. Destrutivo: contorno vermelho + confirmação |
 

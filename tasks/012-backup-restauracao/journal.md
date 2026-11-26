@@ -43,3 +43,10 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Desvio do plano: `undoRestore` move a cópia de segurança para a área de trabalho e, se a restauração falhar, devolve-a ao lugar, para os dados de antes continuarem desfazíveis. O `restore` público apaga o arquivo escolhido; o interno não.
+
+## 2026-11-26 — NoticeBanner e diálogo de progresso
+
+**Feito**
+- `NoticeBanner` (`lib/app/widgets/notice_banner.dart`): fundo suave do tom, ícone e texto na cor forte, ênfase em `labelMedium`; o alinhamento do texto com o ícone sai da altura da linha (`AppTypography.lineHeight`), sem número fixo.
+- `showProgressDialog` (`lib/app/widgets/progress_dialog.dart`): diálogo não dispensável que fecha quando a `Future` termina, devolvendo o valor ou propagando o erro.
+- Testes de widget dos dois e linhas novas na tabela de componentes do `docs/07`.

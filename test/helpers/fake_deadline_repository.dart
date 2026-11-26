@@ -47,12 +47,15 @@ class FakeDeadlineRepository implements DeadlineRepository {
     ]),
   );
 
+  /// Como o real quando há [companies]: só prazos de empresa viva, não
+  /// arquivada e com o módulo habilitado; reage também a mudanças de empresa.
   @override
   Stream<List<Deadline>> watchUpcoming() => _watch(
     () => _sorted([
       for (final d in all)
-        if (d.isOpen) d,
+        if (d.isOpen && _companyAllows(d)) d,
     ]),
+    also: companies?.changes,
   );
 
   @override
@@ -193,17 +196,32 @@ class FakeDeadlineRepository implements DeadlineRepository {
 
   // -------------------------------------------------------------------------
 
-  Stream<T> _watch<T>(T Function() load) {
+  Stream<T> _watch<T>(T Function() load, {Stream<void>? also}) {
     late StreamController<T> controller;
-    StreamSubscription<void>? sub;
+    final subs = <StreamSubscription<void>>[];
     controller = StreamController<T>(
       onListen: () {
         controller.add(load());
-        sub = _changes.stream.listen((_) => controller.add(load()));
+        for (final source in [_changes.stream, ?also]) {
+          subs.add(source.listen((_) => controller.add(load())));
+        }
       },
-      onCancel: () => sub?.cancel(),
+      onCancel: () {
+        for (final s in subs) {
+          s.cancel();
+        }
+      },
     );
     return controller.stream;
+  }
+
+  bool _companyAllows(Deadline d) {
+    final companies = this.companies;
+    if (companies == null) return true;
+    for (final c in companies.all) {
+      if (c.id == d.companyId) return !c.isArchived && c.hasModule(d.module);
+    }
+    return false;
   }
 
   void _notify() => _changes.add(null);
@@ -253,7 +271,10 @@ class FakeDeadlineRepository implements DeadlineRepository {
     ..sort((a, b) {
       final byDate = a.dueDate.compareTo(b.dueDate);
       if (byDate != 0) return byDate;
-      return normalizeForSearch(a.title).compareTo(normalizeForSearch(b.title));
+      final byTitle = normalizeForSearch(a.title)
+          .compareTo(normalizeForSearch(b.title));
+      if (byTitle != 0) return byTitle;
+      return a.id.compareTo(b.id);
     });
 
   DeadlineInput _validated(DeadlineInput input) {

@@ -1,0 +1,180 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:normatrack/app/theme/app_theme.dart';
+import 'package:normatrack/app/widgets/stat_tile.dart';
+
+import '../../helpers/pump_widget.dart';
+
+void main() {
+  Finder tileBox() => find
+      .descendant(of: find.byType(StatTile), matching: find.byType(Container))
+      .first;
+
+  testWidgets('mostra o número, o rótulo e o ícone do tom', (tester) async {
+    await pumpComponent(
+      tester,
+      const StatTile(tone: StatusTone.overdue, count: 3, label: 'Vencidos'),
+    );
+    expect(find.text('3'), findsOneWidget);
+    expect(find.text('Vencidos'), findsOneWidget);
+    expect(find.byIcon(Icons.cancel_outlined), findsOneWidget);
+  });
+
+  testWidgets('altura na escala 1', (tester) async {
+    await pumpComponent(
+      tester,
+      const StatTile(tone: StatusTone.ok, count: 1, label: 'Vigentes'),
+    );
+    expect(tester.getSize(find.byType(StatTile)).height, StatTile.height);
+  });
+
+  Future<void> pumpWithScaler(WidgetTester tester, TextScaler scaler) =>
+      pumpComponent(
+        tester,
+        Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: scaler),
+            // Largura de um tile num celular de 411 de largura.
+            child: const Center(
+              child: SizedBox(
+                width: 121,
+                child: StatTile(
+                  tone: StatusTone.overdue,
+                  count: 12,
+                  label: 'Vencidos',
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Future<void> pumpScaled(WidgetTester tester, double scale) =>
+      pumpWithScaler(tester, TextScaler.linear(scale));
+
+  testWidgets('fonte do sistema maior: altura cresce, sem estouro', (
+    tester,
+  ) async {
+    await pumpScaled(tester, 1.3);
+    expect(tester.takeException(), isNull);
+    final height = tester.getSize(find.byType(StatTile)).height;
+    expect(height, 24 + 47 + 24);
+    expect(height, greaterThan(StatTile.height));
+  });
+
+  testWidgets('escala acima de 1,5 fica limitada a 1,5', (tester) async {
+    await pumpScaled(tester, 2);
+    expect(tester.takeException(), isNull);
+    expect(tester.getSize(find.byType(StatTile)).height, 24 + 54 + 27);
+  });
+
+  testWidgets('escala não linear (Android 14+) não estoura', (tester) async {
+    await pumpWithScaler(tester, const _NonLinearScaler());
+    expect(tester.takeException(), isNull);
+    // número: (30 + 4) × 36/30 = 40,8 → 41; rótulo: (13 + 4) × 18/13 → 24.
+    expect(tester.getSize(find.byType(StatTile)).height, 24 + 41 + 24);
+  });
+
+  testWidgets('cores do tom: fundo suave e texto forte', (tester) async {
+    await pumpComponent(
+      tester,
+      const StatTile(tone: StatusTone.overdue, count: 3, label: 'Vencidos'),
+    );
+    const style = StatusColors.light;
+    final box = tester.widget<Container>(tileBox());
+    expect((box.decoration! as BoxDecoration).color, style.overdue.background);
+    expect(
+      tester.widget<Text>(find.text('3')).style?.color,
+      style.overdue.foreground,
+    );
+    expect(
+      tester.widget<Text>(find.text('Vencidos')).style?.color,
+      style.overdue.foreground,
+    );
+  });
+
+  testWidgets('anel só quando selecionado', (tester) async {
+    await pumpComponent(
+      tester,
+      const StatTile(tone: StatusTone.dueSoon, count: 2, label: 'A vencer'),
+    );
+    expect(tester.widget<Container>(tileBox()).foregroundDecoration, isNull);
+
+    await pumpComponent(
+      tester,
+      const StatTile(
+        tone: StatusTone.dueSoon,
+        count: 2,
+        label: 'A vencer',
+        selected: true,
+      ),
+    );
+    final ring =
+        tester.widget<Container>(tileBox()).foregroundDecoration!
+            as BoxDecoration;
+    expect(ring.border, isNotNull);
+    expect(
+      (ring.border! as Border).top.color,
+      StatusColors.light.dueSoon.foreground,
+    );
+    expect(tester.getSize(find.byType(StatTile)).height, StatTile.height);
+  });
+
+  testWidgets('tocar dispara onTap, inclusive com contagem 0', (tester) async {
+    var taps = 0;
+    await pumpComponent(
+      tester,
+      StatTile(
+        tone: StatusTone.overdue,
+        count: 0,
+        label: 'Vencidos',
+        onTap: () => taps++,
+      ),
+    );
+    await tester.tap(find.byType(StatTile));
+    expect(taps, 1);
+  });
+
+  testWidgets('semântica: botão com contagem e rótulo', (tester) async {
+    final handle = tester.ensureSemantics();
+    await pumpComponent(
+      tester,
+      StatTile(
+        tone: StatusTone.overdue,
+        count: 3,
+        label: 'Vencidos',
+        selected: true,
+        onTap: () {},
+      ),
+    );
+    expect(
+      tester.getSemantics(find.bySemanticsLabel('3 Vencidos')),
+      matchesSemantics(
+        label: '3 Vencidos',
+        isButton: true,
+        hasSelectedState: true,
+        isSelected: true,
+      ),
+    );
+    handle.dispose();
+  });
+}
+
+/// Soma 4 a qualquer tamanho: fontes pequenas crescem proporcionalmente mais,
+/// como a escala não linear do Android 14+.
+class _NonLinearScaler extends TextScaler {
+  const _NonLinearScaler();
+
+  @override
+  double scale(double fontSize) => fontSize + 4;
+
+  @override
+  // ignore: deprecated_member_use
+  double get textScaleFactor => 1.2;
+
+  @override
+  TextScaler clamp({
+    double minScaleFactor = 0,
+    double maxScaleFactor = double.infinity,
+  }) => this;
+}

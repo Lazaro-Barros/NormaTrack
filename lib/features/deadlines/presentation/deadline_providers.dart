@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../companies/domain/company_repository.dart' show CompanyFilter;
 import '../../companies/domain/module_type.dart';
+import '../../companies/presentation/company_providers.dart'
+    show companiesProvider;
 import '../data/local_deadline_repository.dart' show deadlineRepositoryProvider;
 import '../domain/deadline.dart';
 import '../domain/deadline_status.dart';
@@ -41,4 +44,18 @@ final moduleClosedDeadlinesProvider = StreamProvider.autoDispose
             module: key.module,
             statuses: {DeadlineStatus.completed, DeadlineStatus.cancelled},
           ),
+    );
+
+/// Próximos vencimentos de todas as empresas (RF-PRZ-05): em aberto, de
+/// empresas não arquivadas com o módulo habilitado, por vencimento.
+final upcomingDeadlinesProvider = StreamProvider.autoDispose<List<Deadline>>(
+  (ref) => ref.watch(deadlineRepositoryProvider).watchUpcoming(),
+);
+
+/// Nome de exibição por id, das empresas não arquivadas.
+final companyNamesProvider =
+    Provider.autoDispose<AsyncValue<Map<String, String>>>(
+      (ref) => ref
+          .watch(companiesProvider(const CompanyFilter()))
+          .whenData((list) => {for (final c in list) c.id: c.displayName}),
     );

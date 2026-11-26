@@ -116,7 +116,7 @@ Botões, campos, chips, segmentado, interruptores, navegação inferior, snackba
 | Faixa de cabeçalho | `AppBar` do tema (petróleo, cantos inferiores 24) com `BandTitle` ✅ no `title:` (título, `large` nas telas da barra inferior; subtítulo em `onBandMuted`, tabular), ações e no máximo **um** bloco extra abaixo: números, resumo em pílulas, abas (segmentado claro) ou busca. Se o bloco não couber no `AppBar`, criar `AppHeaderBand` em `lib/app/widgets/` |
 | `StatusChip` ✅ | Situação com ícone e texto. Só onde não há bloco de data: histórico de ciclos, tabelas |
 | `DeadlineCard` ✅ | Bloco de data preenchido com a cor forte da situação (dia com dois dígitos e mês; ano de dois dígitos ao lado do mês quando não é o ano corrente) + título + uma linha de contexto (categoria · órgão, ou a empresa) + texto relativo na cor da situação. Texto relativo: "Venceu / ontem", "Venceu / há n dias", "Vence / hoje", "Vence / amanhã", "Vence / em n dias"; vigente "Em n dias" até 365 e "Em n anos" acima. Sem chip |
-| `StatTile` | Número + rótulo na cor suave da situação, dentro da faixa do Painel. Tocar filtra a lista; o selecionado ganha anel |
+| `StatTile` ✅ | Número + rótulo na cor suave da situação, dentro da faixa do Painel: contagem em `AppTypography.number` e, abaixo, ícone do tom + rótulo no plural (`labelMedium`), ambos na cor forte. Tocar filtra a lista (também com contagem 0); o selecionado ganha anel de 2 na cor forte, sem mudar o tamanho. Altura 78 na escala 1 (`StatTile.height`), crescendo com a fonte do sistema até 1,5× (`StatTile.heightOf(context)` dá a altura para o `AppBar.bottom`; acima de 1,5× o rótulo encurta com reticências). Três lado a lado com `AppSpacing.sm` entre eles. Semântica: botão "n Rótulo", com estado selecionado |
 | `PendingRow` | Lançamento periódico a fazer, com botão tonal "Lançar" |
 | `NavRow` / `SwitchRow` ✅ | Linhas dentro de um card, separadas por `divider`. A navegável tem chevron; situação em texto colorido à direita. O interruptor aplica na hora |
 | `AppTextField` ✅ | Rótulo acima (obrigatório com `*`), nunca só placeholder. Ajuda opcional abaixo (`helperText`). Erro com ícone e texto. Formulários longos em seções, cada uma num card |
@@ -139,7 +139,7 @@ A navegação inferior tem 3 destinos: **Painel**, **Empresas** e **Ajustes**. N
 
 | Tela | Requisitos | Conteúdo |
 |---|---|---|
-| Painel | RF-PRZ-05 | Contagem por situação, próximos vencimentos de todas as empresas, lançamentos pendentes |
+| Painel | RF-PRZ-05 | Contagem por situação (`StatTile` que filtra a lista) e próximos vencimentos de todas as empresas, com o nome da empresa no card (task 009). Lançamentos pendentes entram na Fase 2 |
 | Empresas | RF-EMP-01 | Busca na faixa, segmentado ativas/arquivadas; por empresa só nome, cidade/UF e pior situação |
 | Empresa | RF-EMP-03/05 | Resumo de situação na faixa; módulos habilitados; órgãos que se aplicam com situação do registro; dados cadastrais; gerar relatório e arquivar |
 | Nova/editar empresa | RF-EMP-01/02/04/05 | Tela rolável em seções: Identificação · Endereço · Contato · Responsável legal · Módulos · Órgãos. Só a razão social é obrigatória |

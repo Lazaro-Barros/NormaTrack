@@ -7,7 +7,7 @@ void main() {
   testWidgets('abre no Painel e navega pela barra inferior', (tester) async {
     await pumpApp(tester);
 
-    expect(find.text('Painel em construção'), findsOneWidget);
+    expect(find.text('Nenhum prazo em aberto'), findsOneWidget);
     final bar = find.byType(NavigationBar);
     expect(bar, findsOneWidget);
     for (final label in ['Painel', 'Empresas', 'Ajustes']) {
@@ -31,7 +31,7 @@ void main() {
 
     await tester.tap(find.text('Ver empresas'));
     await tester.pumpAndSettle();
-    expect(find.text('Painel em construção'), findsNothing);
+    expect(find.text('Nenhum prazo em aberto'), findsNothing);
     expect(find.text('Nenhuma empresa cadastrada'), findsOneWidget);
   });
 }

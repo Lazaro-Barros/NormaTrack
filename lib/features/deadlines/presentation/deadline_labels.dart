@@ -125,6 +125,15 @@ String situationLabel(DeadlineSituation s) => switch (s) {
   DeadlineSituation.cancelled => 'Cancelado',
 };
 
+/// Rótulo dos tiles do Painel: "Vencidos", "A vencer", "Vigentes". Só para as
+/// três situações em aberto; as demais caem no rótulo do chip.
+String situationPluralLabel(DeadlineSituation s) => switch (s) {
+  DeadlineSituation.overdue => 'Vencidos',
+  DeadlineSituation.dueSoon => 'A vencer',
+  DeadlineSituation.current => 'Vigentes',
+  _ => situationLabel(s),
+};
+
 /// Ícone da situação: o do tom, exceto renovado, concluído e cancelado.
 IconData situationIcon(DeadlineSituation s) => switch (s) {
   DeadlineSituation.renewed => Icons.autorenew,

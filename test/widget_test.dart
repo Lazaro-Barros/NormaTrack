@@ -23,7 +23,7 @@ void main() {
 
     await tester.tap(find.descendant(of: bar, matching: find.text('Ajustes')));
     await tester.pumpAndSettle();
-    expect(find.text('Ajustes em construção'), findsOneWidget);
+    expect(find.text('Alertas'), findsOneWidget);
   });
 
   testWidgets('ação do Painel abre Empresas', (tester) async {

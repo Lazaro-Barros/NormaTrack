@@ -11,8 +11,8 @@ import '../features/deadlines/presentation/dashboard_screen.dart';
 import '../features/deadlines/presentation/deadline_detail_screen.dart';
 import '../features/deadlines/presentation/deadline_form_screen.dart';
 import '../features/deadlines/presentation/module_screen.dart';
+import '../features/settings/presentation/settings_screen.dart';
 import 'app_shell.dart';
-import 'placeholder_screens.dart';
 
 abstract final class AppRoutes {
   static const dashboard = '/painel';
@@ -133,7 +133,7 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.dashboard}) {
             routes: [
               GoRoute(
                 path: AppRoutes.settings,
-                builder: (context, state) => const SettingsPlaceholderScreen(),
+                builder: (context, state) => const SettingsScreen(),
               ),
             ],
           ),

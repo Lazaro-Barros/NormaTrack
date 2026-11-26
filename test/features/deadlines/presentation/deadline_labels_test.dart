@@ -210,6 +210,13 @@ void main() {
       expect(situationIcon(DeadlineSituation.renewed), Icons.autorenew);
     });
 
+    test('situationPluralLabel: rótulos dos tiles do Painel', () {
+      expect(situationPluralLabel(DeadlineSituation.overdue), 'Vencidos');
+      expect(situationPluralLabel(DeadlineSituation.dueSoon), 'A vencer');
+      expect(situationPluralLabel(DeadlineSituation.current), 'Vigentes');
+      expect(situationPluralLabel(DeadlineSituation.renewed), 'Renovado');
+    });
+
     test('banner de vencido', () {
       final b = deadlineBanner(deadline(DateTime(2026, 9, 26)), today);
       expect(b.tone, StatusTone.overdue);

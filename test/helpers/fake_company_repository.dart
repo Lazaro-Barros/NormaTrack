@@ -18,6 +18,10 @@ class FakeCompanyRepository implements CompanyRepository {
   final _changes = StreamController<void>.broadcast();
   var _nextId = 1;
 
+  /// Avisa cada mudança, para o [FakeDeadlineRepository] reagir a arquivar,
+  /// excluir ou desligar módulo, como o join do repositório real.
+  Stream<void> get changes => _changes.stream;
+
   /// Empresas vivas (não excluídas), em ordem de criação.
   List<Company> get all => [
     for (final c in _companies.values)

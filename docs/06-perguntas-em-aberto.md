@@ -24,9 +24,9 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | C3 | Os 150 dias de antecedência valem para todas as licenças? E para laudos e manutenções, qual antecedência? | 🟡 Fase 1 | 2026-09-30 (usuária, task 006): licença 150 dias, laudo e manutenção 30 dias, com lembretes extras de 30, 10 e 3 dias e no dia, editáveis por prazo. Falta confirmar com a cliente. |
 | C4 | Depois que o alerta começa, com que frequência ele deve repetir (diário, semanal) até a renovação? | 🟡 Fase 1 | 2026-11-26 (usuário, task 010): só nos dias de lembrete do prazo; depois de vencido, uma vez por semana até renovar, concluir ou cancelar. Uma notificação por prazo, às 8h (fixo). Falta confirmar com a cliente. |
 | C5 | Que dados da empresa cadastrar (CNPJ, endereço, responsável técnico, números das licenças)? | 🟡 Fase 1 | 2026-09-24: dados cadastrais, responsável legal e registros em órgãos (RF-EMP-04/05); só a razão social é obrigatória. Responsável **técnico** e anexos seguem em aberto (C13). |
-| C6 | Ruídos: sempre 4 pontos ou varia por empresa? Unidade (dB)? Existem limites para destacar valores fora do permitido? | 🟡 Fase 2 | |
-| C7 | Resíduos: quais classes usar? Unidade (kg, t, m³)? Período semanal ou mensal — fixo por empresa? | 🟡 Fase 2 | |
-| C8 | ETE/ETA: quais parâmetros são medidos além de pH e insumo? Com que frequência? | 🟡 Fase 2 | |
+| C6 | Ruídos: sempre 4 pontos ou varia por empresa? Unidade (dB)? Existem limites para destacar valores fora do permitido? | 🟡 Fase 2 | 2026-11-26 (usuário, task 013): quantos pontos a empresa quiser (o app sugere 4 na primeira vez), unidade dB(A), limite máximo opcional por ponto; valor acima aparece com ícone e "Acima do limite". Falta confirmar com a cliente. |
+| C7 | Resíduos: quais classes usar? Unidade (kg, t, m³)? Período semanal ou mensal — fixo por empresa? | 🟡 Fase 2 | 2026-11-26 (usuário, task 013): **perigosos** — tipos cadastrados pela usuária por empresa, quantidade gerada e armazenada em kg, lançamento mensal. **Sólidos** — levar à cliente (perguntas simples abaixo). Não bloqueia a task 013; bloqueia a 016. |
+| C8 | ETE/ETA: quais parâmetros são medidos além de pH e insumo? Com que frequência? | 🟡 Fase 2 | 2026-11-26: levar à cliente (perguntas simples abaixo). Não bloqueia a task 013 (a base aceita qualquer lista de parâmetros, com unidade, frequência e faixa); bloqueia a 017. |
 | C9 | Existem **modelos oficiais** de relatório por órgão? Se sim, enviar os arquivos (Word/planilha). | 🔴 Fase 3 | |
 | C10 | Produtos controlados: o estoque final é informado ou deve ser calculado a partir do estoque anterior + entradas − uso? | 🟡 Fase 3 | 2026-11-26 (vídeo 1, [briefing](briefing-videos.md)): indício de que é **informado** ("a quantidade que ficou em estoque naquele mês"). Confirmar. |
 | C11 | Controle de qualidade: a compra de matéria-prima se vincula a um produto específico ou é da empresa como um todo? | 🟡 Fase 4 | 2026-11-26 (vídeo 2, [briefing](briefing-videos.md)): indício de vínculo com o **produto**; no desenho e na fala a compra fica dentro do "Produto A". Confirmar. |
@@ -44,6 +44,25 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | C23 | Confirmar as suposições do Painel (task 009): a lista traz todos os prazos em aberto, sem limite e sem "Ver todos"; tiles Vencidos · A vencer · Vigentes filtram a lista (tocar de novo limpa); cada item mostra o nome da empresa, sem categoria nem órgão; voltar do detalhe leva ao Painel. | ⚪ Fase 1 | Suposição adotada (2026-11-16): lista e tiles definidos pela usuária; contexto do card e navegação por conta do agente. |
 | C24 | O alerta de vencimento precisa chegar por **e-mail**, como a cliente pediu no vídeo 1, ou a notificação no celular basta até existir a API? | 🟡 Fase 1 | 2026-11-26: suposição — notificação local no MVP (RF-PRZ-03); e-mail na Fase 5, pois exige backend. Alinhar com a cliente. |
 | C25 | Backup (RNF-04): formato, salvaguarda ao restaurar, validação e aviso. | 🟡 Fase 1 | 2026-11-26 (usuário, task 012): cópia do banco SQLite (`.ntbackup`) enviada pela folha de compartilhamento; restaurar pede confirmação com resumo e guarda antes uma cópia dos dados atuais ("Desfazer"); aceita backup de versão igual ou mais antiga e recusa mais nova; aviso "Nenhum backup feito ainda" e data do último backup, sem lembrete periódico. Suposições: compartilhamento sem retorno do aparelho não conta como backup; só a cópia de segurança mais recente fica guardada. Falta confirmar com a cliente. |
+| C26 | Lançamentos periódicos (Fase 2): o que é "pendente", o que se pode editar e o que fazer quando não houve medição? | 🟡 Fase 2 | 2026-11-26 (usuário, task 013): o período corrente aparece como "A lançar" e cada período anterior sem valor como "Atrasado", a partir do período de início do parâmetro; período com só parte dos pontos continua pendente. Pode salvar parcial; o período atual e os passados podem ser lançados, editados ou apagados; período futuro não aceita lançamento. Semana ISO, de segunda a domingo. Um período pode ser marcado "sem medição" com justificativa, e sai das pendências. Falta confirmar com a cliente. |
+
+## Perguntas para levar à cliente (Fase 2)
+
+Versão simples de C7 e C8, para mandar por WhatsApp. Respostas voltam para a tabela acima.
+
+**Resíduos sólidos (C7).** As classes vêm da norma ABNT NBR 10004: **Classe I** são os perigosos (óleo usado, solvente, borra de tinta, estopa suja de óleo); **Classe II-A** são os não perigosos que se decompõem ou se dissolvem (restos de comida, papel, papelão, madeira, lodo comum); **Classe II-B** são os não perigosos que não mudam com o tempo (entulho, vidro, metal, alguns plásticos).
+
+1. Para os resíduos sólidos, basta lançar o total de cada classe (I, II-A e II-B) ou você precisa separar por tipo dentro da classe (ex.: papelão e madeira dentro da II-A)?
+2. Você anota o peso em quilos (kg)? Ou às vezes em toneladas ou em metros cúbicos?
+3. Você lança uma vez por mês ou toda semana? É igual para todas as empresas?
+4. A "Classe I" dos resíduos sólidos é a mesma coisa que os "resíduos perigosos" que você lança separado, ou são lançamentos diferentes?
+
+**ETE e ETA (C8).** ETE é a estação que limpa a água suja que sai da fábrica antes de ir para a rede ou o rio; ETA é a estação que trata a água que entra (de poço ou rio) para a fábrica usar. O "controle" são as medições que você anota de cada uma.
+
+5. Na ETE, o que você mede além do pH? (ex.: vazão, temperatura, quantidade de cada produto químico usado). E na ETA? (ex.: pH, cloro, turbidez, produto usado)
+6. Cada medição é feita todo dia, toda semana ou todo mês?
+7. Existe uma faixa permitida que o app deveria avisar quando sair dela? (ex.: pH entre 6 e 9)
+8. Alguma empresa tem mais de uma ETE ou mais de uma ETA?
 
 ## Pendências de material
 

@@ -36,7 +36,7 @@ tasks/
 4. Adicione a linha no índice `tasks/README.md` com status `rascunho`.
 5. Primeira entrada no `journal.md`: task criada e de onde veio.
 
-Uma task deve caber em um PR revisável. Se o escopo tem mais de uma tela grande, mais de uma tabela nova com regras próprias, ou critérios de aceite que não cabem em ~8 itens, quebre em várias tasks e registre a dependência entre elas.
+Uma task deve caber numa entrega revisável (poucos commits coesos na `main`). Se o escopo tem mais de uma tela grande, mais de uma tabela nova com regras próprias, ou critérios de aceite que não cabem em ~8 itens, quebre em várias tasks e registre a dependência entre elas.
 
 ### 2. Refinar
 
@@ -57,7 +57,7 @@ Antes de escrever código de produção, preencha o `plan.md`:
 O plano precisa passar no **teste do agente novo**: antes de mudar o status para `planejada`, releia a pasta como se não conhecesse a conversa. Para cada decisão que um implementador teria que tomar, a resposta tem que estar escrita. Checklist:
 
 - **Contexto do repositório:** o que já existe e o que ainda não existe (pacotes, arquivos, pastas), versões do Flutter/Dart e armadilhas conhecidas (ex.: um teste que quebra se o widget raiz mudar).
-- **Ordem de implementação:** passos, branch, formato dos commits e como atualizar journal, status e roadmap no fim.
+- **Ordem de implementação:** passos, formato dos commits (direto na `main`, sem branch nem PR) e como atualizar journal, status e roadmap no fim.
 - **Setup:** pacotes com versão (confira com `flutter pub add --dry-run`), arquivos de configuração (`build.yaml`…) e comandos de codegen.
 - **Contratos completos:** assinaturas de entidades, interfaces, parâmetros de filtro e exceções, e não só nomes.
 - **Valores de referência:** todo enum ou lista fixa com valor, código persistido e rótulo pt-BR.
@@ -83,7 +83,8 @@ Quando houver incerteza de UI ou técnica, prototipe antes de implementar:
 
 - Status → `em andamento`. Siga o `CLAUDE.md` (arquitetura, design system, convenções).
 - Escreva no journal **durante** o trabalho, não só no fim: a cada decisão, desvio do plano, descoberta ou bloqueio. Se o plano mudar, atualize o `plan.md` e explique no journal.
-- Referencie `NNN` e os `RF-*` nos commits e no PR (ex.: `feat(empresas): CRUD de empresas [task 003, RF-EMP-01]`).
+- Commits direto na `main`, sem branch nem PR: um por passo, com format, analyze e testes verdes, seguido de `git push origin main`.
+- Referencie `NNN` e os `RF-*` nos commits (ex.: `feat(empresas): CRUD de empresas [task 003, RF-EMP-01]`).
 - Antes de concluir: `dart format .`, `flutter analyze` e `flutter test` sem erros.
 
 ### 6. Concluir
@@ -96,6 +97,7 @@ Quando houver incerteza de UI ou técnica, prototipe antes de implementar:
    - Pergunta respondida → mover para o documento correspondente e anotar em `docs/06-perguntas-em-aberto.md`.
    - Item do roadmap entregue → marcar em `docs/05-roadmap.md` com o número da task.
    - Mudança no design system → `docs/07-design-system.md`.
+5. Commit do fechamento na `main` e `git push origin main`.
 
 ## Journal
 
@@ -113,7 +115,7 @@ Arquivo cronológico, entradas mais recentes **no fim**. Nunca apague entradas a
 **Pendente / dúvidas**
 - …
 
-**Refs:** commit abc1234 · PR #12 · docs/decisoes.md#d007
+**Refs:** commit abc1234 · docs/decisoes.md#d007
 ```
 
 Omita seções vazias. Datas absolutas (`AAAA-MM-DD`), nunca "hoje" ou "ontem".

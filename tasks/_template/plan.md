@@ -12,7 +12,7 @@ O que já existe, o que ainda não existe, versões e armadilhas conhecidas.
 
 ## Ordem de implementação
 
-Branch, passos numerados, formato de commit e fechamento (journal, status, roadmap).
+Passos numerados (um commit por passo, direto na `main`, sem branch nem PR), formato de commit e fechamento (journal, status, roadmap, push).
 
 ## Setup
 

@@ -1,6 +1,6 @@
 # 02 — Requisitos
 
-Identificadores no formato `RF-<ÁREA>-<nº>` para rastrear requisitos em tasks e PRs. Itens marcados com **(?)** dependem de resposta em [perguntas em aberto](06-perguntas-em-aberto.md).
+Identificadores no formato `RF-<ÁREA>-<nº>` para rastrear requisitos em tasks e commits. Itens marcados com **(?)** dependem de resposta em [perguntas em aberto](06-perguntas-em-aberto.md).
 
 ## Transversais
 

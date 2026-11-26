@@ -36,13 +36,18 @@ Regras:
 - Reutilize os widgets de `lib/app/widgets/`. Se a tela precisa de um componente listado em `docs/07-design-system.md` que ainda não existe, crie-o lá (genérico, com teste) antes de usar, em vez de desenhá-lo dentro da feature.
 - Um botão primário (`FilledButton`) por tela, no rodapé. Ações destrutivas usam contorno e pedem confirmação.
 - Navegação: barra inferior com Painel, Empresas e Ajustes; telas internas trocam a barra por uma barra de ações.
-- Se a funcionalidade exigir algo que o design system não cobre (nova cor, novo componente, padrão diferente), não invente localmente: estenda o tema/componente, atualize `docs/07-design-system.md` no mesmo PR e explique a mudança na descrição.
+- Se a funcionalidade exigir algo que o design system não cobre (nova cor, novo componente, padrão diferente), não invente localmente: estenda o tema/componente, atualize `docs/07-design-system.md` no mesmo commit e explique a mudança na mensagem do commit e no journal da task.
 
 ## Convenções
 
 - Interface do usuário em pt-BR; nomes em código conforme o glossário de `docs/03-dominio.md`.
-- Referencie o número da task e o ID do requisito (ex.: `[task 003, RF-PRZ-03]`) no commit ou PR.
+- Referencie o número da task e o ID do requisito (ex.: `[task 003, RF-PRZ-03]`) na mensagem do commit.
 - Antes de concluir: `dart format .`, `flutter analyze` e `flutter test` sem erros.
+
+## Git
+
+- Trabalho direto na `main`: sem branch de task e sem PR ([D012](docs/decisoes.md#d012--commits-direto-na-main-sem-pr)).
+- Um commit por passo da task, já com `dart format .`, `flutter analyze` e `flutter test` verdes, e `git push origin main` em seguida. Nunca commite código que quebra a suíte.
 
 ## Comandos
 

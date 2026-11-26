@@ -90,3 +90,12 @@ Os lembretes de cada prazo ficam em `deadline_reminders` (uma linha por dia de a
 
 - *Por quê:* a usuária quer vários avisos personalizáveis por prazo (ex.: 150, 30, 10, 3 dias e no dia), e a tabela segue a convenção de linhas com `id` e exclusão lógica (D008), boa para sincronização.
 - *Descartado:* a lista numa coluna de texto (`"150,30,10,3,0"`), que não segue a convenção nem permite consultar por dia; e `alertDaysBefore` separado dos lembretes, que seriam duas fontes para a mesma janela.
+
+## D012 — Commits direto na main, sem PR
+
+**Status:** aceita · 2026-11-26
+
+O app tem um único desenvolvedor. Todo trabalho vai em commits direto na `main` e sobe com `git push origin main`, sem branch de task e sem pull request. Cada passo da task vira um commit com `dart format .`, `flutter analyze` e `flutter test` verdes. O rastro de revisão fica nas mensagens de commit (`[task NNN, RF-…]`) e no journal da task.
+
+- *Por quê:* PR só acrescenta passos quando quem escreve e quem revisa é a mesma pessoa.
+- *Descartado:* branch por task com PR (usado até a task 009). Volta a valer se entrar outra pessoa no projeto (T6).

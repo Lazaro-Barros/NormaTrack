@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/router.dart';
+import 'package:normatrack/core/notifications/notification_providers.dart';
 import 'package:normatrack/core/providers.dart';
 import 'package:normatrack/features/companies/data/local_company_repository.dart';
 import 'package:normatrack/features/deadlines/data/local_deadline_repository.dart';
@@ -9,6 +10,8 @@ import 'package:normatrack/main.dart';
 
 import 'fake_company_repository.dart';
 import 'fake_deadline_repository.dart';
+import 'fake_notification_scheduler.dart';
+import 'fake_notification_settings.dart';
 
 /// "Hoje" nos testes: 29/09/2026 em qualquer fuso do Brasil.
 final testNow = DateTime.utc(2026, 9, 29, 12);
@@ -19,6 +22,8 @@ Future<FakeCompanyRepository> pumpApp(
   WidgetTester tester, {
   FakeCompanyRepository? repository,
   FakeDeadlineRepository? deadlineRepository,
+  FakeNotificationScheduler? notificationScheduler,
+  FakeNotificationSettings? notificationSettings,
   String initialLocation = AppRoutes.dashboard,
 }) async {
   final repo = repository ?? FakeCompanyRepository(now: testNow);
@@ -34,6 +39,12 @@ Future<FakeCompanyRepository> pumpApp(
         companyRepositoryProvider.overrideWithValue(repo),
         deadlineRepositoryProvider.overrideWithValue(deadlines),
         clockProvider.overrideWithValue(() => testNow),
+        notificationSchedulerProvider.overrideWithValue(
+          notificationScheduler ?? FakeNotificationScheduler(),
+        ),
+        notificationSettingsProvider.overrideWithValue(
+          notificationSettings ?? FakeNotificationSettings(),
+        ),
         routerProvider.overrideWith((ref) {
           final router = createAppRouter(initialLocation: initialLocation);
           ref.onDispose(router.dispose);

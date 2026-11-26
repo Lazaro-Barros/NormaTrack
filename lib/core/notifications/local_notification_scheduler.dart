@@ -7,14 +7,18 @@ import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import 'deadline_notification_planner.dart';
+import 'latest_only_runner.dart';
 import 'notification_scheduler.dart';
 
 /// [NotificationScheduler] com `flutter_local_notifications`: agendamento
 /// inexato (sem permissão de alarme exato) no fuso do aparelho.
 class LocalNotificationScheduler implements NotificationScheduler {
-  LocalNotificationScheduler._(this._plugin);
+  LocalNotificationScheduler._(this._plugin) {
+    _runner = LatestOnlyRunner(_apply);
+  }
 
   final FlutterLocalNotificationsPlugin _plugin;
+  late final LatestOnlyRunner<List<PlannedNotification>> _runner;
   final _taps = StreamController<String>.broadcast();
 
   static const _details = NotificationDetails(
@@ -80,8 +84,15 @@ class LocalNotificationScheduler implements NotificationScheduler {
     await _plugin.openAppNotificationSettings();
   }
 
+  /// Substituições seguidas rodam uma por vez; só o plano mais recente é
+  /// aplicado depois da que está em andamento.
   @override
-  Future<void> replaceAll(List<PlannedNotification> plan) async {
+  Future<void> replaceAll(List<PlannedNotification> plan) => _runner.run(plan);
+
+  @override
+  Future<void> cancelAll() => _runner.run(const []);
+
+  Future<void> _apply(List<PlannedNotification> plan) async {
     await _plugin.cancelAllPendingNotifications();
     for (final n in plan) {
       final at = n.fireAt;
@@ -105,7 +116,4 @@ class LocalNotificationScheduler implements NotificationScheduler {
       );
     }
   }
-
-  @override
-  Future<void> cancelAll() => _plugin.cancelAllPendingNotifications();
 }

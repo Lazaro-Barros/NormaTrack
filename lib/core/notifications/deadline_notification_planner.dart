@@ -12,6 +12,10 @@ const notificationHour = 8;
 /// Teto de agendamentos: alguns Android (Samsung) limitam a 500 alarmes por app.
 const maxScheduledNotifications = 400;
 
+/// Avisos semanais avulsos depois do vencimento, quando a repetição ainda não
+/// pode ser usada (ver [planDeadlineNotifications]).
+const overdueOneShotWeeks = 4;
+
 /// Uma notificação a agendar. [deadlineId] também vai no payload.
 @immutable
 class PlannedNotification {
@@ -30,7 +34,7 @@ class PlannedNotification {
   /// Local, sem fuso: `DateTime(y, m, d, 8)`.
   final DateTime fireAt;
 
-  /// Repete toda semana no mesmo dia e hora.
+  /// Repete toda semana no mesmo dia e hora, a partir de [fireAt].
   final bool weekly;
   final String title;
   final String body;
@@ -55,7 +59,9 @@ class PlannedNotification {
 }
 
 /// Plano de notificações dos prazos em aberto (RF-PRZ-03): às 8h de cada dia de
-/// lembrete futuro e, a partir de 7 dias depois do vencimento, uma semanal.
+/// lembrete futuro e, a partir de 7 dias depois do vencimento, toda semana.
+/// A semanal é uma notificação repetitiva quando a primeira ocorrência está a
+/// menos de 7 dias de [now]; senão, [overdueOneShotWeeks] avisos avulsos.
 /// Ordenado por horário (desempate: título sem acento/caixa, depois id) e
 /// cortado em [max]. [now] é local.
 List<PlannedNotification> planDeadlineNotifications(
@@ -86,20 +92,30 @@ List<PlannedNotification> planDeadlineNotifications(
         ),
       );
     }
-    var weekly = _at8(DateTime(due.year, due.month, due.day + 7));
-    while (!weekly.isAfter(now)) {
-      weekly = _at8(DateTime(weekly.year, weekly.month, weekly.day + 7));
+    var first = _at8(DateTime(due.year, due.month, due.day + 7));
+    while (!first.isAfter(now)) {
+      first = _plusWeek(first);
     }
-    plan.add(
-      PlannedNotification(
-        id: notificationIdFor(d.id, weekly, weekly: true),
-        deadlineId: d.id,
-        fireAt: weekly,
-        weekly: true,
-        title: d.title,
-        body: _withCompany(company, 'Vencido desde ${formatDate(due)}'),
-      ),
-    );
+    // O Android repete a partir da próxima ocorrência do dia da semana *a
+    // partir de agora*, ignorando a data de início. Só dá para usar a
+    // repetição quando a primeira ocorrência está a menos de 7 dias; antes
+    // disso, avisos avulsos nas primeiras semanas (a sincronização de uma
+    // abertura futura troca pela repetição).
+    final repeats = first.difference(now) < const Duration(days: 7);
+    var fireAt = first;
+    for (var i = 0; i < (repeats ? 1 : overdueOneShotWeeks); i++) {
+      plan.add(
+        PlannedNotification(
+          id: notificationIdFor(d.id, fireAt, weekly: true),
+          deadlineId: d.id,
+          fireAt: fireAt,
+          weekly: repeats,
+          title: d.title,
+          body: _withCompany(company, 'Vencido desde ${formatDate(due)}'),
+        ),
+      );
+      fireAt = _plusWeek(fireAt);
+    }
   }
   plan.sort((a, b) {
     final byTime = a.fireAt.compareTo(b.fireAt);
@@ -113,7 +129,7 @@ List<PlannedNotification> planDeadlineNotifications(
 }
 
 /// Id estável e positivo (cabe no `int` do Android): FNV-1a 32 bits de
-/// `"$deadlineId|yyyy-MM-dd|r"` (lembrete) ou `"…|w"` (semanal).
+/// `"$deadlineId|yyyy-MM-dd|r"` (lembrete) ou `"…|w"` (aviso de vencido).
 int notificationIdFor(
   String deadlineId,
   DateTime date, {
@@ -131,6 +147,8 @@ int notificationIdFor(
 }
 
 DateTime _at8(DateTime d) => DateTime(d.year, d.month, d.day, notificationHour);
+
+DateTime _plusWeek(DateTime d) => _at8(DateTime(d.year, d.month, d.day + 7));
 
 String _reminderText(int daysBefore, DateTime due) => switch (daysBefore) {
   0 => 'Vence hoje',

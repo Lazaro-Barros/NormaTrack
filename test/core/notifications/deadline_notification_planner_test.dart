@@ -71,7 +71,11 @@ void main() {
           ('d1', at8(11, 3), false),
           ('d1', at8(11, 10), false),
           ('d1', at8(11, 13), false),
-          ('d1', at8(11, 20), true),
+          // Primeira semanal a mais de 7 dias: 4 avisos avulsos.
+          ('d1', at8(11, 20), false),
+          ('d1', at8(11, 27), false),
+          ('d1', at8(12, 4), false),
+          ('d1', at8(12, 11), false),
         ],
       );
     });
@@ -89,11 +93,40 @@ void main() {
         'Indústria Alfa Ltda · Vence em 10 dias (13/11/2026)',
         'Indústria Alfa Ltda · Vence em 3 dias (13/11/2026)',
         'Indústria Alfa Ltda · Vence hoje',
-        'Indústria Alfa Ltda · Vencido desde 13/11/2026',
+        for (var i = 0; i < 4; i++)
+          'Indústria Alfa Ltda · Vencido desde 13/11/2026',
       ]);
       expect(plan.first.title, 'Licença de Operação');
       expect(plan.last.title, 'Licença de Instalação');
     });
+
+    test(
+      'semanal repetitiva só com a primeira ocorrência a menos de 7 dias',
+      () {
+        final d = deadline('d9', 'Licença', DateTime(2026, 9, 28));
+        // Primeira semanal: 05/10 às 8h.
+        final sixDaysBefore = DateTime(2026, 9, 29, 9);
+        final repeating = planDeadlineNotifications([d], names, sixDaysBefore);
+        expect(
+          [for (final p in repeating) (p.fireAt, p.weekly)],
+          [(at8(10, 5), true)],
+        );
+        final sevenDaysBefore = DateTime(2026, 9, 28, 8);
+        final oneShots = planDeadlineNotifications([d], names, sevenDaysBefore);
+        expect(
+          [
+            for (final p in oneShots.where((p) => p.fireAt.isAfter(at8(9, 28))))
+              (p.fireAt, p.weekly),
+          ],
+          [
+            (at8(10, 5), false),
+            (at8(10, 12), false),
+            (at8(10, 19), false),
+            (at8(10, 26), false),
+          ],
+        );
+      },
+    );
 
     test('lembrete de 1 dia: "Vence amanhã"', () {
       final d = deadline(

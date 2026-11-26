@@ -7,6 +7,7 @@ import '../features/companies/presentation/company_form_screen.dart';
 import '../features/companies/presentation/company_list_screen.dart';
 import '../features/companies/domain/module_type.dart';
 import '../features/companies/presentation/company_labels.dart';
+import '../features/deadlines/presentation/dashboard_screen.dart';
 import '../features/deadlines/presentation/deadline_detail_screen.dart';
 import '../features/deadlines/presentation/deadline_form_screen.dart';
 import '../features/deadlines/presentation/module_screen.dart';
@@ -53,7 +54,7 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.dashboard}) {
             routes: [
               GoRoute(
                 path: AppRoutes.dashboard,
-                builder: (context, state) => const DashboardPlaceholderScreen(),
+                builder: (context, state) => const DashboardScreen(),
               ),
             ],
           ),

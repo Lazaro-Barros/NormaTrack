@@ -337,7 +337,13 @@ class _Detail extends ConsumerWidget {
           if (!ok) return;
           await repo.delete(d.id);
           say('Prazo excluído');
-          router.go(AppRoutes.module(company.id, module));
+          // Vindo do Painel (`push`), volta ao Painel; vindo do módulo, ao
+          // módulo.
+          if (router.canPop()) {
+            router.pop();
+          } else {
+            router.go(AppRoutes.module(company.id, module));
+          }
       }
     } on DeadlineNotFoundException {
       // O stream já mostra "Prazo não encontrado".

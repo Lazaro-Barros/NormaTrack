@@ -7,9 +7,11 @@ import '../../../app/widgets/nav_row.dart';
 import '../../../app/widgets/section_card.dart';
 import '../../../app/widgets/switch_row.dart';
 import '../../../core/notifications/notification_providers.dart';
+import '../../backup/presentation/backup_section.dart';
 
-/// Ajustes: por enquanto só a seção Alertas (RF-PRZ-03). Backup e "Sobre"
-/// entram com a task de backup (RNF-04).
+/// Ajustes: aviso e seção Backup (RNF-04, task 012) e seção Alertas
+/// (RF-PRZ-03, task 010). "Antecedência padrão" e "Sobre" do wireframe ainda
+/// não entraram.
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
@@ -61,6 +63,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           bottom: AppSpacing.xl,
         ),
         children: [
+          const BackupNotice(),
+          const BackupSection(),
+          const SizedBox(height: AppSpacing.lg),
           SectionCard(
             title: 'Alertas',
             children: [

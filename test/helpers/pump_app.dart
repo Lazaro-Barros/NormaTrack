@@ -4,10 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/router.dart';
 import 'package:normatrack/core/notifications/notification_providers.dart';
 import 'package:normatrack/core/providers.dart';
+import 'package:normatrack/features/backup/data/local_backup_service.dart';
+import 'package:normatrack/features/backup/data/platform_backup_files.dart';
+import 'package:normatrack/features/backup/data/shared_prefs_backup_settings.dart';
 import 'package:normatrack/features/companies/data/local_company_repository.dart';
 import 'package:normatrack/features/deadlines/data/local_deadline_repository.dart';
 import 'package:normatrack/main.dart';
 
+import 'fake_backup.dart';
 import 'fake_company_repository.dart';
 import 'fake_deadline_repository.dart';
 import 'fake_notification_scheduler.dart';
@@ -24,6 +28,9 @@ Future<FakeCompanyRepository> pumpApp(
   FakeDeadlineRepository? deadlineRepository,
   FakeNotificationScheduler? notificationScheduler,
   FakeNotificationSettings? notificationSettings,
+  FakeBackupService? backupService,
+  FakeBackupFiles? backupFiles,
+  FakeBackupSettings? backupSettings,
   String initialLocation = AppRoutes.dashboard,
 }) async {
   final repo = repository ?? FakeCompanyRepository(now: testNow);
@@ -44,6 +51,13 @@ Future<FakeCompanyRepository> pumpApp(
         ),
         notificationSettingsProvider.overrideWithValue(
           notificationSettings ?? FakeNotificationSettings(),
+        ),
+        backupServiceProvider.overrideWithValue(
+          backupService ?? FakeBackupService(),
+        ),
+        backupFilesProvider.overrideWithValue(backupFiles ?? FakeBackupFiles()),
+        backupSettingsProvider.overrideWithValue(
+          backupSettings ?? FakeBackupSettings(),
         ),
         routerProvider.overrideWith((ref) {
           final router = createAppRouter(initialLocation: initialLocation);

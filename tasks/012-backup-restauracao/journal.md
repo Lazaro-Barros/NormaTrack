@@ -50,3 +50,14 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - `NoticeBanner` (`lib/app/widgets/notice_banner.dart`): fundo suave do tom, ícone e texto na cor forte, ênfase em `labelMedium`; o alinhamento do texto com o ícone sai da altura da linha (`AppTypography.lineHeight`), sem número fixo.
 - `showProgressDialog` (`lib/app/widgets/progress_dialog.dart`): diálogo não dispensável que fecha quando a `Future` termina, devolvendo o valor ou propagando o erro.
 - Testes de widget dos dois e linhas novas na tabela de componentes do `docs/07`.
+
+## 2026-11-26 — Ajustes com backup e restauração
+
+**Feito**
+- `lastBackupAtProvider` (`AsyncNotifier`), `BackupNotice` e `BackupSection` em `lib/features/backup/presentation/backup_section.dart`; Ajustes mostra aviso → seção Backup → Alertas.
+- Fluxos: gerar (progresso) → compartilhar → gravar data + "Backup feito"; escolher → conferir (progresso) → confirmação vermelha com resumo → restaurar (progresso) → "Backup restaurado" com "Desfazer" (10 s, `persist: false`).
+- Fakes `test/helpers/fake_backup.dart`, sobrescritos por padrão no `pumpApp`.
+- Testes: `settings_backup_test.dart` (aviso, data, folha fechada, erros, as 4 mensagens de recusa, plural e data na confirmação, cancelar, restaurar, desfazer, falha) e `restore_integration_test.dart` (banco em arquivo + providers reais: restaurar faz a sincronização agendar só os prazos do backup).
+
+**Decidido**
+- O subtítulo "Último backup em DD/MM/AAAA" fica no estilo padrão do `NavRow`, que não aceita estilo próprio; não vale estender o componente só para os algarismos tabulares de uma data curta.

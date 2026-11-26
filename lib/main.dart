@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'app/notification_sync.dart';
 import 'app/router.dart';
 import 'app/theme/app_theme.dart';
+import 'core/notifications/local_notification_scheduler.dart';
+import 'core/notifications/notification_providers.dart';
 
-void main() {
-  runApp(const ProviderScope(child: NormaTrackApp()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final scheduler = await LocalNotificationScheduler.create();
+  runApp(
+    ProviderScope(
+      overrides: [notificationSchedulerProvider.overrideWithValue(scheduler)],
+      child: const NormaTrackApp(),
+    ),
+  );
 }
 
 class NormaTrackApp extends ConsumerWidget {
@@ -14,6 +24,7 @@ class NormaTrackApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(notificationSyncProvider);
     return MaterialApp.router(
       title: 'NormaTrack',
       debugShowCheckedModeBanner: false,

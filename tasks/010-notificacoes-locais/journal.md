@@ -41,3 +41,15 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Feito**
 - Plano aprovado pelo usuário. Status → `em andamento`.
 - AGP 9.1.1, compileSdk 37, desugaring e receivers no manifest (igual ao `prototypes/spike/android.diff`); pacotes `flutter_local_notifications` ^23.0.4, `timezone` ^0.11.2, `flutter_timezone` ^5.1.1, `shared_preferences` ^2.5.6. `flutter build apk --debug` compila; 324 testes verdes.
+
+## 2026-11-26 — Passos 2 a 4: planejador, agendador e sincronização
+
+**Feito**
+- Planejador puro (`lib/core/notifications/deadline_notification_planner.dart`) com 11 testes, nas datas da tabela do plano.
+- `NotificationScheduler` + `LocalNotificationScheduler`, `NotificationSettings` + `SharedPrefsNotificationSettings` (teste com `InMemorySharedPreferencesAsync`; `shared_preferences_platform_interface` entrou como dev_dependency), providers e fakes no `pumpApp`.
+- Sincronizador ligado no `NormaTrackApp`; `main.dart` cria o `LocalNotificationScheduler` antes do `runApp`. `seed_main.dart` da 009 ajustado para o mesmo override. 342 testes verdes.
+
+**Decidido** (desvios do plano)
+- O sincronizador ficou em `lib/app/notification_sync.dart`, não em `lib/core/notifications/`: ele lê os providers da feature de prazos, e o `core` não deve depender de `features/*/presentation`.
+- Sem `BigTextStyleInformation('')`: com texto vazio, a notificação expandida ficaria vazia. O corpo é curto e cabe no estilo padrão.
+- `notificationSyncProvider` é `autoDispose` (assiste providers `autoDispose`); fica vivo porque o `NormaTrackApp` o assiste.

@@ -7,6 +7,8 @@
 // uma com o módulo desligado, cujos prazos não podem aparecer.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:normatrack/core/notifications/local_notification_scheduler.dart';
+import 'package:normatrack/core/notifications/notification_providers.dart';
 import 'package:normatrack/features/companies/data/local_company_repository.dart';
 import 'package:normatrack/features/companies/domain/company.dart';
 import 'package:normatrack/features/companies/domain/module_type.dart';
@@ -17,7 +19,10 @@ import 'package:normatrack/main.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final container = ProviderContainer();
+  final scheduler = await LocalNotificationScheduler.create();
+  final container = ProviderContainer(
+    overrides: [notificationSchedulerProvider.overrideWithValue(scheduler)],
+  );
   final companies = container.read(companyRepositoryProvider);
   final deadlines = container.read(deadlineRepositoryProvider);
 

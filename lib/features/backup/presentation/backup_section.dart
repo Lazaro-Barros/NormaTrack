@@ -98,7 +98,8 @@ class _BackupSectionState extends ConsumerState<BackupSection> {
           .read(lastBackupAtProvider.notifier)
           .record(ref.read(clockProvider)());
       if (mounted) _snack('Backup feito');
-    } on Object {
+    } on Object catch (e) {
+      debugPrint('Falha ao fazer backup: $e');
       if (mounted) _snack('Não foi possível fazer o backup.');
     }
   }
@@ -134,8 +135,10 @@ class _BackupSectionState extends ConsumerState<BackupSection> {
         action: SnackBarAction(label: 'Desfazer', onPressed: _undo),
       );
     } on BackupException catch (e) {
+      debugPrint('Backup recusado: $e');
       if (mounted) _snack(restoreFailureMessage(e.failure));
-    } on Object {
+    } on Object catch (e) {
+      debugPrint('Falha ao restaurar: $e');
       if (mounted) _snack(restoreFailureMessage(BackupFailure.failed));
     }
   }
@@ -149,7 +152,8 @@ class _BackupSectionState extends ConsumerState<BackupSection> {
         ref.read(backupServiceProvider).undoRestore(),
       );
       if (mounted) _snack('Dados anteriores de volta');
-    } on Object {
+    } on Object catch (e) {
+      debugPrint('Falha ao desfazer: $e');
       if (mounted) _snack('Não foi possível desfazer.');
     }
   }

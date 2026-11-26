@@ -61,3 +61,22 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - O subtítulo "Último backup em DD/MM/AAAA" fica no estilo padrão do `NavRow`, que não aceita estilo próprio; não vale estender o componente só para os algarismos tabulares de uma data curta.
+
+## 2026-11-26 — Verificação no emulador
+
+**Feito** (emulador `Medium_Phone_API_37.0`, app instalado com `adb install -r`, que mantém os dados; `flutter install` desinstala antes e não foi usado)
+- Antes de tudo, cópia do banco da usuária no Mac (`adb exec-out run-as br.com.normatrack.app cat app_flutter/normatrack.sqlite`): 5 empresas, incluindo "Alfa To To To To"; 5 prazos ativos, 1 concluído, 1 renovado; `quick_check` ok.
+- Ajustes mostra o aviso âmbar e a seção Backup como no wireframe.
+- "Fazer backup": folha com `NormaTrack-backup-2026-11-26-1357.ntbackup` (Quick Share, Drive, Gmail). Fechar a folha não grava; escolher um app (Quick Share, saindo sem enviar) grava "Último backup em 26/11/2026" e tira o aviso. O arquivo gerado (puxado do cache) é SQLite v2 íntegro.
+- Arquivos de teste enviados por `adb push` para `/sdcard/Download/`: texto → "Este arquivo não é um backup do NormaTrack."; `user_version` 3 → mensagem de versão mais nova; nos dois o banco ficou byte a byte igual.
+- Backup com uma empresa e um prazo a mais ("Restaurada Teste Ltda", vence 10/12/2026): confirmação "6 empresas e 7 prazos, com última alteração em 26/11/2026"; depois de restaurar, o Painel mostra o prazo novo sem reiniciar e `shared_prefs/scheduled_notifications.xml` passa a ter "Restaurada Teste Ltda · Vence em 10 dias (10/12/2026)".
+- "Desfazer" (dentro dos 10 s) volta aos dados de antes ("Dados anteriores de volta").
+- Restaurado de novo o backup com os dados da usuária: as 5 tabelas ficaram iguais, linha a linha, à cópia inicial, e os agendamentos não têm mais o prazo de teste. Arquivos de teste apagados do emulador; ficou `/sdcard/Download/original-usuaria.ntbackup` (backup dos dados dela).
+
+**Decidido**
+- Limite confirmado: escolher um app na folha já conta como backup, mesmo que o envio não termine (o Android não informa mais que isso). Fica como suposição em C25.
+- As falhas dos fluxos de backup passam a ir para o log (`debugPrint`), como na sincronização das notificações.
+
+**Pendente / dúvidas**
+- Uma vez, logo depois da primeira restauração (app aberto por `adb` sem `flutter run`), escolher um arquivo para restaurar não abriu a confirmação nem mostrou erro, embora o arquivo tenha sido copiado. Não reproduziu em quatro tentativas seguintes (duas com `flutter attach`, duas sem, incluindo a mesma sequência Painel → Ajustes → restaurar). Com o log de falhas, uma repetição deixa rastro no logcat (`flutter`).
+- O arquivo escolhido fica em `files/backup/restaurar.ntbackup` quando a pessoa cancela ou o arquivo é recusado (é sobrescrito na próxima escolha). Pequeno; não tratado.

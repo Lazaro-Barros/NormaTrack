@@ -51,7 +51,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       appBar: AppBar(
         title: const BandTitle(title: 'Painel', large: true),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(StatTile.height + AppSpacing.lg),
+          preferredSize: Size.fromHeight(
+            StatTile.heightOf(context) + AppSpacing.lg,
+          ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.lg,

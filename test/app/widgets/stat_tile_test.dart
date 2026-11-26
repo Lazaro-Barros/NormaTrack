@@ -20,12 +20,59 @@ void main() {
     expect(find.byIcon(Icons.cancel_outlined), findsOneWidget);
   });
 
-  testWidgets('altura fixa', (tester) async {
+  testWidgets('altura na escala 1', (tester) async {
     await pumpComponent(
       tester,
       const StatTile(tone: StatusTone.ok, count: 1, label: 'Vigentes'),
     );
     expect(tester.getSize(find.byType(StatTile)).height, StatTile.height);
+  });
+
+  Future<void> pumpWithScaler(WidgetTester tester, TextScaler scaler) =>
+      pumpComponent(
+        tester,
+        Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: scaler),
+            // Largura de um tile num celular de 411 de largura.
+            child: const Center(
+              child: SizedBox(
+                width: 121,
+                child: StatTile(
+                  tone: StatusTone.overdue,
+                  count: 12,
+                  label: 'Vencidos',
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Future<void> pumpScaled(WidgetTester tester, double scale) =>
+      pumpWithScaler(tester, TextScaler.linear(scale));
+
+  testWidgets('fonte do sistema maior: altura cresce, sem estouro', (
+    tester,
+  ) async {
+    await pumpScaled(tester, 1.3);
+    expect(tester.takeException(), isNull);
+    final height = tester.getSize(find.byType(StatTile)).height;
+    expect(height, 24 + 47 + 24);
+    expect(height, greaterThan(StatTile.height));
+  });
+
+  testWidgets('escala acima de 1,5 fica limitada a 1,5', (tester) async {
+    await pumpScaled(tester, 2);
+    expect(tester.takeException(), isNull);
+    expect(tester.getSize(find.byType(StatTile)).height, 24 + 54 + 27);
+  });
+
+  testWidgets('escala não linear (Android 14+) não estoura', (tester) async {
+    await pumpWithScaler(tester, const _NonLinearScaler());
+    expect(tester.takeException(), isNull);
+    // número: (30 + 4) × 36/30 = 40,8 → 41; rótulo: (13 + 4) × 18/13 → 24.
+    expect(tester.getSize(find.byType(StatTile)).height, 24 + 41 + 24);
   });
 
   testWidgets('cores do tom: fundo suave e texto forte', (tester) async {
@@ -111,4 +158,23 @@ void main() {
     );
     handle.dispose();
   });
+}
+
+/// Soma 4 a qualquer tamanho: fontes pequenas crescem proporcionalmente mais,
+/// como a escala não linear do Android 14+.
+class _NonLinearScaler extends TextScaler {
+  const _NonLinearScaler();
+
+  @override
+  double scale(double fontSize) => fontSize + 4;
+
+  @override
+  // ignore: deprecated_member_use
+  double get textScaleFactor => 1.2;
+
+  @override
+  TextScaler clamp({
+    double minScaleFactor = 0,
+    double maxScaleFactor = double.infinity,
+  }) => this;
 }

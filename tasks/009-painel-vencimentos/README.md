@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-05 |
 | **Depende de** | 007, 008 |
@@ -37,14 +37,14 @@ O Painel deixa de ser placeholder: mostra a contagem por situação e os próxim
 
 ## Critérios de aceite
 
-- [ ] O Painel mostra três tiles com a contagem de prazos em aberto vencidos, a vencer e vigentes, de empresas não arquivadas com o módulo habilitado.
-- [ ] A lista traz todos os prazos em aberto na ordem do repositório, cada um com título, nome da empresa e situação em texto (`DeadlineCard`).
-- [ ] Tocar num tile mostra só aquela situação e dá anel ao tile; tocar de novo no mesmo volta a mostrar todos.
-- [ ] Tocar num prazo abre o detalhe; voltar retorna ao Painel (com o filtro mantido).
-- [ ] Com nenhum prazo em aberto, aparece o vazio com "Ver empresas"; filtro sem resultado mostra o vazio do filtro, sem ação.
-- [ ] A tela atualiza sozinha ao criar, renovar, concluir ou excluir um prazo (stream).
-- [ ] `StatTile` documentado em `docs/07-design-system.md`, com teste de widget.
-- [ ] `dart format .`, `flutter analyze` e `flutter test` sem erros; conferido no emulador.
+- [x] O Painel mostra três tiles com a contagem de prazos em aberto vencidos, a vencer e vigentes, de empresas não arquivadas com o módulo habilitado.
+- [x] A lista traz todos os prazos em aberto na ordem do repositório, cada um com título, nome da empresa e situação em texto (`DeadlineCard`).
+- [x] Tocar num tile mostra só aquela situação e dá anel ao tile; tocar de novo no mesmo volta a mostrar todos.
+- [x] Tocar num prazo abre o detalhe; voltar retorna ao Painel (com o filtro mantido).
+- [x] Com nenhum prazo em aberto, aparece o vazio com "Ver empresas"; filtro sem resultado mostra o vazio do filtro, sem ação.
+- [x] A tela atualiza sozinha ao criar, renovar, concluir ou excluir um prazo (stream).
+- [x] `StatTile` documentado em `docs/07-design-system.md`, com teste de widget.
+- [x] `dart format .`, `flutter analyze` e `flutter test` sem erros; conferido no emulador.
 
 ## Links
 

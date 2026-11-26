@@ -110,3 +110,13 @@ As notificações de prazo (RF-PRZ-03) usam `flutter_local_notifications` 23 com
 - *Limite do plugin:* com `DateTimeComponents.dayOfWeekAndTime`, o Android repete a partir da próxima ocorrência do dia da semana contando de agora, ignorando a data de início. Por isso a semanal só é repetitiva quando a primeira ocorrência está a menos de 7 dias; antes disso são 4 avisos semanais avulsos, trocados pela repetição numa abertura futura do app.
 - *Exige:* AGP ≥ 9.1.1, compileSdk 37 e desugaring (`android/`).
 - *Descartado:* alarme exato; `WorkManager` com checagem diária; tabela drift para o ajuste.
+
+## D014 — Backup é uma cópia do banco SQLite
+
+**Status:** aceita · 2026-11-26 (task 012)
+
+O backup (RNF-04) é uma cópia do banco feita com `VACUUM INTO` num arquivo `NormaTrack-backup-AAAA-MM-DD-HHMM.ntbackup`, entregue pela folha de compartilhamento (`share_plus`). Restaurar escolhe o arquivo com `file_picker`, valida com `sqlite3` só leitura (`user_version` de 1 até o `schemaVersion` do app, tabelas de cada versão, `quick_check`), guarda uma cópia dos dados atuais (`VACUUM INTO`), fecha o `AppDatabase`, troca o arquivo e reabre o banco por uma "época" no Riverpod (`databaseEpochProvider`). Repositórios, telas e a sincronização das notificações se reconstroem sozinhos; um backup antigo é migrado na abertura, e se a abertura falhar o app volta para a cópia. Preferências do aparelho (`shared_preferences`, D013), incluindo a data do último backup, ficam fora do backup.
+
+- *Por quê:* a cópia do arquivo leva tudo, inclusive tabelas futuras, sem código de exportação por tabela; `VACUUM INTO` é consistente com o banco aberto; reabrir pelo provider evita reiniciar o app.
+- *Regra para o futuro:* toda nova versão de schema precisa entrar em `_tablesByVersion` (`lib/features/backup/data/local_backup_service.dart`), e a migração drift é o que torna um backup antigo restaurável.
+- *Descartado:* exportação JSON (manutenção por tabela, mais risco na importação); copiar o `.sqlite` direto com o banco aberto; reiniciar o app depois de restaurar; escolher pasta com `FilePicker.saveFile`; filtro de extensão no seletor (o Android não conhece o MIME de `.ntbackup`).

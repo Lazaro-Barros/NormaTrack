@@ -154,7 +154,7 @@ A navegação inferior tem 3 destinos: **Painel**, **Empresas** e **Ajustes**. N
 | Lembrete (sheet) | RF-PRZ-02 | Atalhos (sem os já escolhidos), dias antes do vencimento com a data do aviso, 0 = no dia |
 | Lançamento periódico (ex.: Ruídos) | RF-AMB-02 | Navegação por período, um campo por ponto/parâmetro, valor anterior como referência |
 | Gerar relatório | RF-REL-01/02/03 | Período, conteúdo, formato `.xlsx`/`.docx`, compartilhar |
-| Ajustes | RF-PRZ-03, RNF-04 | Seção Alertas: interruptor das notificações (`SwitchRow`) e, com a permissão negada, `NavRow` "Bloqueadas no Android" que abre as configurações (task 010). Antecedência padrão, backup e restauração entram com a task de backup |
+| Ajustes | RF-PRZ-03, RNF-04 | `NoticeBanner` âmbar "Os dados ficam só neste aparelho. **Nenhum backup feito ainda.**" até o primeiro backup; seção Backup com `NavRow` "Fazer backup" (subtítulo vira "Último backup em DD/MM/AAAA") e "Restaurar backup" (seletor do Android, `showProgressDialog`, confirmação vermelha com o resumo e SnackBar com "Desfazer") (task 012). Seção Alertas: interruptor das notificações (`SwitchRow`) e, com a permissão negada, `NavRow` "Bloqueadas no Android" que abre as configurações (task 010). "Antecedência padrão" e "Sobre" do wireframe ainda não entraram |
 
 Ainda não desenhadas: lançamento mensal de produtos controlados (Fase 3) e lotes/estoque do Controle de Qualidade (Fase 4). Elas devem reutilizar o padrão de lançamento periódico.
 

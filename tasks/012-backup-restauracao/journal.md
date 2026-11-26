@@ -80,3 +80,19 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Pendente / dúvidas**
 - Uma vez, logo depois da primeira restauração (app aberto por `adb` sem `flutter run`), escolher um arquivo para restaurar não abriu a confirmação nem mostrou erro, embora o arquivo tenha sido copiado. Não reproduziu em quatro tentativas seguintes (duas com `flutter attach`, duas sem, incluindo a mesma sequência Painel → Ajustes → restaurar). Com o log de falhas, uma repetição deixa rastro no logcat (`flutter`).
 - O arquivo escolhido fica em `files/backup/restaurar.ntbackup` quando a pessoa cancela ou o arquivo é recusado (é sobrescrito na próxima escolha). Pequeno; não tratado.
+
+## 2026-11-26 — Fechamento
+
+**Feito**
+- Critérios de aceite marcados; status `concluída` aqui e no índice.
+- `docs/02` (RNF-04 sem "(?)", com o comportamento), `docs/04` (pacotes e risco de perda de dados), `docs/05` (item da Fase 1 marcado; a Fase 1 está completa), `docs/07` (linha de Ajustes), [D014](../../docs/decisoes.md#d014--backup-é-uma-cópia-do-banco-sqlite) e o wireframe de Ajustes (título "Backup" e nota dos estados). C25 já estava em `docs/06`.
+
+**Como verificar**
+- `dart format .`, `flutter analyze`, `flutter test` (394 testes) e `flutter build apk --debug`.
+- No aparelho: Ajustes → Fazer backup → escolher um destino; Restaurar backup → escolher o `.ntbackup` → conferir o resumo → Restaurar → Painel e notificações seguem o backup; "Desfazer" volta.
+
+**Pendente / dúvidas**
+- Confirmar C25 com a cliente (formato, cópia de segurança, aviso sem lembrete).
+- Lembrete periódico de backup (descartado por ora), "Antecedência padrão" e "Sobre" em Ajustes.
+- O travamento visto uma vez no emulador e o arquivo escolhido que sobra em `files/backup/` (entrada anterior).
+- Nova versão de schema: incluir as tabelas em `_tablesByVersion` (D014).

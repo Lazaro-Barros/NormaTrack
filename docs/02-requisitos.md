@@ -74,6 +74,6 @@ Exemplo da cliente: indústria de alimentos (biscoito doce, biscoito salgado).
 - **RNF-01** — Funciona 100% offline; dados persistidos no dispositivo.
 - **RNF-02** — Camada de dados isolada atrás de interfaces de repositório, permitindo trocar o banco local por uma API sem alterar telas e regras.
 - **RNF-03** — Dados preparados para sincronização futura: IDs gerados no cliente (UUID), `createdAt`/`updatedAt` e exclusão lógica.
-- **RNF-04** — Backup e restauração manual do banco (exportar/importar arquivo), já que os dados vivem só no aparelho. **(?)**
+- **RNF-04** — Backup e restauração manual do banco, já que os dados vivem só no aparelho: em Ajustes, "Fazer backup" gera um arquivo `.ntbackup` (cópia do banco) e o envia pela folha de compartilhamento; "Restaurar backup" aceita arquivo da mesma versão do app ou de uma mais antiga, pede confirmação com o resumo e guarda uma cópia dos dados atuais ("Desfazer"). Aviso enquanto nenhum backup foi feito (task 012, C25).
 - **RNF-05** — Android: versão mínima a definir **(?)**; permissão de notificação no Android 13+.
 - **RNF-06** — Interface em português (pt-BR); datas e números no formato brasileiro.

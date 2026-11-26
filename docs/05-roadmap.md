@@ -24,7 +24,7 @@ Entrega o padrão "prazo com alerta" para **todos** os módulos de uma vez.
 - [x] Renovação com histórico (RF-PRZ-04) — tasks 006 (domínio e dados) e 008 (detalhe, renovar, concluir, reabrir)
 - [x] Painel de próximos vencimentos (RF-PRZ-05) — task 009
 - [x] Notificações locais (RF-PRZ-03) — task 010
-- [ ] Backup e restauração manual do banco (RNF-04)
+- [x] Backup e restauração manual do banco (RNF-04) — task 012 (sem lembrete periódico de backup)
 
 **Pronto quando:** a cliente consegue cadastrar suas empresas e licenças reais e recebe o alerta no celular.
 

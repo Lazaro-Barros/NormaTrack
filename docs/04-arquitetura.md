@@ -51,8 +51,8 @@ A troca para API acontece em **um ponto**: o provider que decide qual implementa
 | Notificações | `flutter_local_notifications` | Agendamento local dos alertas |
 | Planilha | `excel` | Geração de `.xlsx` |
 | Word | a validar (`docx_template` ou similar) | Preenche um `.docx` modelo; precisa de prova de conceito |
-| Compartilhar arquivo | `share_plus` | |
-| Backup/restauração | `path_provider` + `file_picker` | Exportar/importar o arquivo do banco |
+| Compartilhar arquivo | `share_plus` | Folha de compartilhamento do Android (backup, task 012) |
+| Backup/restauração | `path_provider` + `file_picker` + `sqlite3` | Cópia do banco com `VACUUM INTO` e restauração com troca do arquivo e reabertura do banco ([D014](decisoes.md#d014--backup-é-uma-cópia-do-banco-sqlite)) |
 
 Versões serão fixadas no `pubspec.yaml` na Fase 0.
 
@@ -97,6 +97,6 @@ O envio de e-mail entra junto com a API, e o servidor passa a ser responsável p
 
 ## Riscos
 
-- **Perda de dados:** o banco vive só no aparelho. Mitigação: backup manual (RNF-04) desde cedo e lembrete periódico de backup.
+- **Perda de dados:** o banco vive só no aparelho. Mitigação: backup manual em Ajustes (RNF-04, task 012), com aviso enquanto nenhum backup foi feito. Lembrete periódico de backup ainda não existe (C25).
 - **Relatórios Word:** gerar `.docx` fiel a um modelo no Flutter é o ponto técnico mais incerto. Mitigação: prova de conceito antes da Fase 3.
 - **Mudança de escopo por módulo:** a cliente prevê novos itens. Mitigação: a estrutura de parâmetros/medições descrita no [domínio](03-dominio.md).

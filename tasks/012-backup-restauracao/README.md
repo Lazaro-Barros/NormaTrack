@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | em andamento |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RNF-04 |
 | **Depende de** | 010 (tela de Ajustes, sincronização das notificações) |
@@ -42,14 +42,14 @@ Respostas do usuário, todas na opção recomendada (journal, C25):
 
 ## Critérios de aceite
 
-- [ ] "Fazer backup" gera o arquivo `.ntbackup` com todos os dados e abre a folha de compartilhamento; escolher um destino grava a data do último backup, fechar a folha não grava.
-- [ ] Ajustes mostra o aviso âmbar enquanto não há backup e "Último backup em DD/MM/AAAA" depois.
-- [ ] "Restaurar backup" valida o arquivo escolhido e pede confirmação com empresas, prazos e data da última alteração; cancelar não muda nada.
-- [ ] Confirmar substitui os dados; Painel, Empresas, detalhes e notificações passam a refletir o backup sem reiniciar o app; "Desfazer" volta aos dados de antes.
-- [ ] Backup de schema mais antigo é migrado; mais novo, de outro app ou corrompido é recusado com mensagem clara e os dados atuais ficam intactos (também se a abertura do banco restaurado falhar).
-- [ ] Testes do plano passam (serviço de backup com arquivos reais, providers reabrindo o banco, Ajustes, componentes novos).
-- [ ] `dart format .`, `flutter analyze`, `flutter test` e `flutter build apk --debug` sem erros; conferido no emulador sem perder os dados da usuária.
-- [ ] `docs/02`, `docs/04`, `docs/05`, `docs/06`, `docs/07`, `docs/decisoes.md` e o wireframe de Ajustes atualizados.
+- [x] "Fazer backup" gera o arquivo `.ntbackup` com todos os dados e abre a folha de compartilhamento; escolher um destino grava a data do último backup, fechar a folha não grava.
+- [x] Ajustes mostra o aviso âmbar enquanto não há backup e "Último backup em DD/MM/AAAA" depois.
+- [x] "Restaurar backup" valida o arquivo escolhido e pede confirmação com empresas, prazos e data da última alteração; cancelar não muda nada.
+- [x] Confirmar substitui os dados; Painel, Empresas, detalhes e notificações passam a refletir o backup sem reiniciar o app; "Desfazer" volta aos dados de antes.
+- [x] Backup de schema mais antigo é migrado; mais novo, de outro app ou corrompido é recusado com mensagem clara e os dados atuais ficam intactos (também se a abertura do banco restaurado falhar; este último coberto por teste, não no emulador).
+- [x] Testes do plano passam (serviço de backup com arquivos reais, providers reabrindo o banco, Ajustes, componentes novos).
+- [x] `dart format .`, `flutter analyze`, `flutter test` e `flutter build apk --debug` sem erros; conferido no emulador sem perder os dados da usuária.
+- [x] `docs/02`, `docs/04`, `docs/05`, `docs/06`, `docs/07`, `docs/decisoes.md` e o wireframe de Ajustes atualizados.
 
 ## Links
 

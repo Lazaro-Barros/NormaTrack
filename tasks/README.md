@@ -17,4 +17,4 @@ Status: `rascunho` · `planejada` · `em andamento` · `concluída` · `bloquead
 | 009 | [Painel de próximos vencimentos](009-painel-vencimentos/) | RF-PRZ-05 | 1 | concluída |
 | 010 | [Notificações locais de prazo](010-notificacoes-locais/) | RF-PRZ-03 | 1 | concluída |
 | 011 | [Bloco de data com a fonte do sistema grande](011-date-block-fonte-grande/) | RNF-06 | 1 | concluída |
-| 012 | [Backup e restauração manual do banco](012-backup-restauracao/) | RNF-04 | 1 | em andamento |
+| 012 | [Backup e restauração manual do banco](012-backup-restauracao/) | RNF-04 | 1 | concluída |

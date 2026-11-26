@@ -1,12 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'app/notification_navigation.dart';
 import 'app/notification_sync.dart';
 import 'app/router.dart';
 import 'app/theme/app_theme.dart';
 import 'core/notifications/local_notification_scheduler.dart';
 import 'core/notifications/notification_providers.dart';
+import 'features/deadlines/data/local_deadline_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,11 +23,55 @@ Future<void> main() async {
   );
 }
 
-class NormaTrackApp extends ConsumerWidget {
+class NormaTrackApp extends ConsumerStatefulWidget {
   const NormaTrackApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NormaTrackApp> createState() => _NormaTrackAppState();
+}
+
+class _NormaTrackAppState extends ConsumerState<NormaTrackApp> {
+  StreamSubscription<String>? _taps;
+
+  @override
+  void initState() {
+    super.initState();
+    final scheduler = ref.read(notificationSchedulerProvider);
+    _taps = scheduler.taps.listen(_open);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _afterFirstFrame());
+  }
+
+  @override
+  void dispose() {
+    _taps?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _afterFirstFrame() async {
+    final scheduler = ref.read(notificationSchedulerProvider);
+    final launch = await scheduler.launchPayload();
+    if (launch != null) await _open(launch);
+    await _askPermissionOnce();
+  }
+
+  // TODO(RF-PRZ-03): permissão pedida uma vez na primeira abertura (suposição,
+  // C4); depois, só pela tela de Ajustes.
+  Future<void> _askPermissionOnce() async {
+    final settings = ref.read(notificationSettingsProvider);
+    if (await settings.wasPermissionAsked()) return;
+    if (!await settings.isEnabled()) return;
+    await settings.markPermissionAsked();
+    await ref.read(notificationSchedulerProvider).requestPermission();
+  }
+
+  Future<void> _open(String deadlineId) => openDeadlineFromNotification(
+    ref.read(routerProvider),
+    ref.read(deadlineRepositoryProvider),
+    deadlineId,
+  );
+
+  @override
+  Widget build(BuildContext context) {
     ref.watch(notificationSyncProvider);
     return MaterialApp.router(
       title: 'NormaTrack',

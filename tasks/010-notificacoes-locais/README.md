@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | em andamento |
+| **Status** | concluída |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-03 · RNF-05 · D004 |
 | **Depende de** | 006, 008, 009 |
@@ -37,14 +37,14 @@ O celular avisa nos dias de lembrete de cada prazo em aberto e, depois de vencid
 
 ## Critérios de aceite
 
-- [ ] Cada prazo em aberto tem notificação às 8h em cada dia de lembrete futuro e uma semanal a partir de 7 dias depois do vencimento, com o texto do plano.
-- [ ] Prazos renovados, concluídos, cancelados, excluídos, de empresa arquivada ou de módulo desligado não notificam (agendamentos refeitos a cada mudança).
-- [ ] Tocar na notificação abre o detalhe do prazo, com o app aberto ou fechado; voltar leva ao Painel.
-- [ ] Na primeira abertura o app pede a permissão de notificação uma vez.
-- [ ] Ajustes mostra a seção Alertas; desligar cancela os pendentes e ligar reagenda; com a permissão negada aparece "Bloqueadas no Android", que abre as configurações.
-- [ ] Os testes do plano (planejador, sincronização, toque, Ajustes, primeira abertura) passam.
-- [ ] `dart format .`, `flutter analyze`, `flutter test` e `flutter build apk --debug` sem erros; conferido no emulador.
-- [ ] `docs/04`, `docs/07`, `docs/decisoes.md` (D013), roadmap e wireframe de Ajustes atualizados.
+- [x] Cada prazo em aberto tem notificação às 8h em cada dia de lembrete futuro e uma semanal a partir de 7 dias depois do vencimento, com o texto do plano.
+- [x] Prazos renovados, concluídos, cancelados, excluídos, de empresa arquivada ou de módulo desligado não notificam (agendamentos refeitos a cada mudança).
+- [x] Tocar na notificação abre o detalhe do prazo, com o app aberto ou fechado; voltar leva ao Painel. (Coberto por testes de widget com o agendador falso; no aparelho, só a entrega foi vista, no spike.)
+- [x] Na primeira abertura o app pede a permissão de notificação uma vez.
+- [x] Ajustes mostra a seção Alertas; desligar cancela os pendentes e ligar reagenda; com a permissão negada aparece "Bloqueadas no Android", que abre as configurações.
+- [x] Os testes do plano (planejador, sincronização, toque, Ajustes, primeira abertura) passam.
+- [x] `dart format .`, `flutter analyze`, `flutter test` e `flutter build apk --debug` sem erros; conferido no emulador.
+- [x] `docs/04`, `docs/07`, `docs/decisoes.md` (D013), roadmap e wireframe de Ajustes atualizados.
 
 ## Links
 

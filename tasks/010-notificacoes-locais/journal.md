@@ -53,3 +53,21 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - O sincronizador ficou em `lib/app/notification_sync.dart`, não em `lib/core/notifications/`: ele lê os providers da feature de prazos, e o `core` não deve depender de `features/*/presentation`.
 - Sem `BigTextStyleInformation('')`: com texto vazio, a notificação expandida ficaria vazia. O corpo é curto e cabe no estilo padrão.
 - `notificationSyncProvider` é `autoDispose` (assiste providers `autoDispose`); fica vivo porque o `NormaTrackApp` o assiste.
+
+## 2026-11-26 — Passos 5 a 7: toque, Ajustes, emulador e fechamento
+
+**Feito**
+- Toque na notificação (`lib/app/notification_navigation.dart`): vai ao Painel e empilha o detalhe; prazo inexistente fica no Painel. `NormaTrackApp` virou `ConsumerStatefulWidget`, assina `taps`, lê `launchPayload()` e pede a permissão uma vez na primeira abertura.
+- Tela de Ajustes (`lib/features/settings/presentation/settings_screen.dart`) com a seção Alertas; placeholder removido. Wireframe com o subtítulo novo.
+- **Emulador:** com os dados do `seed_main.dart` (3 prazos em aberto), o Android mostrou os alarmes do plano. Desligar em Ajustes zerou os alarmes (17 → 0) e religar voltou a 17. Revogando `POST_NOTIFICATIONS`, apareceu "Bloqueadas no Android", e o toque abriu `AppNotificationSettingsActivity`; com a permissão devolvida, a linha sumiu ao voltar (`AppLifecycleListener`). Permissão deixada concedida, como estava.
+- **Bug achado no emulador e corrigido:** as semanais de prazos ainda não vencidos estavam marcadas para o próximo domingo/quarta, e não para vencimento + 7. O código nativo do plugin (`getNextFireDateMatchingDateTimeComponents`) calcula a próxima ocorrência *a partir de agora* e ignora a data de início. Correção no planejador: repetitiva só com a primeira ocorrência a menos de 7 dias; antes disso, 4 avisos semanais avulsos. Plano, `docs/04` e D013 atualizados.
+- **Corrida corrigida:** na abertura o sincronizador dispara várias vezes seguidas; duas substituições intercaladas podiam deixar itens de um plano velho. `LatestOnlyRunner` faz uma por vez e aplica só a mais recente (com teste).
+- `docs/05` (item marcado), `docs/07` (linha de Ajustes), `docs/decisoes.md` D013. Suíte: 356 testes verdes; `flutter analyze` limpo; APK debug compila.
+
+**Pendente / dúvidas**
+- **Não conferido no aparelho:** o toque numa notificação real abrindo o detalhe (coberto por testes de widget). A entrega de uma notificação agendada foi vista no spike.
+- Se o app não for aberto por mais de 4 semanas depois de um vencimento ainda distante no momento da última abertura, os avisos semanais param até a próxima abertura (limite do plugin, D013).
+- C4 (hora fixa, semanal, uma por prazo) e as suposições (lembrete do dia depois das 8h não agendado; permissão na primeira abertura) aguardam confirmação da cliente.
+- Fabricantes que matam apps em segundo plano podem atrasar alarmes inexatos (README do plugin).
+
+**Refs:** commits 9462725, 870ca97, 3eb064b, 4a5e8c1, 219be02, a44c896, 729c47b, cdd68b0, 5cddfb8 · docs/decisoes.md#d013

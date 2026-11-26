@@ -99,3 +99,14 @@ O app tem um único desenvolvedor. Todo trabalho vai em commits direto na `main`
 
 - *Por quê:* PR só acrescenta passos quando quem escreve e quem revisa é a mesma pessoa.
 - *Descartado:* branch por task com PR (usado até a task 009). Volta a valer se entrar outra pessoa no projeto (T6).
+
+## D013 — Notificações locais: planejador, sincronização e limites do Android
+
+**Status:** aceita · 2026-11-26 (task 010)
+
+As notificações de prazo (RF-PRZ-03) usam `flutter_local_notifications` 23 com agendamento **inexato** (`inexactAllowWhileIdle`), sem permissão de alarme exato. Um planejador em Dart puro gera o plano (8h de cada dia de lembrete futuro e semanal depois do vencimento), e um sincronizador substitui **todos** os pendentes a cada mudança, com ids estáveis (FNV-1a de prazo + data + tipo), teto de 400 agendamentos e uma substituição por vez (só a mais recente). O ajuste ligado/desligado fica em `shared_preferences`, fora do banco.
+
+- *Por quê:* refazer o plano inteiro é simples e sempre correto (renovar, concluir, excluir, arquivar, desligar módulo); o teto respeita o limite de 500 alarmes de alguns aparelhos; o ajuste é preferência do aparelho, não dado do domínio.
+- *Limite do plugin:* com `DateTimeComponents.dayOfWeekAndTime`, o Android repete a partir da próxima ocorrência do dia da semana contando de agora, ignorando a data de início. Por isso a semanal só é repetitiva quando a primeira ocorrência está a menos de 7 dias; antes disso são 4 avisos semanais avulsos, trocados pela repetição numa abertura futura do app.
+- *Exige:* AGP ≥ 9.1.1, compileSdk 37 e desugaring (`android/`).
+- *Descartado:* alarme exato; `WorkManager` com checagem diária; tabela drift para o ajuste.

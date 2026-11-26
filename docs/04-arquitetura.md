@@ -87,8 +87,9 @@ test/
 
 Sem backend, não há envio de e-mail. Os alertas serão **notificações locais**:
 
-- Ao criar ou editar um prazo, o app agenda notificações para a data `dueDate − alertDaysBefore` e para lembretes seguintes (frequência a definir).
-- Ao abrir o app, os agendamentos são recalculados. Isso cobre reinstalação, troca de fuso e notificações perdidas.
+- Às 8h de cada dia de lembrete do prazo (`reminderDays`) e, a partir de 7 dias depois do vencimento, toda semana até o prazo sair de "em aberto" (C4, task 010).
+- Um planejador em Dart puro (`lib/core/notifications/deadline_notification_planner.dart`) gera o plano; o sincronizador (`lib/app/notification_sync.dart`) substitui todos os agendamentos pendentes a cada mudança em prazos, empresas ou no ajuste, e a cada abertura do app. Isso cobre reinstalação, troca de fuso e notificações perdidas. Detalhes em [D013](decisoes.md#d013--notificações-locais-planejador-sincronização-e-limites-do-android).
+- A semanal só pode ser uma notificação repetitiva quando a primeira ocorrência está a menos de 7 dias (o Android repete a partir da próxima ocorrência do dia da semana contando de agora). Antes disso, ficam 4 avisos semanais avulsos; uma abertura do app depois troca pela repetição.
 - A tela inicial sempre mostra os prazos "a vencer" e "vencidos". Ela não depende da notificação ter chegado.
 - Android 13+ exige a permissão `POST_NOTIFICATIONS`. Como os alertas são por dia (e não por minuto), agendamento **inexato** basta, o que evita a permissão de alarme exato.
 

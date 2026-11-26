@@ -144,7 +144,7 @@ abstract interface class NotificationScheduler {
 - `launchPayload`: `plugin.getNotificationAppLaunchDetails()`; se `didNotificationLaunchApp`, `notificationResponse?.payload`.
 - `areEnabled`/`requestPermission`: `resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()` → `areNotificationsEnabled()` / `requestNotificationsPermission()` (`null` → `true`).
 - `openSystemSettings`: `plugin.openAppNotificationSettings()`.
-- `replaceAll`: `plugin.cancelAllPendingNotifications()` e, para cada item, `zonedSchedule(id:, scheduledDate: tz.TZDateTime(tz.local, y, m, d, 8), notificationDetails: _details, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle, title:, body:, payload: deadlineId, matchDateTimeComponents: weekly ? DateTimeComponents.dayOfWeekAndTime : null)`.
+- `replaceAll` (na implementação, serializado por `LatestOnlyRunner`: uma substituição por vez, só a mais recente; `cancelAll` = substituir por lista vazia): `plugin.cancelAllPendingNotifications()` e, para cada item, `zonedSchedule(id:, scheduledDate: tz.TZDateTime(tz.local, y, m, d, 8), notificationDetails: _details, androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle, title:, body:, payload: deadlineId, matchDateTimeComponents: weekly ? DateTimeComponents.dayOfWeekAndTime : null)`.
 - `_details`: `NotificationDetails(android: AndroidNotificationDetails('prazos', 'Vencimento de prazos', channelDescription: 'Avisos nos dias de lembrete de cada prazo', importance: Importance.high, priority: Priority.high, styleInformation: BigTextStyleInformation('')))`. Se `BigTextStyleInformation('')` não exibir o corpo, use `null` e registre no journal.
 - Exceções do plugin no `replaceAll` são capturadas e registradas com `debugPrint` (o app não pode quebrar por causa de notificação).
 
@@ -192,6 +192,7 @@ final notificationSyncProvider = Provider<void>((ref) { ... });
 - **Plano por prazo** (só `d.isOpen`; a lista já vem filtrada):
   - Para cada `days` em `reminderDays`: `date = reminderDate(dueDate, days)`; `fireAt = DateTime(date.year, date.month, date.day, 8)`; entra se `fireAt.isAfter(now)`. Lembrete de hoje depois das 8h **não** é agendado: o Painel mostra o prazo. **[suposição]** (evita reavisar a cada abertura do app).
   - Semanal: `first = DateTime(due.y, due.m, due.d + 7, 8)`; enquanto `!first.isAfter(now)`, soma 7 dias (`DateTime(y, m, d + 7, 8)`). Uma entrada `weekly: true` com esse `fireAt`. Vale para todo prazo em aberto (os ainda não vencidos já deixam a semanal agendada).
+  - **Corrigido na implementação (2026-11-26):** o Android repete `dayOfWeekAndTime` a partir da próxima ocorrência contando de agora e ignora a data de início (visto no emulador e no código nativo do plugin). A entrada repetitiva só é usada quando `first` está a menos de 7 dias de `now`; senão, `overdueOneShotWeeks` (4) avisos avulsos em `first`, `first + 7`, `+ 14`, `+ 21`. Ver journal e D013.
   - O plano não depende de "hoje" fora do `now` recebido.
 - **Textos** (`title` = `d.title`; `empresa` = `companyNames[d.companyId]`, omitida com o separador se faltar):
   - Lembrete, `n = dias de date até dueDate`: `n == 0` → `"$empresa · Vence hoje"`; `n == 1` → `"$empresa · Vence amanhã (dd/MM/aaaa)"`; senão `"$empresa · Vence em $n dias (dd/MM/aaaa)"`.

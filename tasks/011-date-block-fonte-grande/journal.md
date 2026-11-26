@@ -34,3 +34,12 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Barra de ações do detalhe: "Registrar renovação" quebra em duas linhas (cabe, mas fica apertado).
 
 **Refs:** commits 3397cd0 (docs) · 93145ce (correção) · branch `task/011-date-block-fonte-grande`
+
+## 2026-11-26 — Commits trazidos para a `main` (D012)
+
+**Feito**
+- Regra nova do projeto: commits direto na `main`, sem branch de task nem PR ([D012](../../docs/decisoes.md#d012--commits-direto-na-main-sem-pr)). A branch `task/011-date-block-fonte-grande` já partia de `a478534` (a `main` com a D012 e o merge da 009), então os commits 3397cd0, 93145ce e 48dbf0b entraram na `main` por fast-forward, sem rebase. Plano ajustado.
+- `dart format .`, `flutter analyze` e `flutter test` verdes na `main` antes do push.
+
+**Pendente / dúvidas**
+- A branch `task/011-date-block-fonte-grande` continua no `origin` e na pasta, só com commits que já estão na `main`. Pode ser apagada.

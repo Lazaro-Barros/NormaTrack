@@ -9,7 +9,7 @@ A mesma solução do `StatTile` (task 009, commit 4c16838): dentro do componente
 ## Contexto do repositório (em 2026-11-26)
 
 - Flutter em `/opt/homebrew/bin/flutter`; `adb` em `~/Library/Android/sdk/platform-tools/adb` (fora do PATH). Emulador `Medium_Phone_API_37.0` (`emulator-5554`), `font_scale` original **1.0**.
-- Branch base: `task/009-painel-vencimentos` (ainda não mergeada na `main` em 2026-11-26). Esta task vive em `task/011-date-block-fonte-grande`.
+- Commits direto na `main`, com push, sem branch nem PR ([D012](../../docs/decisoes.md#d012--commits-direto-na-main-sem-pr)). A task começou numa branch `task/011-date-block-fonte-grande`, trazida para a `main` por fast-forward (ver journal).
 - `DateBlock` (task 001): `Container` 48 × 52 com `Column` centralizada: dia em `titleLarge` (22/28) tabular e mês (com ano de 2 dígitos se `showYear`) em `labelSmall` (12/16) tabular. Na escala 1: 28 + 16 = 44 de texto, 8 de folga. O dia não tem `maxLines`: com a fonte de teste (cada glifo é um quadrado do tamanho da fonte), "05" a 1,3× mede 57 > 48 e quebra em duas linhas.
 - Medido no emulador (task 009): estouro de 1 px em 1,3× e 25 px em 2× (o mês some).
 - `StatusBanner`: `Container` de altura fixa 76 (`StatusBanner.height`), padding `md` (12), `DateBlock` + coluna com título (`titleLarge`) e mensagem (`bodyMedium`, 13/18). Usado só em `deadline_detail_screen.dart`, no `AppBar.bottom` com `StatusBanner.height + AppSpacing.lg`.
@@ -22,7 +22,7 @@ A mesma solução do `StatTile` (task 009, commit 4c16838): dentro do componente
 1. Docs da task (este plano, README, journal, índice). Commit `docs(design-system): task 011 …`.
 2. `AppTypography.lineHeight` + refatorar `StatTile` para usá-lo; `DateBlock`, `StatusBanner`, detalhe do prazo; testes. Commit `fix(design-system): DateBlock e StatusBanner crescem com a fonte do sistema [task 011, RNF-06]`.
 3. Conferir no emulador em 1,3× e 2×; voltar `font_scale` para 1.0.
-4. `docs/07-design-system.md`, journal, status `concluída` no README e no índice. Commit `docs(design-system): fechamento da task 011 [task 011, RNF-06]`. Push da branch.
+4. `docs/07-design-system.md`, journal, status `concluída` no README e no índice. Commit `docs(design-system): fechamento da task 011 [task 011, RNF-06]`. `git push origin main`.
 
 ## Arquivos
 

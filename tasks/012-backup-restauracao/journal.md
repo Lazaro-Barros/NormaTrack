@@ -26,3 +26,9 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Usuário aprovou o plano sem mudanças. Status → `em andamento`.
 - `flutter pub add share_plus file_picker path_provider 'sqlite3:^3.6.0' path`: share_plus 13.3.1, file_picker 13.4.1 (android_file_picker 2.2.1), path_provider 2.1.6, sqlite3 3.6.0 mantido no lock, path 1.9.1.
 - `flutter build apk --debug` passou sem mudar nada em `android/` (com `android.builtInKotlin=false`, os plugins Kotlin aplicam o próprio `kotlin-android`).
+
+## 2026-11-26 — Banco reabrível
+
+**Feito**
+- `AppDatabase.close()` idempotente; `currentSchemaVersion = 2`; `appDatabasePath()` explícito (mesmo caminho padrão do drift_flutter, nada muda para os dados existentes); `databasePathProvider`, `databaseOpenerProvider` e `databaseEpochProvider` (`reopen()`), observados pelo `appDatabaseProvider`.
+- Teste `test/core/database/app_database_reopen_test.dart`: fechar duas vezes; `reopen()` cria outro banco, fecha o antigo e o `companiesProvider` passa a ler o novo.

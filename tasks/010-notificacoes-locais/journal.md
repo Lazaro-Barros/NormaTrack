@@ -35,3 +35,9 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Pendente / dúvidas**
 - Aprovação do plano pelo usuário.
+
+## 2026-11-26 — Implementação, passo 1: setup
+
+**Feito**
+- Plano aprovado pelo usuário. Status → `em andamento`.
+- AGP 9.1.1, compileSdk 37, desugaring e receivers no manifest (igual ao `prototypes/spike/android.diff`); pacotes `flutter_local_notifications` ^23.0.4, `timezone` ^0.11.2, `flutter_timezone` ^5.1.1, `shared_preferences` ^2.5.6. `flutter build apk --debug` compila; 324 testes verdes.

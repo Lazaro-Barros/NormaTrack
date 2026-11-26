@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | em andamento |
 | **Fase** | 1 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-PRZ-03 · RNF-05 · D004 |
 | **Depende de** | 006, 008, 009 |

@@ -32,3 +32,14 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Feito**
 - `AppDatabase.close()` idempotente; `currentSchemaVersion = 2`; `appDatabasePath()` explícito (mesmo caminho padrão do drift_flutter, nada muda para os dados existentes); `databasePathProvider`, `databaseOpenerProvider` e `databaseEpochProvider` (`reopen()`), observados pelo `appDatabaseProvider`.
 - Teste `test/core/database/app_database_reopen_test.dart`: fechar duas vezes; `reopen()` cria outro banco, fecha o antigo e o `companiesProvider` passa a ler o novo.
+
+## 2026-11-26 — Serviço de backup e restauração
+
+**Feito**
+- `lib/features/backup/domain/backup.dart` (Dart puro): `BackupSummary`, `BackupFailure`, `BackupException`, `BackupFile`, `backupFileName` e as interfaces `BackupService`, `BackupFiles`, `BackupSettings`.
+- `LocalBackupService`: `VACUUM INTO` para gerar o backup e a cópia de segurança; `inspect` com `sqlite3` só leitura (`user_version`, tabelas por versão, `quick_check`, contagens); `restore` fecha, troca o arquivo (apaga `-wal`/`-shm`/`-journal`, cópia via `.tmp` + rename), reabre e força a abertura; em erro volta à cópia de segurança.
+- `PlatformBackupFiles` (share_plus + file_picker) e `SharedPrefsBackupSettings` (`backup.last_at`).
+- Testes com arquivos reais em pasta temporária: contagens (arquivada conta, excluída e renovada não), recusas (bytes aleatórios, outro app, sem `user_version`, versão 3, inexistente), troca A → B, desfazer e refazer, backup v1 migrado para v2 (com `validateDatabaseSchema`), falha simulada na reabertura volta aos dados A.
+
+**Decidido**
+- Desvio do plano: `undoRestore` move a cópia de segurança para a área de trabalho e, se a restauração falhar, devolve-a ao lugar, para os dados de antes continuarem desfazíveis. O `restore` público apaga o arquivo escolhido; o interno não.

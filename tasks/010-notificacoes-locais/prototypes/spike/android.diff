@@ -1,0 +1,58 @@
+--- /Users/lazaro/Documents/NormaTrack/android/app/build.gradle.kts	2026-11-16 11:42:08
++++ android/app/build.gradle.kts	2026-11-26 10:53:10
+@@ -6,10 +6,11 @@
+ 
+ android {
+     namespace = "br.com.normatrack.normatrack"
+-    compileSdk = flutter.compileSdkVersion
++    compileSdk = 37
+     ndkVersion = flutter.ndkVersion
+ 
+     compileOptions {
++        isCoreLibraryDesugaringEnabled = true
+         sourceCompatibility = JavaVersion.VERSION_17
+         targetCompatibility = JavaVersion.VERSION_17
+     }
+@@ -47,3 +48,7 @@
+ flutter {
+     source = "../.."
+ }
++
++dependencies {
++    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
++}
+--- /Users/lazaro/Documents/NormaTrack/android/settings.gradle.kts	2026-11-16 11:42:08
++++ android/settings.gradle.kts	2026-11-26 10:53:10
+@@ -19,7 +19,7 @@
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.1.0" apply false
++    id("com.android.application") version "9.1.1" apply false
+     id("org.jetbrains.kotlin.android") version "2.4.0" apply false
+ }
+ 
+--- /Users/lazaro/Documents/NormaTrack/android/app/src/main/AndroidManifest.xml	2026-11-16 11:42:08
++++ android/app/src/main/AndroidManifest.xml	2026-11-26 10:53:10
+@@ -1,4 +1,5 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android">
++    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+     <application
+         android:label="NormaTrack"
+         android:name="${applicationName}"
+@@ -27,6 +28,15 @@
+         </activity>
+         <!-- Don't delete the meta-data below.
+              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
++        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
++        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
++            <intent-filter>
++                <action android:name="android.intent.action.BOOT_COMPLETED"/>
++                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
++                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
++                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
++            </intent-filter>
++        </receiver>
+         <meta-data
+             android:name="flutterEmbedding"
+             android:value="2" />

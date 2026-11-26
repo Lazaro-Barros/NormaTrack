@@ -22,7 +22,7 @@ Legenda: 🔴 bloqueia a fase indicada · 🟡 necessária antes da fase · ⚪ 
 | C1 | Quem usa o app: só ela, gerenciando várias empresas, ou cada empresa terá o próprio acesso? | 🟡 Fase 1 | |
 | C2 | Precisa de senha/PIN para abrir o app, mesmo offline? | 🟡 Fase 1 | |
 | C3 | Os 150 dias de antecedência valem para todas as licenças? E para laudos e manutenções, qual antecedência? | 🟡 Fase 1 | 2026-09-30 (usuária, task 006): licença 150 dias, laudo e manutenção 30 dias, com lembretes extras de 30, 10 e 3 dias e no dia, editáveis por prazo. Falta confirmar com a cliente. |
-| C4 | Depois que o alerta começa, com que frequência ele deve repetir (diário, semanal) até a renovação? | 🟡 Fase 1 | |
+| C4 | Depois que o alerta começa, com que frequência ele deve repetir (diário, semanal) até a renovação? | 🟡 Fase 1 | 2026-11-26 (usuário, task 010): só nos dias de lembrete do prazo; depois de vencido, uma vez por semana até renovar, concluir ou cancelar. Uma notificação por prazo, às 8h (fixo). Falta confirmar com a cliente. |
 | C5 | Que dados da empresa cadastrar (CNPJ, endereço, responsável técnico, números das licenças)? | 🟡 Fase 1 | 2026-09-24: dados cadastrais, responsável legal e registros em órgãos (RF-EMP-04/05); só a razão social é obrigatória. Responsável **técnico** e anexos seguem em aberto (C13). |
 | C6 | Ruídos: sempre 4 pontos ou varia por empresa? Unidade (dB)? Existem limites para destacar valores fora do permitido? | 🟡 Fase 2 | |
 | C7 | Resíduos: quais classes usar? Unidade (kg, t, m³)? Período semanal ou mensal — fixo por empresa? | 🟡 Fase 2 | |

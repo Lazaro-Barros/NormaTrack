@@ -88,6 +88,15 @@ abstract final class AppTypography {
     fontFeatures: _tabular,
   );
 
+  /// Altura de uma linha de [style] na escala [scaler], para componentes cujo
+  /// tamanho acompanha a fonte do sistema. Escala o tamanho da fonte, não a
+  /// altura da linha: no Android 14+ a escala não é linear (fontes pequenas
+  /// crescem mais). Arredonda para cima, como o `TextPainter` faz com a
+  /// altura do parágrafo. Sem tamanho ou altura no estilo: 14 e 1,2.
+  static double lineHeight(TextStyle? style, TextScaler scaler) =>
+      (scaler.scale(style?.fontSize ?? 14) * (style?.height ?? 1.2))
+          .ceilToDouble();
+
   /// Aplica algarismos tabulares: datas, quantidades, CNPJ.
   static TextStyle tabular(TextStyle? style) =>
       (style ?? const TextStyle()).copyWith(fontFeatures: _tabular);

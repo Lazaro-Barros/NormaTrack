@@ -4,6 +4,7 @@ import 'package:normatrack/app/theme/app_theme.dart';
 import 'package:normatrack/app/widgets/stat_tile.dart';
 
 import '../../helpers/pump_widget.dart';
+import '../../helpers/text_scalers.dart';
 
 void main() {
   Finder tileBox() => find
@@ -69,7 +70,7 @@ void main() {
   });
 
   testWidgets('escala não linear (Android 14+) não estoura', (tester) async {
-    await pumpWithScaler(tester, const _NonLinearScaler());
+    await pumpWithScaler(tester, const NonLinearScaler());
     expect(tester.takeException(), isNull);
     // número: (30 + 4) × 36/30 = 40,8 → 41; rótulo: (13 + 4) × 18/13 → 24.
     expect(tester.getSize(find.byType(StatTile)).height, 24 + 41 + 24);
@@ -158,23 +159,4 @@ void main() {
     );
     handle.dispose();
   });
-}
-
-/// Soma 4 a qualquer tamanho: fontes pequenas crescem proporcionalmente mais,
-/// como a escala não linear do Android 14+.
-class _NonLinearScaler extends TextScaler {
-  const _NonLinearScaler();
-
-  @override
-  double scale(double fontSize) => fontSize + 4;
-
-  @override
-  // ignore: deprecated_member_use
-  double get textScaleFactor => 1.2;
-
-  @override
-  TextScaler clamp({
-    double minScaleFactor = 0,
-    double maxScaleFactor = double.infinity,
-  }) => this;
 }

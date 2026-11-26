@@ -39,18 +39,12 @@ class StatTile extends StatelessWidget {
   static TextScaler _scaler(BuildContext context) =>
       MediaQuery.textScalerOf(context).clamp(maxScaleFactor: maxTextScale);
 
-  /// Soma das alturas de linha do número e do rótulo. Escala o tamanho da
-  /// fonte, não a altura da linha: no Android 14+ a escala não é linear
-  /// (fontes pequenas crescem mais). Cada linha é arredondada para cima, como
-  /// o `TextPainter` faz com a altura do parágrafo.
-  static double _heightFor(BuildContext context, TextScaler s) {
-    double line(TextStyle? t, double fallbackSize, double fallbackHeight) =>
-        (s.scale(t?.fontSize ?? fallbackSize) * (t?.height ?? fallbackHeight))
-            .ceilToDouble();
-    return 2 * AppSpacing.md +
-        line(AppTypography.number, 30, 36 / 30) +
-        line(Theme.of(context).textTheme.labelMedium, 13, 18 / 13);
-  }
+  /// Padding mais as linhas do número e do rótulo
+  /// (ver [AppTypography.lineHeight]).
+  static double _heightFor(BuildContext context, TextScaler s) =>
+      2 * AppSpacing.md +
+      AppTypography.lineHeight(AppTypography.number, s) +
+      AppTypography.lineHeight(Theme.of(context).textTheme.labelMedium, s);
 
   @override
   Widget build(BuildContext context) {

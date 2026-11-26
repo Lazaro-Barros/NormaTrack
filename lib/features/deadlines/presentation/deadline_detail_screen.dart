@@ -189,8 +189,8 @@ class _Detail extends ConsumerWidget {
             ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(
-            StatusBanner.height + AppSpacing.lg,
+          preferredSize: Size.fromHeight(
+            StatusBanner.heightOf(context) + AppSpacing.lg,
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(

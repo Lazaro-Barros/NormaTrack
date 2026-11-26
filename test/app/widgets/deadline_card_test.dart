@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/theme/app_theme.dart';
+import 'package:normatrack/app/widgets/date_block.dart';
 import 'package:normatrack/app/widgets/deadline_card.dart';
 
 import '../../helpers/pump_widget.dart';
+import '../../helpers/text_scalers.dart';
 
 void main() {
   testWidgets('bloco de data, textos e cor da situação', (tester) async {
@@ -79,5 +81,44 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+
+  group('fonte do sistema maior, sem estouro', () {
+    for (final (name, scaler) in [
+      ('1,3×', const TextScaler.linear(1.3)),
+      ('2×', const TextScaler.linear(2)),
+      ('não linear', const NonLinearScaler()),
+    ]) {
+      testWidgets(name, (tester) async {
+        await pumpComponent(
+          tester,
+          withTextScaler(
+            scaler,
+            ListView(
+              // Margem lateral num celular de 411 de largura.
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              children: [
+                SizedBox(
+                  width: 379,
+                  child: DeadlineCard(
+                    date: DateTime(2028, 9, 21),
+                    showYear: true,
+                    title: 'Licença de Operação',
+                    subtitle: 'Indústria Alfa Ltda',
+                    tone: StatusTone.overdue,
+                    statusLead: 'Venceu',
+                    statusText: 'há 3 dias',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+        expect(tester.takeException(), isNull);
+        final card = tester.getSize(find.byType(DeadlineCard));
+        final block = tester.getSize(find.byType(DateBlock));
+        expect(card.height, greaterThanOrEqualTo(block.height + 16));
+      });
+    }
   });
 }

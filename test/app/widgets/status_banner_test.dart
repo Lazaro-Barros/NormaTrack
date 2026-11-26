@@ -4,6 +4,7 @@ import 'package:normatrack/app/theme/app_theme.dart';
 import 'package:normatrack/app/widgets/status_banner.dart';
 
 import '../../helpers/pump_widget.dart';
+import '../../helpers/text_scalers.dart';
 
 Color? _bg(WidgetTester tester) {
   final c = tester.widget<Container>(
@@ -71,5 +72,66 @@ void main() {
       final expected = StatusColors.light.resolve(tone).background;
       expect(_bg(tester), expected);
     }
+  });
+
+  Future<double> pumpScaled(WidgetTester tester, TextScaler scaler) async {
+    late double computed;
+    await pumpComponent(
+      tester,
+      withTextScaler(
+        scaler,
+        Builder(
+          builder: (context) {
+            computed = StatusBanner.heightOf(context);
+            return Align(
+              alignment: Alignment.topCenter,
+              // Largura do banner num celular de 411 de largura.
+              child: SizedBox(
+                width: 379,
+                child: StatusBanner(
+                  tone: StatusTone.overdue,
+                  date: DateTime(2028, 9, 26),
+                  showYear: true,
+                  title: 'Venceu há 3 dias',
+                  message: 'Alertas desde 29/04/2026',
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    return computed;
+  }
+
+  double bannerHeight(WidgetTester tester) =>
+      tester.getSize(find.byType(StatusBanner)).height;
+
+  testWidgets('altura 76 na escala 1', (tester) async {
+    final computed = await pumpScaled(tester, TextScaler.noScaling);
+    expect(bannerHeight(tester), StatusBanner.height);
+    expect(computed, StatusBanner.height);
+  });
+
+  testWidgets('fonte 1,3×: altura cresce, sem estouro', (tester) async {
+    final computed = await pumpScaled(tester, const TextScaler.linear(1.3));
+    expect(tester.takeException(), isNull);
+    // 24 + bloco de data (8 + 37 + 21); título + mensagem: 37 + 24 = 61.
+    expect(bannerHeight(tester), 24 + 66);
+    expect(computed, bannerHeight(tester));
+  });
+
+  testWidgets('fonte 2×: limitada a 1,5×, sem estouro', (tester) async {
+    final computed = await pumpScaled(tester, const TextScaler.linear(2));
+    expect(tester.takeException(), isNull);
+    expect(bannerHeight(tester), 24 + 74);
+    expect(computed, bannerHeight(tester));
+  });
+
+  testWidgets('escala não linear (Android 14+) não estoura', (tester) async {
+    final computed = await pumpScaled(tester, const NonLinearScaler());
+    expect(tester.takeException(), isNull);
+    expect(bannerHeight(tester), 24 + 64);
+    expect(computed, bannerHeight(tester));
   });
 }

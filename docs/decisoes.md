@@ -33,7 +33,7 @@ E-mail exige servidor. Até a API existir, os alertas serão notificações loca
 
 ## D005 — Modelagem híbrida para medições
 
-**Status:** proposta · 2026-09
+**Status:** aceita · 2026-09 (detalhada em D015, task 013)
 
 As entidades centrais serão tipadas. Medições (ruído, ETE/ETA, laudos de análise) usarão a estrutura genérica parâmetro + valor. Reavaliar ao fim da Fase 2.
 
@@ -120,3 +120,14 @@ O backup (RNF-04) é uma cópia do banco feita com `VACUUM INTO` num arquivo `No
 - *Por quê:* a cópia do arquivo leva tudo, inclusive tabelas futuras, sem código de exportação por tabela; `VACUUM INTO` é consistente com o banco aberto; reabrir pelo provider evita reiniciar o app.
 - *Regra para o futuro:* toda nova versão de schema precisa entrar em `_tablesByVersion` (`lib/features/backup/data/local_backup_service.dart`), e a migração drift é o que torna um backup antigo restaurável.
 - *Descartado:* exportação JSON (manutenção por tabela, mais risco na importação); copiar o `.sqlite` direto com o banco aberto; reiniciar o app depois de restaurar; escolher pasta com `FilePicker.saveFile`; filtro de extensão no seletor (o Android não conhece o MIME de `.ntbackup`).
+
+## D015 — Medições genéricas por período
+
+**Status:** aceita · 2026-11-27 (task 013)
+
+Ruídos e controle de ETE/ETA usam duas tabelas genéricas: `measurement_parameters` (o que se mede: empresa, contexto `noise`/`effluent`/`water`, nome, unidade, frequência, posição, data de início, limites opcionais, arquivamento) e `measurements` (valor ou justificativa de um parâmetro num período). O período é guardado só pela data de início (`period_start`, `AAAA-MM-DD`), calculada pelo `MeasurementPeriod` do domínio para as frequências diária, semanal (ISO), quinzenal e mensal; um índice parcial único garante uma medição viva por parâmetro e período. As pendências ("A lançar" / "Atrasado") são calculadas no domínio (`pendingLaunches`), nunca gravadas.
+
+- *Por quê:* uma estrutura serve a todos os automonitoramentos com lista de parâmetros variável (ruídos com quantos pontos a empresa tiver, ETE com pH, vazão e produtos); frequência por parâmetro cobre a ETA diária e a ETE semanal, quinzenal ou mensal (C8) sem migração; uma coluna de data ordena e filtra bem para qualquer frequência.
+- *Regras:* frequência nova = código novo no enum (sem migração); mudar a frequência de um parâmetro com medições é recusado; medição apagada e relançada vira linha nova (não há lista editável que justifique reaproveitar a linha, como em D011); `value` é `REAL` e a formatação fica na apresentação.
+- *Descartado:* tabela por tipo de medição; período como texto `AAAA-Www`/`AAAA-MM`; gravar a situação "pendente"; tabela de estações já na task 013 (entra na 017, quando houver tela para ela).
+

@@ -12,7 +12,10 @@ Nomes em código propostos em inglês — **a confirmar** (ver perguntas em aber
 | Prazo / vencimento | Qualquer data que exige ação e alerta | `Deadline` |
 | Alerta | Aviso antes do vencimento | `Reminder` |
 | Automonitoramento | Medições que a empresa é obrigada a fazer | — (agrupador) |
-| Ponto de medição | Local fixo onde se mede ruído | `NoisePoint` |
+| Parâmetro | O que se mede periodicamente: ponto de ruído, pH, vazão, insumo… | `MeasurementParameter` |
+| Medição / lançamento | Valor de um parâmetro num período, ou "sem medição" com justificativa | `Measurement` |
+| Período | Dia, semana ISO, quinzena ou mês de um lançamento | `MeasurementPeriod` |
+| Ponto de medição | Local fixo onde se mede ruído | `MeasurementParameter` (contexto `noise`) |
 | R.S. — resíduos sólidos | Resíduos classificados por classe | `WasteRecord` (tipo `solid`) |
 | R.P. — resíduos perigosos | Resíduos perigosos gerados/armazenados | `WasteRecord` (tipo `hazardous`) |
 | ETE | Estação de Tratamento de Efluentes | `TreatmentStation` (tipo `effluent`) |
@@ -36,7 +39,7 @@ Os módulos têm campos diferentes e a cliente disse que "pode incluir mais cois
 1. **Tabelas específicas** por tipo de registro — tipagem forte, relatórios simples, mas cada novo tipo exige migração.
 2. **Registros genéricos configuráveis** (tipo de lançamento + campos dinâmicos) — flexível, mas complexo de validar e de exportar.
 
-**Proposta: híbrido começando pelo simples.** Entidades centrais tipadas (empresa, prazo, produto, lote). Para medições, uma estrutura semi-genérica de *parâmetro + valor* (`MeasurementParameter` / `Measurement`), que cobre ruído, ETE/ETA e laudos de análise sem uma tabela para cada caso. Reavaliar após a Fase 2.
+**Decisão: híbrido começando pelo simples** ([D015](decisoes.md#d015--medições-genéricas-por-período)). Entidades centrais tipadas (empresa, prazo, produto, lote). Para medições, uma estrutura semi-genérica de *parâmetro + valor* (`MeasurementParameter` / `Measurement`), que cobre ruído, ETE/ETA e laudos de análise sem uma tabela para cada caso. Reavaliar após a Fase 2.
 
 ## Modelo preliminar
 
@@ -101,16 +104,20 @@ erDiagram
         int daysBefore "dias antes do vencimento"
     }
     MeasurementParameter {
-        string context "noise_point | effluent | water | product_analysis"
-        string ownerId "station ou product, opcional"
-        string name "Ponto 1, pH, Cloro..."
-        string unit
-        string frequency "weekly | monthly | on_demand"
+        string context "noise | effluent | water (task 013)"
+        string name "Portão principal, pH, Vazão..."
+        string unit "dB(A), mg/L... opcional"
+        string frequency "daily | weekly | biweekly | monthly"
+        int position "ordem na lista"
+        date startDate "a partir de quando cobra"
+        real limitMin "opcional"
+        real limitMax "opcional"
+        datetime archivedAt
     }
     Measurement {
-        date referenceDate
-        decimal value
-        string notes
+        date periodStart "inicio do periodo"
+        real value "null = sem medicao"
+        string note "obrigatoria sem valor"
     }
     WasteRecord {
         string wasteType "solid | hazardous"
@@ -168,4 +175,7 @@ erDiagram
 - **Renovar** cria um novo `Deadline` com a nova data, apontando para o anterior, e marca o anterior como `renewed`. A nova data é posterior à anterior (C20). Excluir o ciclo em aberto desfaz a renovação: o anterior volta a `active` (C20).
 - **Concluir** vale para laudo e manutenção (RF-AMB-06): estado `completed` com `completedOn`. Concluído e cancelado podem ser reabertos.
 - **Próximos vencimentos** (RF-PRZ-05): prazos em aberto de empresas não arquivadas, com o módulo habilitado (C20).
+- **Medições** (task 013, [D015](decisoes.md#d015--medições-genéricas-por-período)): um parâmetro pertence a uma empresa e a um contexto (`noise`, `effluent`, `water`), com frequência própria. O período é identificado pela data de início: o próprio dia (diária), a segunda-feira da semana ISO (semanal), o dia 1 ou 16 (quinzenal, suposição C8) ou o dia 1 (mensal). Uma medição viva por parâmetro e período. Sem valor, a justificativa é obrigatória ("sem medição no período", C26). Período futuro não aceita lançamento; passado e atual podem ser lançados, editados ou apagados. Limites mínimo e máximo opcionais, estritos (igual ao limite está dentro). Mudar a frequência de um parâmetro com medições é recusado.
+- **Pendências de lançamento** (C26) são **calculadas**: para cada empresa, contexto e frequência, do período de início do parâmetro até o período atual, um período é pendente se algum parâmetro não arquivado que já cobrava não tem medição (valor ou justificativa). O período atual é "A lançar"; os anteriores, "Atrasado". Parâmetro arquivado não cobra (nem o passado); empresa arquivada, excluída ou com o módulo desligado não aparece. Excluir a empresa exclui logicamente os parâmetros e as medições.
+- **Ainda não modelado:** estações (várias ETE/ETA por empresa, task 017) e resíduos (task 016). `TreatmentStation` e `WasteRecord` no diagrama são propostas.
 - **Produtos controlados:** o estoque ao fim do mês é informado pela cliente, não calculado. **(?)** confirmar se deveria ser calculado a partir do estoque anterior e das entradas/saídas.

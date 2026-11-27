@@ -76,6 +76,7 @@ lib/
     │   ├── data/             # tables, LocalCompanyRepository, mappers
     │   └── presentation/     # telas, controllers
     ├── deadlines/
+    ├── measurements/         # parâmetros e medições genéricos (ruídos, ETE/ETA)
     ├── environmental/
     ├── controlled_products/
     └── quality_control/

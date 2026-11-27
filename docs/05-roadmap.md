@@ -30,7 +30,7 @@ Entrega o padrão "prazo com alerta" para **todos** os módulos de uma vez.
 
 ## Fase 2 — Automonitoramento ambiental
 
-- [ ] Parâmetros e medições (estrutura genérica do [domínio](03-dominio.md))
+- [x] Parâmetros e medições (estrutura genérica do [domínio](03-dominio.md)) — task 013 (domínio, dados, migração v3 e backup; telas nas tasks 014, 015 e 017)
 - [ ] Ruídos: pontos e lançamento semanal (RF-AMB-02)
 - [ ] Resíduos sólidos e perigosos (RF-AMB-03/04)
 - [ ] Controle de ETE/ETA (RF-AMB-07)

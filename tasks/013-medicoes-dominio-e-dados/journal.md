@@ -78,3 +78,32 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Feito**
 - `_tablesByVersion[3] = ['measurement_parameters', 'measurements']` (D014). A "última alteração" do resumo passa a considerar as duas tabelas (consulta montada a partir de uma lista de tabelas por versão, em vez de condicionais no SQL).
 - Testes novos em `local_backup_service_test.dart`: backup v2 com empresa, módulo, prazo e lembrete é aceito (resumo v2), restaurado e migrado para v3 (`validateDatabaseSchema`, prazo e lembrete intactos); backup v3 com ponto e medição faz ida e volta (restaurar outro e depois ele de novo traz a medição) e a medição conta como última alteração; arquivo marcado v3 sem as tabelas de medições é recusado. Conferido que este último falha sem a linha nova em `_tablesByVersion`.
+
+## 2026-11-27 — Verificação no emulador
+
+**Feito** (emulador `Medium_Phone_API_37.0`; sem `pm clear`, sem desinstalar, instalado com `adb install -r`)
+- Antes de instalar: banco copiado para o Mac (`antes.sqlite` no scratchpad da sessão): `user_version` 2, `quick_check` ok, 5 empresas (incluindo "Alfa To To To To"), 8 prazos (5 em aberto, 1 cancelado, 1 concluído, 1 renovado), 38 lembretes.
+- Backup pelo app (Ajustes → Fazer backup): `NormaTrack-backup-2026-11-27-1214.ntbackup` gerado; folha fechada sem enviar. Cópia em `/sdcard/Download/antes-task013.ntbackup` (fica no emulador como salvaguarda, ao lado de `original-usuaria.ntbackup`).
+- `flutter build apk --debug` + `adb install -r`. Na abertura o banco foi para a v3: `quick_check` ok, `measurement_parameters` e `measurements` vazias com os dois índices parciais, e as 5 tabelas antigas **iguais linha a linha** à cópia de antes (comparação por hash de `SELECT * … ORDER BY id`). Painel com os mesmos prazos.
+- Restaurado pelo app o backup v2 de antes da atualização: confirmação "5 empresas e 6 prazos, com última alteração em 26/11/2026" (6 = em aberto + concluído + cancelado, sem o renovado e um excluído), SnackBar "Backup restaurado" com "Desfazer". Depois da restauração o banco está na v3, íntegro, e as 5 tabelas antigas continuam iguais às de antes.
+
+**Decidido**
+- Observação, não corrigida aqui: o processo antigo do app estava aberto desde 26/11 e o Painel mostrava "Venceu há 3 dias" em 27/11 (depois de reabrir, "há 4 dias"). As listas não viram o dia sozinhas. A task 015 já prevê reassinar as pendências na virada do dia; o mesmo vale para os prazos do Painel.
+
+## 2026-11-27 — Fechamento
+
+**Feito**
+- Todos os critérios de aceite marcados. Status → `concluída` aqui e no índice.
+- Docs: `docs/03-dominio.md` (glossário, modelo `MeasurementParameter`/`Measurement`, regras de medições e pendências), `docs/decisoes.md` (D005 aceita e [D015](../../docs/decisoes.md#d015--medições-genéricas-por-período)), `docs/04-arquitetura.md` (`features/measurements/`), `docs/05-roadmap.md` (item "Parâmetros e medições" marcado). C6, C7, C8 e C26 já estavam em `docs/06-perguntas-em-aberto.md`.
+
+**Como verificar**
+```bash
+dart run build_runner build --delete-conflicting-outputs   # sem diff
+dart run drift_dev make-migrations                          # sem diff
+dart format . && flutter analyze && flutter test
+grep -rE "package:(flutter|drift)" lib/features/measurements/domain   # vazio
+```
+
+**Pendente / dúvidas**
+- Suposições a confirmar com a cliente, com `// TODO(RF-AMB-…)` no código: quinzena 1–15/16–fim (C8); arquivar um parâmetro tira inclusive as pendências passadas (C26); C6 e C26 respondidas pelo usuário, falta a cliente.
+- Próximas: 014 (Ruídos: pontos e lançamento), depois 015 (Painel com pendências). A 017 acrescenta a tabela de estações e agrupa as pendências também por estação.

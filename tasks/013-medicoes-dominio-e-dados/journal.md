@@ -42,3 +42,12 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - A quantidade armazenada vale para todas as classes de resíduo, não só para a Classe I. Registrado em C7 e na linha da task 016.
 - Frequência dos resíduos: por tipo, com padrão semanal; não precisa perguntar à cliente (explicado ao usuário que a frequência só define o que o app cobra, a navegação da tela e a soma do relatório).
 - Sem impacto na 013: resíduos com dois valores por lançamento são da 016.
+
+## 2026-11-27 — Passo 1: domínio
+
+**Feito**
+- Plano aprovado pelo usuário. Status → `em andamento`.
+- `lib/features/measurements/domain/`: `MeasurementContext`, `MeasurementFrequency` (diária, semanal, quinzenal, mensal), `MeasurementPeriod`, `MeasurementParameter` (com `LimitStatus`), `Measurement`/`MeasurementEntry`, validação, `pendingLaunches` e a interface `MeasurementRepository` com as exceções. 37 testes de domínio.
+
+**Decidido**
+- Desempate extra na ordem das pendências: depois de período, contexto e empresa, a frequência (dois grupos do mesmo contexto podem começar no mesmo dia, ex.: quinzenal e mensal em 01/11).

@@ -18,7 +18,7 @@ Status: `rascunho` · `planejada` · `em andamento` · `concluída` · `bloquead
 | 010 | [Notificações locais de prazo](010-notificacoes-locais/) | RF-PRZ-03 | 1 | concluída |
 | 011 | [Bloco de data com a fonte do sistema grande](011-date-block-fonte-grande/) | RNF-06 | 1 | concluída |
 | 012 | [Backup e restauração manual do banco](012-backup-restauracao/) | RNF-04 | 1 | concluída |
-| 013 | [Medições: domínio e dados](013-medicoes-dominio-e-dados/) | RF-AMB-02/07, RNF-04 | 2 | planejada |
+| 013 | [Medições: domínio e dados](013-medicoes-dominio-e-dados/) | RF-AMB-02/07, RNF-04 | 2 | em andamento |
 
 ## Fase 2 — quebra em tasks (2026-11-26)
 

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | em andamento |
 | **Fase** | 2 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-AMB-02, RF-AMB-07 (base genérica), RNF-03, RNF-04 |
 | **Depende de** | 006 (padrões de domínio e dados), 012 (backup, D014) |

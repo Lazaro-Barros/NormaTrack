@@ -35,3 +35,10 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Pendente / dúvidas**
 - Aprovação do plano ajustado pelo usuário.
+
+## 2026-11-27 — Resíduos: armazenada em todas as classes
+
+**Decidido** (usuário)
+- A quantidade armazenada vale para todas as classes de resíduo, não só para a Classe I. Registrado em C7 e na linha da task 016.
+- Frequência dos resíduos: por tipo, com padrão semanal; não precisa perguntar à cliente (explicado ao usuário que a frequência só define o que o app cobra, a navegação da tela e a soma do relatório).
+- Sem impacto na 013: resíduos com dois valores por lançamento são da 016.

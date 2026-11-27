@@ -129,4 +129,52 @@ void main() {
     expect(pointsSubtitle(1), '1 ponto · semanal');
     expect(pointsSubtitle(4), '4 pontos · semanal');
   });
+
+  test('overdueLabel', () {
+    expect(overdueLabel(weekly, 1), '1 semana atrasada');
+    expect(overdueLabel(weekly, 3), '3 semanas atrasadas');
+    expect(
+      overdueLabel(MeasurementFrequency.biweekly, 1),
+      '1 quinzena atrasada',
+    );
+    expect(
+      overdueLabel(MeasurementFrequency.biweekly, 2),
+      '2 quinzenas atrasadas',
+    );
+    expect(overdueLabel(MeasurementFrequency.monthly, 1), '1 mês atrasado');
+    expect(overdueLabel(MeasurementFrequency.monthly, 4), '4 meses atrasados');
+    expect(overdueLabel(MeasurementFrequency.daily, 1), '1 dia atrasado');
+    expect(overdueLabel(MeasurementFrequency.daily, 5), '5 dias atrasados');
+  });
+
+  test('pendingGroupStatus e pendingPeriodLabel', () {
+    expect(
+      pendingGroupStatus(
+        PendingGroup(
+          oldest: pending(PendingKind.overdue),
+          overdue: 2,
+          total: 3,
+        ),
+      ),
+      (label: '2 semanas atrasadas', tone: StatusTone.overdue),
+    );
+    expect(
+      pendingGroupStatus(
+        PendingGroup(
+          oldest: pending(PendingKind.toLaunch),
+          overdue: 0,
+          total: 1,
+        ),
+      ),
+      (label: 'A lançar', tone: StatusTone.dueSoon),
+    );
+    expect(
+      pendingPeriodLabel(at(weekly, 2026, 11, 10)),
+      'Semana 46 · 09 a 15/11/2026',
+    );
+    expect(
+      pendingPeriodLabel(at(MeasurementFrequency.daily, 2026, 11, 26)),
+      '26/11/2026',
+    );
+  });
 }

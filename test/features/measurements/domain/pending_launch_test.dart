@@ -242,4 +242,94 @@ void main() {
       ]);
     },
   );
+
+  group('groupPendingLaunches', () {
+    test('vazio', () => expect(groupPendingLaunches(const []), isEmpty));
+
+    test('um grupo por empresa e contexto, com a mais antiga', () {
+      // Semanas 46 e 47 atrasadas e 48 a lançar em c2; só a 48 em c1.
+      final list = pendingLaunches(
+        parameters: [
+          param('a', company: 'c1', start: DateTime(2026, 11, 24)),
+          param('b', company: 'c2', start: DateTime(2026, 11, 10)),
+        ],
+        measurements: const [],
+        today: today,
+      );
+      expect(list, hasLength(4));
+
+      final groups = groupPendingLaunches(list);
+      expect(groups, [
+        PendingGroup(
+          oldest: pending(
+            DateTime(2026, 11, 9),
+            PendingKind.overdue,
+            0,
+            1,
+            company: 'c2',
+          ),
+          overdue: 2,
+          total: 3,
+        ),
+        PendingGroup(
+          oldest: pending(DateTime(2026, 11, 23), PendingKind.toLaunch, 0, 1),
+          overdue: 0,
+          total: 1,
+        ),
+      ]);
+      expect(groups.first.kind, PendingKind.overdue);
+      expect(groups.last.kind, PendingKind.toLaunch);
+      expect(groups.first.companyId, 'c2');
+      expect(groups.first.context, MeasurementContext.noise);
+      expect(groups.first.frequency, MeasurementFrequency.weekly);
+    });
+
+    test('frequências e contextos diferentes viram grupos separados', () {
+      final groups = groupPendingLaunches([
+        pending(
+          DateTime(2026, 11, 1),
+          PendingKind.toLaunch,
+          0,
+          1,
+          context: MeasurementContext.effluent,
+          frequency: MeasurementFrequency.monthly,
+        ),
+        pending(
+          DateTime(2026, 11, 16),
+          PendingKind.toLaunch,
+          0,
+          1,
+          context: MeasurementContext.effluent,
+          frequency: MeasurementFrequency.biweekly,
+        ),
+        pending(DateTime(2026, 11, 23), PendingKind.toLaunch, 0, 1),
+        pending(
+          DateTime(2026, 11, 23),
+          PendingKind.toLaunch,
+          0,
+          1,
+          context: MeasurementContext.effluent,
+          frequency: MeasurementFrequency.weekly,
+        ),
+      ]);
+      expect(
+        [for (final g in groups) (g.context, g.frequency)],
+        [
+          (MeasurementContext.effluent, MeasurementFrequency.monthly),
+          (MeasurementContext.effluent, MeasurementFrequency.biweekly),
+          (MeasurementContext.noise, MeasurementFrequency.weekly),
+          (MeasurementContext.effluent, MeasurementFrequency.weekly),
+        ],
+      );
+    });
+
+    test('a mais antiga independe da ordem de entrada', () {
+      final groups = groupPendingLaunches([
+        pending(DateTime(2026, 11, 23), PendingKind.toLaunch, 0, 1),
+        pending(DateTime(2026, 11, 16), PendingKind.overdue, 1, 2),
+      ]);
+      expect(groups.single.oldest.period.start, DateTime(2026, 11, 16));
+      expect((groups.single.overdue, groups.single.total), (1, 2));
+    });
+  });
 }

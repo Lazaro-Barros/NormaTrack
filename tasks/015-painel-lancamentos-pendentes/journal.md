@@ -28,3 +28,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Nos testes de `ProviderContainer` em `testWidgets`, o contêiner é descartado dentro do teste: a checagem de timers pendentes roda antes do `tearDown`. Com `pumpApp` não precisa (desmontar o `ProviderScope` cancela o timer).
+
+## 2026-11-27 — Passo 2: agrupamento e PendingRow
+
+**Feito**
+- Domínio: `PendingGroup` e `groupPendingLaunches` em `pending_launch.dart` (por empresa, contexto e frequência; ordem pela mais antiga), com 4 testes.
+- Rótulos: `overdueLabel` (semana, quinzena, mês, dia; singular e plural), `pendingGroupStatus` e `pendingPeriodLabel` ("Semana 46 · 09 a 15/11/2026"; diária só a data). `monitoringStatus` passa a usar `overdueLabel` (mesmos textos).
+- `PendingRow` em `lib/app/widgets/` com 7 testes (textos, tom, ação, sem subtítulo, posição do botão, fonte 1,3×/2×/não linear sem estouro, botão abaixo em 2×). `docs/07-design-system.md` atualizado.
+
+**Decidido**
+- Sem espaço extra entre as três linhas de texto do `PendingRow` (a altura de linha do tema basta; evita um `AppSpacing.xs / 2` solto).

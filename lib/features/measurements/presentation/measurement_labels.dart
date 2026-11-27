@@ -64,11 +64,11 @@ String? limitLabel(MeasurementParameter p, double? value) {
 ) {
   if (activePoints == 0) return (label: 'Nenhum ponto cadastrado', tone: null);
   final overdue = pending.where((p) => p.kind == PendingKind.overdue).length;
-  if (overdue == 1) {
-    return (label: '1 semana atrasada', tone: StatusTone.overdue);
-  }
-  if (overdue > 1) {
-    return (label: '$overdue semanas atrasadas', tone: StatusTone.overdue);
+  if (overdue > 0) {
+    return (
+      label: overdueLabel(MeasurementFrequency.weekly, overdue),
+      tone: StatusTone.overdue,
+    );
   }
   if (pending.isNotEmpty) return (label: 'A lançar', tone: StatusTone.dueSoon);
   return (label: 'Em dia', tone: StatusTone.ok);
@@ -82,3 +82,30 @@ String pointLimitLabel(MeasurementParameter p) => switch (p.limitMax) {
   final max? => 'Limite ${formatDecimal(max)} ${p.unit ?? ''}'.trim(),
   null => 'Sem limite',
 };
+
+/// "1 semana atrasada", "3 quinzenas atrasadas", "2 meses atrasados",
+/// "1 dia atrasado".
+String overdueLabel(MeasurementFrequency f, int n) {
+  final one = n == 1;
+  return switch (f) {
+    MeasurementFrequency.weekly =>
+      one ? '1 semana atrasada' : '$n semanas atrasadas',
+    MeasurementFrequency.biweekly =>
+      one ? '1 quinzena atrasada' : '$n quinzenas atrasadas',
+    MeasurementFrequency.monthly =>
+      one ? '1 mês atrasado' : '$n meses atrasados',
+    MeasurementFrequency.daily => one ? '1 dia atrasado' : '$n dias atrasados',
+  };
+}
+
+/// Situação de uma linha de pendência: atrasadas (vermelho) ou "A lançar".
+({String label, StatusTone tone}) pendingGroupStatus(PendingGroup g) =>
+    g.overdue > 0
+    ? (label: overdueLabel(g.frequency, g.overdue), tone: StatusTone.overdue)
+    : (label: 'A lançar', tone: StatusTone.dueSoon);
+
+/// "Semana 46 · 09 a 15/11/2026"; diária só a data.
+String pendingPeriodLabel(MeasurementPeriod p) {
+  final range = periodRange(p);
+  return range.isEmpty ? periodTitle(p) : '${periodTitle(p)} · $range';
+}

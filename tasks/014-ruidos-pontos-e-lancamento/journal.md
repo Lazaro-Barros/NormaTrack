@@ -40,3 +40,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Feito**
 - `measurement_labels.dart` (período, intervalo, anterior, limite, situação do módulo, subtítulos), `measurement_providers.dart`, `isoDate`/`parseIsoDate` em `date_format.dart`.
 - `test/helpers/fake_measurement_repository.dart` (pendências pelo mesmo `pendingLaunches` do domínio; `saved` guarda o que a tela enviou) e override no `pumpApp`.
+
+## 2026-11-27 — Passo 4: pontos de medição
+
+**Feito**
+- `ModuleGate` (`lib/features/companies/presentation/module_gate.dart`): a checagem "Módulo não encontrado / desligado / Empresa não encontrada" saiu do `ModuleScreen` para ser usada também pelas telas de ruídos (parâmetro `only` restringe ao Ambiental). Testes do módulo seguem verdes.
+- `NoisePointsScreen`, `point_sheet.dart` e `openPointSheet` (grava, trata erros e mostra SnackBar; reaproveitado pelo lançamento). Rota provisória `…/modulos/:modulo/ruidos/pontos` (vira filha de `ruidos` no passo 5).
+- 7 testes de tela: vazio → cadastrar com limite (unidade dB(A), semanal, início no dia), nome vazio e repetido com a sheet aberta, editar e tirar limite, desativar/reativar, excluir com confirmação (apaga as medições), módulo desligado e fora do Ambiental.
+
+**Decidido**
+- O erro de nome repetido vem do repositório e aparece no campo sem fechar a sheet: a sheet recebe `onSave` que devolve a mensagem.

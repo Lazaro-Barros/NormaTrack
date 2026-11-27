@@ -13,7 +13,7 @@ import '../../../core/providers.dart';
 import '../../companies/domain/company.dart';
 import '../../companies/domain/module_type.dart';
 import '../../companies/presentation/company_labels.dart';
-import '../../companies/presentation/company_providers.dart';
+import '../../companies/presentation/module_gate.dart';
 import '../domain/deadline.dart';
 import '../domain/deadline_category.dart';
 import 'deadline_labels.dart';
@@ -22,66 +22,18 @@ import 'deadline_providers.dart';
 /// Tela de um módulo da empresa: prazos em aberto por categoria
 /// (RF-AMB-01/05/06, RF-PCT-01). Lançamentos e relatórios entram nas fases 2
 /// e 3.
-class ModuleScreen extends ConsumerWidget {
+class ModuleScreen extends StatelessWidget {
   const ModuleScreen({super.key, required this.companyId, required this.slug});
 
   final String companyId;
   final String slug;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final module = moduleFromSlug(slug);
-    if (module == null) {
-      return _message(
-        icon: Icons.help_outline,
-        title: 'Módulo não encontrado',
-        message: 'Volte e escolha o módulo de novo.',
-        actionLabel: 'Voltar',
-        onAction: () => context.go(AppRoutes.company(companyId)),
-      );
-    }
-    return switch (ref.watch(companyProvider(companyId))) {
-      AsyncValue(value: final Company company) =>
-        company.hasModule(module)
-            ? _Deadlines(company: company, module: module)
-            : _message(
-                icon: module.icon,
-                title: 'Módulo desligado',
-                message:
-                    'Ligue o módulo no cadastro da empresa para ver os '
-                    'prazos.',
-                actionLabel: 'Editar empresa',
-                onAction: () => context.go(AppRoutes.editCompany(companyId)),
-              ),
-      AsyncValue(hasValue: true) || AsyncValue(hasError: true) => _message(
-        icon: Icons.apartment_outlined,
-        title: 'Empresa não encontrada',
-        message: 'Ela pode ter sido excluída.',
-        actionLabel: 'Voltar',
-        onAction: () => context.go(AppRoutes.companies),
-      ),
-      _ => Scaffold(
-        appBar: AppBar(),
-        body: const Center(child: CircularProgressIndicator()),
-      ),
-    };
-  }
-
-  Widget _message({
-    required IconData icon,
-    required String title,
-    required String message,
-    required String actionLabel,
-    required VoidCallback onAction,
-  }) => Scaffold(
-    appBar: AppBar(),
-    body: EmptyState(
-      icon: icon,
-      title: title,
-      message: message,
-      actionLabel: actionLabel,
-      onAction: onAction,
-    ),
+  Widget build(BuildContext context) => ModuleGate(
+    companyId: companyId,
+    slug: slug,
+    builder: (context, company, module) =>
+        _Deadlines(company: company, module: module),
   );
 }
 

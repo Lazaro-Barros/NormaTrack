@@ -11,6 +11,8 @@ import '../features/deadlines/presentation/dashboard_screen.dart';
 import '../features/deadlines/presentation/deadline_detail_screen.dart';
 import '../features/deadlines/presentation/deadline_form_screen.dart';
 import '../features/deadlines/presentation/module_screen.dart';
+import '../features/measurements/presentation/noise_points_screen.dart';
+import '../core/utils/date_format.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import 'app_shell.dart';
 
@@ -28,6 +30,13 @@ abstract final class AppRoutes {
       '${AppRoutes.module(companyId, module)}/prazos/$id';
   static String editDeadline(String companyId, ModuleType module, String id) =>
       '${deadline(companyId, module, id)}/editar';
+
+  /// Lançamento de ruídos; [week] abre a semana que contém a data.
+  static String noise(String companyId, {DateTime? week}) =>
+      '${module(companyId, ModuleType.environmental)}/ruidos'
+      '${week == null ? '' : '?semana=${isoDate(week)}'}';
+  static String noisePoints(String companyId) =>
+      '${module(companyId, ModuleType.environmental)}/ruidos/pontos';
   static const settings = '/ajustes';
 }
 
@@ -93,6 +102,14 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.dashboard}) {
                         ),
                         // `novo` antes de `:prazo`.
                         routes: [
+                          GoRoute(
+                            path: 'ruidos/pontos',
+                            parentNavigatorKey: rootKey,
+                            builder: (context, state) => NoisePointsScreen(
+                              companyId: state.pathParameters['id']!,
+                              slug: state.pathParameters['modulo']!,
+                            ),
+                          ),
                           GoRoute(
                             path: 'prazos/novo',
                             parentNavigatorKey: rootKey,

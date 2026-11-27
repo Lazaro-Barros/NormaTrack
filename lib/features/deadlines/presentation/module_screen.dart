@@ -14,6 +14,7 @@ import '../../companies/domain/company.dart';
 import '../../companies/domain/module_type.dart';
 import '../../companies/presentation/company_labels.dart';
 import '../../companies/presentation/module_gate.dart';
+import '../../measurements/presentation/monitoring_section.dart';
 import '../domain/deadline.dart';
 import '../domain/deadline_category.dart';
 import 'deadline_labels.dart';
@@ -92,7 +93,7 @@ class _DeadlinesState extends ConsumerState<_Deadlines> {
           title: 'Nenhum prazo encerrado',
           message: 'Prazos concluídos ou cancelados aparecem aqui.',
         ),
-        _ when list != null && list.isEmpty => EmptyState(
+        _ when list != null && list.isEmpty && !_hasMonitoring => EmptyState(
           icon: module.icon,
           title: 'Nenhum prazo em aberto',
           message:
@@ -134,6 +135,9 @@ class _DeadlinesState extends ConsumerState<_Deadlines> {
         ],
       );
 
+  /// Só o Ambiental tem automonitoramento (RF-AMB-02), na vista "Em aberto".
+  bool get _hasMonitoring => module == ModuleType.environmental && !_closed;
+
   Widget _list(BuildContext context, List<Deadline> list, DateTime today) {
     final text = Theme.of(context).textTheme;
     final byCategory = list.groupListsBy((d) => d.category);
@@ -141,6 +145,25 @@ class _DeadlinesState extends ConsumerState<_Deadlines> {
     return ListView(
       padding: AppSpacing.screen.copyWith(top: AppSpacing.lg, bottom: 88),
       children: [
+        if (_hasMonitoring) ...[
+          MonitoringSection(
+            companyId: company.id,
+            today: DateTime(today.year, today.month, today.day),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          if (list.isEmpty)
+            EmptyState(
+              icon: module.icon,
+              title: 'Nenhum prazo em aberto',
+              message:
+                  'Cadastre licenças, laudos e manutenções para receber os '
+                  'alertas.',
+              actionLabel: 'Cadastrar prazo',
+              onAction: () =>
+                  context.go(AppRoutes.newDeadline(company.id, module)),
+              inline: true,
+            ),
+        ],
         for (final (i, category) in categories.indexed) ...[
           if (i > 0) const SizedBox(height: AppSpacing.lg),
           Padding(

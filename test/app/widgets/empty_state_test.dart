@@ -48,4 +48,30 @@ void main() {
     await tester.tap(find.text('Criar'));
     expect(taps, 1);
   });
+
+  testWidgets('inline: só o card, dentro de uma lista', (tester) async {
+    await pumpComponent(
+      tester,
+      ListView(
+        children: const [
+          Text('Outra seção'),
+          EmptyState(
+            icon: Icons.inbox,
+            title: 'Vazio',
+            message: 'Nada.',
+            inline: true,
+          ),
+        ],
+      ),
+    );
+    expect(tester.takeException(), isNull);
+    expect(find.text('Vazio'), findsOneWidget);
+    expect(
+      find.ancestor(
+        of: find.text('Vazio'),
+        matching: find.byType(SingleChildScrollView),
+      ),
+      findsNothing,
+    );
+  });
 }

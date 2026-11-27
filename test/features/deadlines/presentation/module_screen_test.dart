@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/router.dart';
 import 'package:normatrack/app/widgets/band_title.dart';
 import 'package:normatrack/app/widgets/deadline_card.dart';
+import 'package:normatrack/app/widgets/status_text.dart';
 import 'package:normatrack/features/companies/domain/authority.dart';
 import 'package:normatrack/features/companies/domain/company.dart';
 import 'package:normatrack/features/companies/domain/module_type.dart';
@@ -10,16 +11,22 @@ import 'package:normatrack/features/deadlines/domain/deadline_category.dart';
 
 import '../../../helpers/fake_company_repository.dart';
 import '../../../helpers/fake_deadline_repository.dart';
+import '../../../helpers/fake_measurement_repository.dart';
 import '../../../helpers/pump_app.dart';
 
 void main() {
   late FakeCompanyRepository companies;
   late FakeDeadlineRepository deadlines;
+  late FakeMeasurementRepository measurements;
   late String companyId;
 
   setUp(() async {
     companies = FakeCompanyRepository(now: testNow);
     deadlines = FakeDeadlineRepository(now: testNow, companies: companies);
+    measurements = FakeMeasurementRepository(
+      now: testNow,
+      companies: companies,
+    );
     companyId = (await companies.seed(
       const CompanyInput(
         legalName: 'Indústria Alfa Ltda',
@@ -45,6 +52,7 @@ void main() {
     tester,
     repository: companies,
     deadlineRepository: deadlines,
+    measurementRepository: measurements,
     initialLocation:
         location ?? AppRoutes.module(companyId, ModuleType.environmental),
   );
@@ -192,5 +200,98 @@ void main() {
     await tester.tap(find.text('Encerrados'));
     await tester.pumpAndSettle();
     expect(find.text('Nenhum prazo encerrado'), findsOneWidget);
+  });
+
+  group('Automonitoramento (task 014)', () {
+    // `testNow` = 29/09/2026, semana 40 (28/09 a 04/10).
+    String status(WidgetTester tester) =>
+        tester.widget<StatusText>(find.byType(StatusText)).label;
+
+    testWidgets('sem pontos: "Nenhum ponto cadastrado" e vazio de prazos', (
+      tester,
+    ) async {
+      await pumpModule(tester);
+      expect(find.text('Automonitoramento'), findsOneWidget);
+      expect(find.text('Ruídos'), findsOneWidget);
+      expect(status(tester), 'Nenhum ponto cadastrado');
+      // Sem prazos, o card vazio fica abaixo da seção.
+      expect(find.text('Nenhum prazo em aberto'), findsOneWidget);
+      await tester.tap(find.text('Cadastrar prazo'));
+      await tester.pumpAndSettle();
+      expect(find.text('Novo prazo'), findsWidgets);
+    });
+
+    testWidgets('situações: atrasadas, a lançar e em dia', (tester) async {
+      // Início na semana 38: 38 e 39 atrasadas, 40 a lançar.
+      final p = measurements.seedPoint(
+        companyId,
+        'Portão',
+        startDate: DateTime(2026, 9, 14),
+      );
+      measurements.seedPoint(companyId, 'Antigo', archived: true);
+      await pumpModule(tester);
+      expect(status(tester), '2 semanas atrasadas');
+      expect(find.text('1 ponto · semanal'), findsOneWidget);
+
+      measurements
+        ..seedMeasurement(p.id, DateTime(2026, 9, 14), value: 60)
+        ..seedMeasurement(p.id, DateTime(2026, 9, 21), note: 'Parada');
+      await tester.pumpAndSettle();
+      expect(status(tester), 'A lançar');
+
+      measurements.seedMeasurement(p.id, DateTime(2026, 9, 28), value: 61);
+      await tester.pumpAndSettle();
+      expect(status(tester), 'Em dia');
+    });
+
+    testWidgets('tocar abre a semana atrasada mais antiga', (tester) async {
+      measurements.seedPoint(
+        companyId,
+        'Portão',
+        startDate: DateTime(2026, 9, 14),
+      );
+      await pumpModule(tester);
+      await tester.tap(find.text('Ruídos'));
+      await tester.pumpAndSettle();
+      expect(find.text('Semana 38'), findsOneWidget);
+      expect(find.text('14 a 20/09/2026'), findsOneWidget);
+    });
+
+    testWidgets('em dia: tocar abre a semana atual', (tester) async {
+      final p = measurements.seedPoint(
+        companyId,
+        'Portão',
+        startDate: DateTime(2026, 9, 28),
+      );
+      measurements.seedMeasurement(p.id, DateTime(2026, 9, 28), value: 61);
+      await pumpModule(tester);
+      await tester.tap(find.text('Ruídos'));
+      await tester.pumpAndSettle();
+      expect(find.text('Semana 40'), findsOneWidget);
+    });
+
+    testWidgets('Encerrados e outros módulos não mostram a seção', (
+      tester,
+    ) async {
+      await pumpModule(tester);
+      await tester.tap(find.text('Encerrados'));
+      await tester.pumpAndSettle();
+      expect(find.text('Automonitoramento'), findsNothing);
+    });
+
+    testWidgets('Produtos controlados não mostra a seção', (tester) async {
+      final other = (await companies.seed(
+        const CompanyInput(
+          legalName: 'Beta',
+          enabledModules: {ModuleType.controlledProducts},
+        ),
+      )).id;
+      await pumpModule(
+        tester,
+        AppRoutes.module(other, ModuleType.controlledProducts),
+      );
+      expect(find.text('Automonitoramento'), findsNothing);
+      expect(find.text('Nenhum prazo em aberto'), findsOneWidget);
+    });
   });
 }

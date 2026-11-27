@@ -60,3 +60,12 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Decidido**
 - `MeasurementInputRow` usa `PopupMenuButton.onSelected` em vez de `PopupMenuItem.onTap`: o `onTap` roda antes de o menu fechar, e o fechamento derrubaria a sheet do motivo recém-aberta.
 - Depois de salvar, a tela fica na mesma semana, com SnackBar "Semana 40 salva" **[suposição]**.
+
+## 2026-11-27 — Passo 6: Ruídos no módulo Ambiental
+
+**Feito**
+- `MonitoringSection` (seção "Automonitoramento" com o `NavRow` "Ruídos") no topo da vista "Em aberto" do Ambiental; sem prazos, o vazio de prazos aparece abaixo dela. `EmptyState` ganhou `inline: true` (só o card, para ficar numa lista), com teste.
+- 6 testes novos no `module_screen_test.dart`: sem pontos, as três situações reagindo aos lançamentos, toque abre a semana atrasada mais antiga ou a atual, Encerrados e Produtos controlados sem a seção. `docs/07-design-system.md` (telas do módulo, lançamento e pontos; `EmptyState.inline`).
+
+**Decidido**
+- Tentativa descartada: tornar flexível o conteúdo à direita de todo `NavRow` (para a situação longa quebrar linha) quebrou outras telas que põem uma linha inteira à direita (formulário de prazo, Ajustes). Ficou só na seção: a situação tem largura máxima de 40% da tela e quebra a linha.

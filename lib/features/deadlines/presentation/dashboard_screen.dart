@@ -9,7 +9,7 @@ import '../../../app/widgets/deadline_card.dart';
 import '../../../app/widgets/empty_state.dart';
 import '../../../app/widgets/stat_tile.dart';
 import '../../../app/widgets/status_chip.dart';
-import '../../../core/providers.dart';
+import '../../../core/today.dart';
 import '../domain/deadline.dart';
 import '../domain/deadline_status.dart';
 import '../domain/deadline_summary.dart';
@@ -39,7 +39,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final today = ref.read(clockProvider)().toLocal();
+    final today = ref.watch(todayProvider);
     final deadlines = ref.watch(upcomingDeadlinesProvider);
     final names = ref.watch(companyNamesProvider);
     final all = deadlines.value;

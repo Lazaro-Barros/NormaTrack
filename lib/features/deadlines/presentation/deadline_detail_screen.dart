@@ -12,7 +12,7 @@ import '../../../app/widgets/info_row.dart';
 import '../../../app/widgets/section_card.dart';
 import '../../../app/widgets/status_banner.dart';
 import '../../../app/widgets/status_chip.dart';
-import '../../../core/providers.dart';
+import '../../../core/today.dart';
 import '../../../core/utils/date_format.dart';
 import '../../companies/domain/company.dart';
 import '../../companies/domain/module_type.dart';
@@ -153,7 +153,7 @@ class _Detail extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final today = ref.read(clockProvider)().toLocal();
+    final today = ref.watch(todayProvider);
     final d = deadline;
     final banner = deadlineBanner(d, today);
     final history = ref.watch(deadlineHistoryProvider(d.id)).value;

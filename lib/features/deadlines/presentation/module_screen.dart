@@ -9,7 +9,7 @@ import '../../../app/widgets/band_segmented_button.dart';
 import '../../../app/widgets/band_title.dart';
 import '../../../app/widgets/deadline_card.dart';
 import '../../../app/widgets/empty_state.dart';
-import '../../../core/providers.dart';
+import '../../../core/today.dart';
 import '../../companies/domain/company.dart';
 import '../../companies/domain/module_type.dart';
 import '../../companies/presentation/company_labels.dart';
@@ -56,7 +56,7 @@ class _DeadlinesState extends ConsumerState<_Deadlines> {
 
   @override
   Widget build(BuildContext context) {
-    final today = ref.read(clockProvider)().toLocal();
+    final today = ref.watch(todayProvider);
     final key = (companyId: company.id, module: module);
     final deadlines = _closed
         ? ref.watch(moduleClosedDeadlinesProvider(key))
@@ -146,10 +146,7 @@ class _DeadlinesState extends ConsumerState<_Deadlines> {
       padding: AppSpacing.screen.copyWith(top: AppSpacing.lg, bottom: 88),
       children: [
         if (_hasMonitoring) ...[
-          MonitoringSection(
-            companyId: company.id,
-            today: DateTime(today.year, today.month, today.day),
-          ),
+          MonitoringSection(companyId: company.id, today: today),
           const SizedBox(height: AppSpacing.lg),
           if (list.isEmpty)
             EmptyState(

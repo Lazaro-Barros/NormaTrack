@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:normatrack/app/router.dart';
 import 'package:normatrack/core/notifications/notification_providers.dart';
 import 'package:normatrack/core/providers.dart';
+import 'package:normatrack/core/utils/clock.dart';
 import 'package:normatrack/features/backup/data/local_backup_service.dart';
 import 'package:normatrack/features/backup/data/platform_backup_files.dart';
 import 'package:normatrack/features/backup/data/shared_prefs_backup_settings.dart';
@@ -23,7 +24,9 @@ import 'fake_notification_settings.dart';
 final testNow = DateTime.utc(2026, 9, 29, 12);
 
 /// Monta o app inteiro numa tela de 390 × 844, com relógio fixo e os
-/// repositórios em memória. Devolve o repositório de empresas usado.
+/// repositórios em memória. [clock] troca o relógio fixo em [testNow] (ex.: um
+/// relógio mutável para testar a virada do dia). Devolve o repositório de
+/// empresas usado.
 Future<FakeCompanyRepository> pumpApp(
   WidgetTester tester, {
   FakeCompanyRepository? repository,
@@ -35,6 +38,7 @@ Future<FakeCompanyRepository> pumpApp(
   FakeBackupFiles? backupFiles,
   FakeBackupSettings? backupSettings,
   String initialLocation = AppRoutes.dashboard,
+  Clock? clock,
 }) async {
   final repo = repository ?? FakeCompanyRepository(now: testNow);
   final deadlines =
@@ -52,7 +56,7 @@ Future<FakeCompanyRepository> pumpApp(
           measurementRepository ??
               FakeMeasurementRepository(now: testNow, companies: repo),
         ),
-        clockProvider.overrideWithValue(() => testNow),
+        clockProvider.overrideWithValue(clock ?? () => testNow),
         notificationSchedulerProvider.overrideWithValue(
           notificationScheduler ?? FakeNotificationScheduler(),
         ),

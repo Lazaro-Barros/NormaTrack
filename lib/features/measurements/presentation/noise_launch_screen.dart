@@ -13,7 +13,7 @@ import '../../../app/widgets/empty_state.dart';
 import '../../../app/widgets/measurement_input_row.dart';
 import '../../../app/widgets/period_navigator.dart';
 import '../../../app/widgets/section_card.dart';
-import '../../../core/providers.dart';
+import '../../../core/today.dart';
 import '../../../core/utils/date_format.dart';
 import '../../companies/domain/company.dart';
 import '../../companies/domain/module_type.dart';
@@ -104,8 +104,9 @@ class _NoiseLaunch extends ConsumerStatefulWidget {
 class _NoiseLaunchState extends ConsumerState<_NoiseLaunch> {
   static const _weekly = MeasurementFrequency.weekly;
 
-  late final DateTime _today;
-  late final MeasurementPeriod _current;
+  /// Semana que contém hoje; acompanha a virada do dia.
+  MeasurementPeriod get _current =>
+      MeasurementPeriod.containing(_weekly, ref.read(todayProvider));
   late MeasurementPeriod _period;
   final _drafts = <String, _Draft>{};
   bool _saving = false;
@@ -115,17 +116,15 @@ class _NoiseLaunchState extends ConsumerState<_NoiseLaunch> {
   @override
   void initState() {
     super.initState();
-    final now = ref.read(clockProvider)().toLocal();
-    _today = DateTime(now.year, now.month, now.day);
-    _current = MeasurementPeriod.containing(_weekly, _today);
+    final current = _current;
     final asked = switch (widget.week) {
       final w? => parseIsoDate(w),
       null => null,
     };
     _period = asked == null
-        ? _current
+        ? current
         : MeasurementPeriod.containing(_weekly, asked);
-    if (_period.compareTo(_current) > 0) _period = _current;
+    if (_period.compareTo(current) > 0) _period = current;
   }
 
   @override
@@ -253,7 +252,7 @@ class _NoiseLaunchState extends ConsumerState<_NoiseLaunch> {
     try {
       await ref
           .read(measurementRepositoryProvider)
-          .savePeriod(_period, entries, today: _today);
+          .savePeriod(_period, entries, today: ref.read(todayProvider));
       messenger.showSnackBar(SnackBar(content: Text('$title salva')));
     } on FuturePeriodException {
       messenger.showSnackBar(
@@ -290,7 +289,9 @@ class _NoiseLaunchState extends ConsumerState<_NoiseLaunch> {
         ? _rows(pointList, saved)
         : const <MeasurementParameter>[];
     final dirty = ready && _isDirty(rows, saved);
-    final isCurrent = _period == _current;
+    final today = ref.watch(todayProvider);
+    final isCurrent =
+        _period.compareTo(MeasurementPeriod.containing(_weekly, today)) >= 0;
 
     return PopScope(
       canPop: !dirty,

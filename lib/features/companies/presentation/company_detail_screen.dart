@@ -12,7 +12,7 @@ import '../../../app/widgets/info_row.dart';
 import '../../../app/widgets/nav_row.dart';
 import '../../../app/widgets/section_card.dart';
 import '../../../app/widgets/status_text.dart';
-import '../../../core/providers.dart';
+import '../../../core/today.dart';
 import '../../../core/utils/br_documents.dart';
 import '../../deadlines/domain/deadline.dart';
 import '../../deadlines/presentation/deadline_labels.dart';
@@ -67,7 +67,7 @@ class _Detail extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final today = ref.read(clockProvider)().toLocal();
+    final today = ref.watch(todayProvider);
     final cnpj = company.cnpj;
     final subtitle = [
       if (cnpj != null) 'CNPJ ${formatCnpj(cnpj)}',

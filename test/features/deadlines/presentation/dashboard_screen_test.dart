@@ -312,4 +312,36 @@ void main() {
     ]);
     expectCounts(tester, 1, 1, 1);
   });
+
+  testWidgets('vira o dia ao voltar o app para a frente e à meia-noite', (
+    tester,
+  ) async {
+    await seed(alfa, 'Licença de Operação', DateTime(2026, 9, 26));
+    var now = testNow;
+    await pumpApp(
+      tester,
+      repository: companies,
+      deadlineRepository: deadlines,
+      clock: () => now,
+    );
+    String status() {
+      final c = tester.widget<DeadlineCard>(card('Licença de Operação'));
+      return '${c.statusLead} ${c.statusText}';
+    }
+
+    expect(status(), 'Venceu há 3 dias');
+
+    // App em segundo plano desde a véspera.
+    now = testNow.add(const Duration(days: 1));
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(status(), 'Venceu há 4 dias');
+
+    // App aberto na virada: o timer da meia-noite dispara.
+    now = testNow.add(const Duration(days: 2));
+    await tester.pump(const Duration(days: 1));
+    await tester.pumpAndSettle();
+    expect(status(), 'Venceu há 5 dias');
+  });
 }

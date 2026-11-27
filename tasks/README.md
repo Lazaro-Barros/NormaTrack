@@ -20,6 +20,7 @@ Status: `rascunho` · `planejada` · `em andamento` · `concluída` · `bloquead
 | 012 | [Backup e restauração manual do banco](012-backup-restauracao/) | RNF-04 | 1 | concluída |
 | 013 | [Medições: domínio e dados](013-medicoes-dominio-e-dados/) | RF-AMB-02/07, RNF-04 | 2 | concluída |
 | 014 | [Ruídos: pontos de medição e lançamento semanal](014-ruidos-pontos-e-lancamento/) | RF-AMB-02 | 2 | concluída |
+| 015 | [Painel: lançamentos pendentes](015-painel-lancamentos-pendentes/) | RF-AMB-02, RF-PRZ-05 | 2 | em andamento |
 
 ## Fase 2 — quebra em tasks (2026-11-26)
 

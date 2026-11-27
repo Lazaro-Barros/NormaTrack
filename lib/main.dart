@@ -10,6 +10,7 @@ import 'app/router.dart';
 import 'app/theme/app_theme.dart';
 import 'core/notifications/local_notification_scheduler.dart';
 import 'core/notifications/notification_providers.dart';
+import 'core/today.dart';
 import 'features/deadlines/data/local_deadline_repository.dart';
 
 Future<void> main() async {
@@ -32,10 +33,16 @@ class NormaTrackApp extends ConsumerStatefulWidget {
 
 class _NormaTrackAppState extends ConsumerState<NormaTrackApp> {
   StreamSubscription<String>? _taps;
+  late final AppLifecycleListener _lifecycle;
 
   @override
   void initState() {
     super.initState();
+    // A data de hoje vira ao voltar o app para a frente (o timer da
+    // meia-noite pode atrasar com o app em segundo plano).
+    _lifecycle = AppLifecycleListener(
+      onResume: () => ref.read(todayProvider.notifier).refresh(),
+    );
     final scheduler = ref.read(notificationSchedulerProvider);
     _taps = scheduler.taps.listen(_open);
     WidgetsBinding.instance.addPostFrameCallback((_) => _afterFirstFrame());
@@ -44,6 +51,7 @@ class _NormaTrackAppState extends ConsumerState<NormaTrackApp> {
   @override
   void dispose() {
     _taps?.cancel();
+    _lifecycle.dispose();
     super.dispose();
   }
 

@@ -18,7 +18,7 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - `docs/06-perguntas-em-aberto.md`: C13 e C21 com a suposição adotada; C22 nova.
 - Conferido no código: o repositório real já cobre todas as transições; o `FakeDeadlineRepository` não (histórico, validações, exclusão que reabre o anterior), então o passo 1 do plano o corrige.
 
-**Decidido** (respostas da usuária)
+**Decidido** (respostas do usuário)
 - C21 e C13: assumir o mais simples. Sem data de emissão do ciclo, sem anexos, sem "Nº do documento" (tirado do wireframe e do escopo).
 - Encerrados: segmentado "Em aberto | Encerrados" na tela do módulo (concluídos e cancelados; renovados só no histórico). Alternativas descartadas: seção no fim da lista e deixar para depois.
 - Renovação: sheet com data sugerida (mesmo intervalo em meses do ciclo anterior; sem anterior, +1 ano), editável, sem aceitar data até o vencimento atual. Alternativa descartada: seletor direto.

@@ -8,11 +8,11 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Criada junto com as tasks 007 a 010, na divisão das telas de prazo depois da task 006 (domínio e dados): 007 módulo e cadastro, 008 detalhe e renovação, 009 painel, 010 notificações.
 
 **Pendente / dúvidas**
-- Rascunho. Refinar com a usuária antes do plano.
+- Rascunho. Refinar com o usuário antes do plano.
 
-## 2026-09-30 — Refinamento com a usuária
+## 2026-09-30 — Refinamento com o usuário
 
-**Decidido** (respostas da usuária)
+**Decidido** (respostas do usuário)
 - **Lembretes:** lista livre no formulário (cada lembrete removível, "Adicionar lembrete"), em vez do contador único do wireframe. Adicionar abre um bottom sheet com campo de dias e atalhos, no padrão do sheet de órgão.
 - **Tela do módulo:** só prazos, sem abas; Lançamentos e Relatórios entram quando existirem.
 - **Agrupamento:** por categoria (Licenças, Laudos, Manutenções). O "ETE e ETA" do wireframe depende de estações (Fase 2).
@@ -36,12 +36,12 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Os atalhos do sheet escondem os valores que já estão na lista; valor repetido digitado à mão não é adicionado de novo (a normalização do domínio já remove repetidos).
 
 **Pendente / dúvidas**
-- Aprovação da usuária. Aprovado: copiar para `docs/design/wireframes/` (`PrazoForm` e um novo `PrazoLembrete`) e escrever o plano.
+- Aprovação do usuário. Aprovado: copiar para `docs/design/wireframes/` (`PrazoForm` e um novo `PrazoLembrete`) e escrever o plano.
 
 ## 2026-09-30 — Protótipo aprovado e plano escrito
 
 **Feito**
-- Usuária aprovou o protótipo. `docs/design/wireframes/PrazoForm.dc.html` substituído e `PrazoLembrete.dc.html` criado.
+- Usuário aprovou o protótipo. `docs/design/wireframes/PrazoForm.dc.html` substituído e `PrazoLembrete.dc.html` criado.
 - `plan.md` escrito, conferido contra o código de empresas (formulário, sheet de órgão, detalhe, lista), o tema e os helpers de teste. Datas de exemplo calculadas por script a partir de `testNow` (29/09/2026). Critérios de aceite no README. Status → `planejada`.
 
 **Decidido**
@@ -53,7 +53,7 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - `pumpApp` passa a sobrescrever `deadlineRepositoryProvider` com um fake por padrão (senão os testes de widget tentariam abrir o banco real).
 
 **Pendente / dúvidas**
-- Revisão do plano pela usuária antes de implementar.
+- Revisão do plano pelo usuário antes de implementar.
 
 ## 2026-09-30 — Implementação, passos 1 a 6 (código escrito, testes de tela pendentes)
 

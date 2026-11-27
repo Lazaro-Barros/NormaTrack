@@ -277,7 +277,7 @@ Componentes novos em `lib/app/widgets/`:
   1. **Antes de tudo**, salvar uma cópia dos dados atuais no Mac: `adb exec-out run-as br.com.normatrack.app cat app_flutter/normatrack.sqlite > <scratchpad>/emulador-antes.sqlite` (e `-wal` se existir) e conferir que abre e tem a empresa "Alfa To To To To".
   2. Ajustes mostra o aviso; "Fazer backup" abre a folha; salvar em Arquivos/Drive (ou outro destino disponível); o subtítulo vira "Último backup em …".
   3. Preparar um backup diferente no Mac (cópia do arquivo do passo 1 com uma empresa "Restaurada Teste" inserida pelo `sqlite3`), `adb push` para `/sdcard/Download/`, restaurar pelo app: confirmação com as contagens, Painel e Empresas mostram a empresa nova sem reiniciar; `adb shell dumpsys alarm` mostra os agendamentos refeitos.
-  4. "Desfazer" (ou restaurar o backup do passo 2) volta aos dados da usuária; conferir "Alfa To To To To" e os prazos.
+  4. "Desfazer" (ou restaurar o backup do passo 2) volta aos dados de teste do emulador; conferir "Alfa To To To To" e os prazos.
   5. Arquivo qualquer (ex.: um `.txt`) e um backup com `user_version` 3 → mensagens de recusa, dados intactos.
 - Se algo der errado no emulador, voltar com o arquivo do passo 1 (`adb push` + `run-as cp` com o app parado).
 

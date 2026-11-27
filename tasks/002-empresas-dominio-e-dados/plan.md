@@ -357,6 +357,6 @@ A pasta `test/` espelha `lib/`. Relógio fixo (`() => DateTime.utc(2026, 1, 1)`,
 - **Validade no cadastro × prazo (C16):** a validade do registro também é, na prática, um prazo com alerta. Por ora ela só fica guardada no registro. Quando `Deadline` existir, avaliar se uma licença é criada a partir do registro ou se passa a referenciá-lo (`authorityRegistrationId`).
 - **`Deadline.authority`** passa a reusar `Authority` (D007). Não mexa em prazos nesta task.
 - **Suposições** (também em `docs/06-perguntas-em-aberto.md`, C18): telefone com 10 ou 11 dígitos; um telefone e um e-mail por empresa; nenhum módulo por padrão; registro vale até o dia da validade, inclusive; um registro por órgão, com observação livre (C17).
-- *Descartado:* tabela de órgãos editável pela usuária, porque telas condicionais e relatórios dependeriam de dados em vez de código (decisão da usuária, 2026-09-24).
+- *Descartado:* tabela de órgãos editável pelo usuário, porque telas condicionais e relatórios dependeriam de dados em vez de código (decisão do usuário, 2026-09-24).
 - *Descartado:* JSON com os dados de endereço/órgãos em uma coluna. Não permite filtrar por órgão nem validar no banco.
 - *Descartado:* `textEnum` do drift, porque grava o `name` do enum e renomear viraria migração.

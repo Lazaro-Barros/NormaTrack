@@ -22,13 +22,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Detalhe mostra só os órgãos que se aplicam, com link "Ver todos os 9 órgãos".
 
 **Pendente / dúvidas**
-- Aprovação da usuária para os wireframes v0.2 (critério de aceite desta task).
+- Aprovação do usuário para os wireframes v0.2 (critério de aceite desta task).
 - Componentes novos da v0.2 que esta task vai precisar: `NavRow`, `SwitchRow`, `AppTextField`, `EmptyState` e a faixa de cabeçalho com bloco extra (busca na lista, resumo no detalhe).
 
 ## 2026-09-29 — Wireframes v0.2 aprovados
 
 **Decidido**
-- Usuária aprovou os wireframes v0.2 de `Empresas`, `EmpresaForm`, `EmpresaOrgao` e `EmpresaDetalhe`. Critério de aceite do wireframe do formulário atendido.
+- Usuário aprovou os wireframes v0.2 de `Empresas`, `EmpresaForm`, `EmpresaOrgao` e `EmpresaDetalhe`. Critério de aceite do wireframe do formulário atendido.
 
 ## 2026-09-29 — Plano técnico escrito
 
@@ -38,7 +38,7 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Dígitos verificadores dos CNPJs/CPFs de teste calculados por script.
 
 **Decidido**
-- Usuária: omitir por ora tudo que depende de prazos (situação na lista, pílulas no detalhe, pendências por módulo) e o que depende de telas inexistentes ("Gerar relatório", abrir módulo). Ficam como TODO.
+- Usuário: omitir por ora tudo que depende de prazos (situação na lista, pílulas no detalhe, pendências por módulo) e o que depende de telas inexistentes ("Gerar relatório", abrir módulo). Ficam como TODO.
 - `go_router` fixado em `^17.5.0`: a 18.x migrou para `material_ui`, separado do `package:flutter/material.dart` do app. Vira D010 no fechamento.
 - Situação do registro em órgão calculada no domínio (`AuthorityRegistration.situationOn` → `RegistrationSituation`) e mostrada igual no formulário e no detalhe com `StatusText` (texto colorido + ícone), em vez da pílula do wireframe do formulário.
 - No bottom sheet, "Precisa obter" descarta nº e validade (critério de aceite), embora o domínio aceite.
@@ -139,7 +139,7 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Critérios de aceite e onde estão cobertos: criar só com razão social e editar (`company_form_screen_test`); erros de CNPJ/CPF/e-mail/CEP e CNPJ duplicado (idem); módulos no detalhe (`company_form_screen_test` grava o módulo, `company_detail_screen_test` mostra só os habilitados); nº/validade só com "Possui" e validade vencida com ícone + texto (`registration_sheet_test`, `company_detail_screen_test`); arquivar com confirmação e Arquivadas (`company_detail_screen_test`).
 
 **Pendente / dúvidas**
-- **Não verificado no emulador**: não havia dispositivo Android conectado nesta sessão, então o `flutter run` do "Como verificar" (criar, editar, órgão com validade vencida, arquivar/desfazer) fica para a usuária. Pontos a olhar: menu da UF estreito (`CE · Ceará` pode aparecer cortado, passo 4), teclado sobre o bottom sheet, cursor no fim ao editar no meio de CNPJ/telefone (limitação aceita no plano).
+- **Não verificado no emulador**: não havia dispositivo Android conectado nesta sessão, então o `flutter run` do "Como verificar" (criar, editar, órgão com validade vencida, arquivar/desfazer) fica para o usuário. Pontos a olhar: menu da UF estreito (`CE · Ceará` pode aparecer cortado, passo 4), teclado sobre o bottom sheet, cursor no fim ao editar no meio de CNPJ/telefone (limitação aceita no plano).
 - "Editar todos os campos": todos os campos são editáveis no formulário, mas o teste de edição altera só o nome fantasia (e confere que CNPJ e telefone chegam formatados).
 - Seguem os TODOs de prazos e relatórios: `TODO(RF-PRZ-05)` (lista, faixa do detalhe, Painel), `TODO(RF-REL-01)` (gerar relatório), `TODO(RF-EMP-03)` (tela do módulo), `TODO(RF-PRZ-03)` (Ajustes). C15–C19 abertas.
 

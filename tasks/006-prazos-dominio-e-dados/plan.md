@@ -90,7 +90,7 @@ test/core/database/migration_test.dart     # gerado + teste de dados
 | `labReport` | `lab_report` | Laudo | `[30, 10, 3, 0]` |
 | `maintenance` | `maintenance` | Manutenção | `[30, 10, 3, 0]` |
 
-Padrões decididos pela usuária em 2026-09-30 (journal); falta a cliente confirmar (C3). Marque com `// TODO(RF-PRZ-02): padrões por categoria a confirmar com a cliente (C3).`
+Padrões decididos pelo usuário em 2026-09-30 (journal); falta a cliente confirmar (C3). Marque com `// TODO(RF-PRZ-02): padrões por categoria a confirmar com a cliente (C3).`
 
 **`DeadlineStatus`** (estado gravado):
 
@@ -160,7 +160,7 @@ Aritmética de datas (evita erro de horário de verão):
 1. `renewed` → `renewed`; `completed` → `completed`; `cancelled` → `cancelled`.
 2. `active`: `d = daysUntilDue(today)`. `d < 0` → `overdue`; `d <= alertDaysBefore` → `dueSoon`; senão `current`.
 
-No dia do vencimento (`d == 0`) o prazo está **a vencer**; vencido a partir do dia seguinte (decisão da usuária, 2026-09-30). Com lembretes `[0]`, o prazo só fica "a vencer" no próprio dia.
+No dia do vencimento (`d == 0`) o prazo está **a vencer**; vencido a partir do dia seguinte (decisão do usuário, 2026-09-30). Com lembretes `[0]`, o prazo só fica "a vencer" no próprio dia.
 
 ### `DeadlineInput`
 
@@ -197,7 +197,7 @@ Sobre o input já normalizado. `DeadlineField { title, dueDate, reminderDays }`,
 | `reminderDays` | lista vazia | `required` |
 | `reminderDays` | algum valor `< 0` | `invalid` |
 
-Órgão é opcional em qualquer categoria (decisão da usuária). Não há limite superior de lembretes nem restrição de data no passado (um prazo já vencido pode ser cadastrado). `notAfterPrevious` só é usado em `renew` (ver abaixo).
+Órgão é opcional em qualquer categoria (decisão do usuário). Não há limite superior de lembretes nem restrição de data no passado (um prazo já vencido pode ser cadastrado). `notAfterPrevious` só é usado em `renew` (ver abaixo).
 
 **[suposição]** Qualquer categoria em qualquer módulo (ex.: laudo em Produtos controlados). `// TODO(RF-PRZ-01): categorias permitidas por módulo (C20).`
 
@@ -424,7 +424,7 @@ grep -rE "package:(flutter|drift)" lib/features/deadlines/domain   # deve sair v
 - **Nº do documento** (wireframe `PrazoDetalhe`) continua fora do modelo, esperando C5/C13. Acrescentar depois é uma coluna nullable numa migração nova.
 - **Agrupamento "ETE e ETA"** no wireframe `ModuloAmbiental` (e "Manutenção · ETE") depende de `TreatmentStation`, da Fase 2. Por ora a UI pode agrupar por categoria.
 - **Situação calculada no Dart:** `watchUpcoming` devolve todos os prazos em aberto e a UI calcula a situação com a data de hoje. Com o volume esperado (dezenas a centenas de prazos) isso não pesa; se crescer, filtrar por `due_date` no SQL.
-- *Descartado:* lembretes numa coluna de texto (`"150,30,10,3,0"`). A usuária escolheu tabela filha (2026-09-30).
+- *Descartado:* lembretes numa coluna de texto (`"150,30,10,3,0"`). O usuário escolheu tabela filha (2026-09-30).
 - *Descartado:* `alertDaysBefore` separado dos lembretes. Seriam duas fontes para a mesma janela.
 - *Descartado:* gravar a situação. Viola a regra do `CLAUDE.md` (valores derivados são calculados).
 - *Descartado:* renovar editando o próprio prazo. Perde o histórico exigido por RF-PRZ-04.

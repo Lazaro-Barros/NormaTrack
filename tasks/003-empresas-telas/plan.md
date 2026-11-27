@@ -6,7 +6,7 @@
 
 Três telas de empresa (lista, formulário, detalhe) e o bottom sheet de registro em órgão, sobre o `CompanyRepository` da task 002, que não muda. Antes das telas vêm a navegação (`go_router` com barra inferior), a localização pt-BR e os componentes genéricos de `lib/app/widgets/` que o design system lista e ainda não existem. As telas leem dados por dois `StreamProvider`s (lista e empresa) e escrevem chamando o repositório direto. O estado do formulário é local da tela (`ConsumerStatefulWidget` com `TextEditingController`s), porque só existe enquanto ela está aberta.
 
-**O que depende de prazos fica fora** (decisão da usuária, 2026-09-29): a situação na lista ("1 vencido", "Em dia"), as pílulas de resumo no cabeçalho do detalhe, o resumo de pendências por módulo, o botão "Gerar relatório" e a navegação para a tela do módulo. Cada lugar leva um `// TODO(RF-PRZ-05):` ou `// TODO(RF-REL-01):` / `// TODO(RF-EMP-03):`.
+**O que depende de prazos fica fora** (decisão do usuário, 2026-09-29): a situação na lista ("1 vencido", "Em dia"), as pílulas de resumo no cabeçalho do detalhe, o resumo de pendências por módulo, o botão "Gerar relatório" e a navegação para a tela do módulo. Cada lugar leva um `// TODO(RF-PRZ-05):` ou `// TODO(RF-REL-01):` / `// TODO(RF-EMP-03):`.
 
 ## Contexto do repositório (em 2026-09-29)
 
@@ -40,7 +40,7 @@ Branch: `task/003-empresas-telas`. Um commit por passo, no formato `feat(<escopo
 6. **Lista** (`feat(empresas)`, RF-EMP-01): providers, `CompanyListScreen`, helpers de apresentação, `FakeCompanyRepository`, testes.
 7. **Formulário e bottom sheet** (`feat(empresas)`, RF-EMP-04/02/05): `CompanyFormScreen`, `RegistrationSheet`, testes.
 8. **Detalhe** (`feat(empresas)`, RF-EMP-03/05/01): `CompanyDetailScreen`, arquivar/desarquivar, testes.
-9. **Docs e fechamento** (`docs(empresas)`): atualizar `docs/07-design-system.md` ([Docs](#docs-a-atualizar-no-mesmo-pr)), `docs/05-roadmap.md`, critérios no `README.md`, entrada final no journal, status `concluída` aqui e em `tasks/README.md`. `dart format .`, `flutter analyze` e `flutter test` sem erros. Não faça push nem abra PR sem a usuária pedir; quando pedir, o PR vai para `main` com `[task 003, RF-EMP-01..05]` no título.
+9. **Docs e fechamento** (`docs(empresas)`): atualizar `docs/07-design-system.md` ([Docs](#docs-a-atualizar-no-mesmo-pr)), `docs/05-roadmap.md`, critérios no `README.md`, entrada final no journal, status `concluída` aqui e em `tasks/README.md`. `dart format .`, `flutter analyze` e `flutter test` sem erros. Não faça push nem abra PR sem o usuário pedir; quando pedir, o PR vai para `main` com `[task 003, RF-EMP-01..05]` no título.
 
 ## Setup
 

@@ -9,11 +9,11 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Branch `task/006-prazos-dominio-e-dados`.
 
 **Pendente / dúvidas (na criação)**
-- Refinar com a usuária antes do plano: antecedência padrão de laudo e manutenção (C3), conclusão de manutenção (RF-AMB-06), prazos sem órgão e o que conta como "vencido" no dia do vencimento.
+- Refinar com o usuário antes do plano: antecedência padrão de laudo e manutenção (C3), conclusão de manutenção (RF-AMB-06), prazos sem órgão e o que conta como "vencido" no dia do vencimento.
 
-## 2026-09-30 — Refinamento com a usuária
+## 2026-09-30 — Refinamento com o usuário
 
-**Decidido** (respostas da usuária)
+**Decidido** (respostas do usuário)
 - **Antecedência (C3):** laudo e manutenção usam 30 dias; licença continua com 150. O modelo deve aceitar vários lembretes personalizáveis por prazo, com avisos menores depois do primeiro: 30, 10 e 3 dias e o próprio dia. Padrões: licença `150, 30, 10, 3, 0`; laudo e manutenção `30, 10, 3, 0`. O maior valor abre a janela "a vencer". As notificações em si continuam fora do escopo (RF-PRZ-03).
 - **Manutenção (RF-AMB-06):** novo estado persistido `completed`, com data de conclusão. O prazo concluído sai dos próximos vencimentos. Manutenção periódica usa renovar.
 - **Dia do vencimento:** o prazo vale até o dia do vencimento, inclusive; nesse dia está "a vencer" e fica "vencido" a partir do dia seguinte (mesma regra da validade do registro no órgão, C18).
@@ -31,7 +31,7 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Suposições novas registradas em `docs/06-perguntas-em-aberto.md` (C20, C21). Status → `planejada`.
 
 **Decidido**
-- **Lembretes em tabela filha** `deadline_reminders` (escolha da usuária), com `(deadline_id, days_before)` único e reaproveitamento de linha excluída, como os registros em órgão. Vira D011 no fechamento.
+- **Lembretes em tabela filha** `deadline_reminders` (escolha do usuário), com `(deadline_id, days_before)` único e reaproveitamento de linha excluída, como os registros em órgão. Vira D011 no fechamento.
 - Sem `alertDaysBefore` gravado: a antecedência é o maior lembrete.
 - Ações de estado explícitas no repositório: `renew`, `complete` (só laudo e manutenção), `cancel`, `reopen` (desfazer concluir/cancelar). `update` não muda estado.
 - `watchUpcoming` devolve `Deadline` sem dados da empresa; o painel cruza com `CompanyRepository`.
@@ -39,7 +39,7 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - Suposições marcadas no plano: qualquer categoria em qualquer módulo; renovação com data posterior; excluir ciclo atual reabre o anterior; módulo desabilitado tira os prazos do painel (C20).
 
 **Pendente / dúvidas**
-- Revisão do plano pela usuária antes de implementar.
+- Revisão do plano pelo usuário antes de implementar.
 
 ## 2026-09-30 — Passos 1 a 3: domínio, tabelas e migração v2
 

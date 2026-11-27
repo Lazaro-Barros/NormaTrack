@@ -10,7 +10,7 @@
 
 ## Objetivo
 
-Os dados vivem só no aparelho. Com esta task, a usuária gera em Ajustes um arquivo com todos os dados e o envia para onde quiser (Drive, WhatsApp, e-mail), e consegue restaurar esse arquivo no mesmo aparelho ou em outro. O app avisa enquanto nenhum backup foi feito.
+Os dados vivem só no aparelho. Com esta task, o usuário gera em Ajustes um arquivo com todos os dados e o envia para onde quiser (Drive, WhatsApp, e-mail), e consegue restaurar esse arquivo no mesmo aparelho ou em outro. O app avisa enquanto nenhum backup foi feito.
 
 > **Ponto de partida para quem for implementar:** [plan.md](plan.md).
 
@@ -48,7 +48,7 @@ Respostas do usuário, todas na opção recomendada (journal, C25):
 - [x] Confirmar substitui os dados; Painel, Empresas, detalhes e notificações passam a refletir o backup sem reiniciar o app; "Desfazer" volta aos dados de antes.
 - [x] Backup de schema mais antigo é migrado; mais novo, de outro app ou corrompido é recusado com mensagem clara e os dados atuais ficam intactos (também se a abertura do banco restaurado falhar; este último coberto por teste, não no emulador).
 - [x] Testes do plano passam (serviço de backup com arquivos reais, providers reabrindo o banco, Ajustes, componentes novos).
-- [x] `dart format .`, `flutter analyze`, `flutter test` e `flutter build apk --debug` sem erros; conferido no emulador sem perder os dados da usuária.
+- [x] `dart format .`, `flutter analyze`, `flutter test` e `flutter build apk --debug` sem erros; conferido no emulador sem perder os dados de teste do emulador.
 - [x] `docs/02`, `docs/04`, `docs/05`, `docs/06`, `docs/07`, `docs/decisoes.md` e o wireframe de Ajustes atualizados.
 
 ## Links

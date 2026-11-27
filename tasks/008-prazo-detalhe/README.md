@@ -10,7 +10,7 @@
 
 ## Objetivo
 
-A usuária abre um prazo, vê a situação em destaque, os dados e o histórico de ciclos, e registra a renovação, a conclusão (laudo e manutenção), o cancelamento ou a exclusão. Também chega aos prazos encerrados (concluídos e cancelados) para reabri-los.
+O usuário abre um prazo, vê a situação em destaque, os dados e o histórico de ciclos, e registra a renovação, a conclusão (laudo e manutenção), o cancelamento ou a exclusão. Também chega aos prazos encerrados (concluídos e cancelados) para reabri-los.
 
 ## Escopo
 

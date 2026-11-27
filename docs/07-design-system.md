@@ -94,7 +94,7 @@ Títulos e números grandes em **Manrope** e o restante em **IBM Plex Sans**, em
 
 Títulos de seção em frase normal, nunca em caixa alta (o sobretítulo da v0.1 saiu). Datas, quantidades e CNPJ usam algarismos tabulares (`FontFeature.tabularFigures()`). Datas sempre em `dd/MM/yyyy`.
 
-**Fonte do sistema grande.** Componente de tamanho fixo não pode estourar quando a usuária aumenta a fonte no Android. Regra (task 009 no `StatTile`, task 011 no `DateBlock` e no `StatusBanner`): limitar a escala dentro do componente (`MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.5)`) e calcular o tamanho linha a linha com `AppTypography.lineHeight(style, scaler)`, que escala o `fontSize` (no Android 14+ a escala não é linear) e arredonda para cima, como o `TextPainter`. Quem vai num `AppBar.bottom` expõe `heightOf(context)`. Componentes de altura só mínima (cards, linhas) não precisam disso.
+**Fonte do sistema grande.** Componente de tamanho fixo não pode estourar quando o usuário aumenta a fonte no Android. Regra (task 009 no `StatTile`, task 011 no `DateBlock` e no `StatusBanner`): limitar a escala dentro do componente (`MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.5)`) e calcular o tamanho linha a linha com `AppTypography.lineHeight(style, scaler)`, que escala o `fontSize` (no Android 14+ a escala não é linear) e arredonda para cima, como o `TextPainter`. Quem vai num `AppBar.bottom` expõe `heightOf(context)`. Componentes de altura só mínima (cards, linhas) não precisam disso.
 
 ### Espaço, raios e elevação
 

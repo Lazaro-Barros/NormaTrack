@@ -7,7 +7,7 @@ description: Fluxo de tasks do NormaTrack. Use sempre que for criar, quebrar, re
 
 Todo trabalho de implementação vive em `tasks/NNN-slug/`. A pasta da task guarda o escopo, o plano técnico, os protótipos e o diário (journal) do que foi feito e decidido. Um agente que abre a pasta deve conseguir retomar o trabalho sem o histórico da conversa.
 
-**Regra de ouro: a pasta da task é autocontida.** Um agente novo e independente, com acesso só à pasta, ao `CLAUDE.md`, aos `docs/` citados e ao código, deve conseguir implementar a task sem perguntar nada e sem adivinhar. Tudo que foi decidido em conversa (respostas da usuária, suposições, escolhas técnicas) vai para o `README.md`, o `plan.md` ou o `journal.md`. O que ficou só no chat está perdido.
+**Regra de ouro: a pasta da task é autocontida.** Um agente novo e independente, com acesso só à pasta, ao `CLAUDE.md`, aos `docs/` citados e ao código, deve conseguir implementar a task sem perguntar nada e sem adivinhar. Tudo que foi decidido em conversa (respostas do usuário, suposições, escolhas técnicas) vai para o `README.md`, o `plan.md` ou o `journal.md`. O que ficou só no chat está perdido.
 
 ## Estrutura
 

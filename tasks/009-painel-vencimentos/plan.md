@@ -197,6 +197,6 @@ Meta: 286 testes atuais verdes + os novos (≈ 20).
 
 - **[suposição]** Linha de contexto do card = empresa, sem categoria/órgão (como o wireframe). Em C23.
 - **[suposição]** Voltar do detalhe leva ao Painel (`push`); excluir volta ao Painel; renovar a partir do Painel deixa o usuário no detalhe do novo ciclo dentro da aba Empresas. Em C23.
-- **[suposição]** Sem limite na lista (resposta da usuária); com centenas de prazos, a `ListView` já é preguiçosa. Reavaliar paginação/"Ver todos" se a cliente reclamar.
+- **[suposição]** Sem limite na lista (resposta do usuário); com centenas de prazos, a `ListView` já é preguiçosa. Reavaliar paginação/"Ver todos" se a cliente reclamar.
 - Tile de altura fixa: fonte grande pode cortar. Mesmo risco dos banners da 008.
 - *Descartado:* filtro persistente entre sessões; limite de 10 itens com "Ver todos"; esconder "Vigentes" da lista; tiles apenas informativos (contradiz docs/07 "tocar filtra").

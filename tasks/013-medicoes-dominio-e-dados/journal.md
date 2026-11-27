@@ -13,7 +13,7 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - C6, ruídos: quantos pontos a empresa quiser (sugestão de 4 na primeira vez, task 014), unidade dB(A), limite máximo opcional por ponto, com aviso "Acima do limite".
 - C26 (nova), lançamentos periódicos: período corrente "A lançar" e anteriores sem valor "Atrasado", a partir do período de início do parâmetro; parcial continua pendente; pode salvar parcial; passado e atual editáveis, futuro não; semana ISO de segunda a domingo (como o wireframe: semana 39 = 21 a 27/09/2026).
 - "Sem medição no período" com justificativa: **sim** (o usuário escolheu essa opção em vez da recomendação "não por ora"). Na base: medição com `value` nulo e `note` obrigatória.
-- C7, resíduos perigosos: tipos cadastrados pela usuária, gerado e armazenado em kg, mensal (task 016).
+- C7, resíduos perigosos: tipos cadastrados pelo usuário, gerado e armazenado em kg, mensal (task 016).
 - C7 (sólidos) e C8 (ETE/ETA): o usuário pediu perguntas mais simples para levar à cliente, com a explicação das classes e de ETE/ETA. Escritas em `docs/06-perguntas-em-aberto.md` ("Perguntas para levar à cliente"). Não bloqueiam esta task: a base aceita qualquer lista de parâmetros com unidade, frequência e faixa.
 - Técnico (agente): resíduos ficam fora da estrutura genérica (tabela própria na 016); uma ETE e uma ETA por empresa como contextos, sem tabela de estação; sem frequência diária até C8.
 
@@ -107,3 +107,9 @@ grep -rE "package:(flutter|drift)" lib/features/measurements/domain   # vazio
 **Pendente / dúvidas**
 - Suposições a confirmar com a cliente, com `// TODO(RF-AMB-…)` no código: quinzena 1–15/16–fim (C8); arquivar um parâmetro tira inclusive as pendências passadas (C26); C6 e C26 respondidas pelo usuário, falta a cliente.
 - Próximas: 014 (Ruídos: pontos e lançamento), depois 015 (Painel com pendências). A 017 acrescenta a tabela de estações e agrupa as pendências também por estação.
+
+## 2026-11-27 — Correção de termos
+
+**Feito**
+- A pedido do usuário: a pessoa que usa o app é sempre "o usuário" (nunca "a usuária"). Termo corrigido em todos os docs, tasks, na skill de tasks e no nome de um teste (26 arquivos). "A cliente" (quem pediu o app, nos vídeos) continua como está.
+- Os dados do emulador (empresas como "Alfa To To To To") são **de teste**: nada foi publicado e não há dados reais. Textos das tasks 012 e 013 que falavam em "dados do usuário" passam a dizer "dados de teste do emulador". O cuidado com eles (não apagar, `adb install -r`, cópia antes de migrar) continua valendo, porque são a base das verificações.

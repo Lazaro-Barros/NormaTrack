@@ -52,7 +52,7 @@ O `applicationId` é `br.com.normatrack.app`. Por enquanto o app não será publ
 `Authority` (os 9 órgãos) e `ModuleType` são enums fixos no domínio. Cada valor tem um `code` estável em texto (`federal_police`, `controlled_products`…), que é o que vai para o banco e para a futura API, e um rótulo pt-BR. `Deadline.authority` reutiliza o mesmo `Authority`.
 
 - *Por quê:* telas condicionais, relatórios por órgão e regras de módulo precisam de valores conhecidos em tempo de compilação. Guardar `code`, e não `name`/`index`, permite renomear o enum sem migração.
-- *Descartado:* tabela de órgãos editável pela usuária, porque o comportamento passaria a depender de dados. Novo órgão = nova versão do app.
+- *Descartado:* tabela de órgãos editável pelo usuário, porque o comportamento passaria a depender de dados. Novo órgão = nova versão do app.
 
 ## D008 — Convenções de tabela drift
 
@@ -88,7 +88,7 @@ Rotas com `go_router` fixado em `^17.5.0` (`lib/app/router.dart`). Um `StatefulS
 
 Os lembretes de cada prazo ficam em `deadline_reminders` (uma linha por dia de aviso, `(deadline_id, days_before)` único), e não num campo `alertDaysBefore`. O maior valor abre a janela "a vencer"; os demais alimentam as notificações (RF-PRZ-03). Editar a lista reaproveita a linha do mesmo valor, mesmo excluída, como os registros em órgão.
 
-- *Por quê:* a usuária quer vários avisos personalizáveis por prazo (ex.: 150, 30, 10, 3 dias e no dia), e a tabela segue a convenção de linhas com `id` e exclusão lógica (D008), boa para sincronização.
+- *Por quê:* o usuário quer vários avisos personalizáveis por prazo (ex.: 150, 30, 10, 3 dias e no dia), e a tabela segue a convenção de linhas com `id` e exclusão lógica (D008), boa para sincronização.
 - *Descartado:* a lista numa coluna de texto (`"150,30,10,3,0"`), que não segue a convenção nem permite consultar por dia; e `alertDaysBefore` separado dos lembretes, que seriam duas fontes para a mesma janela.
 
 ## D012 — Commits direto na main, sem PR

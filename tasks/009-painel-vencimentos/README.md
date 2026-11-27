@@ -31,7 +31,7 @@ O Painel deixa de ser placeholder: mostra a contagem por situação e os próxim
 
 ## Decisões (2026-11-16)
 
-- Lista sem limite; tiles Vencidos · A vencer · Vigentes com filtro que alterna (respostas da usuária).
+- Lista sem limite; tiles Vencidos · A vencer · Vigentes com filtro que alterna (respostas do usuário).
 - **[suposição]** Linha de contexto do card = nome da empresa (`displayName`), como no wireframe. Registrado em C23.
 - **[suposição]** Voltar do detalhe leva ao Painel (abre-se com `push`). Registrado em C23.
 

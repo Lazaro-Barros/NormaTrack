@@ -12,7 +12,7 @@
 
 ## Objetivo
 
-A usuária cadastra, edita, arquiva e consulta empresas no app, com dados cadastrais, módulos ativos e registros em órgãos. O detalhe da empresa mostra só os módulos habilitados.
+O usuário cadastra, edita, arquiva e consulta empresas no app, com dados cadastrais, módulos ativos e registros em órgãos. O detalhe da empresa mostra só os módulos habilitados.
 
 ## Escopo
 
@@ -29,12 +29,12 @@ A usuária cadastra, edita, arquiva e consulta empresas no app, com dados cadast
 
 - `ModuleCard` com resumo de pendências (depende de prazos). No detalhe, os módulos aparecem só como itens.
 - Painel e Ajustes funcionais.
-- Excluir empresa pela UI (só arquivar), a menos que a usuária peça.
-- Tudo que depende de prazos ou relatórios (decisão da usuária, 2026-09-29): situação por empresa na lista, pílulas de resumo no cabeçalho do detalhe, pendências por módulo, botão "Gerar relatório" e navegação para a tela do módulo. Ficam como `TODO(RF-PRZ-05)`, `TODO(RF-REL-01)` e `TODO(RF-EMP-03)`.
+- Excluir empresa pela UI (só arquivar), a menos que o usuário peça.
+- Tudo que depende de prazos ou relatórios (decisão do usuário, 2026-09-29): situação por empresa na lista, pílulas de resumo no cabeçalho do detalhe, pendências por módulo, botão "Gerar relatório" e navegação para a tela do módulo. Ficam como `TODO(RF-PRZ-05)`, `TODO(RF-REL-01)` e `TODO(RF-EMP-03)`.
 
 ## Critérios de aceite
 
-- [x] Wireframe do formulário atualizado e aprovado pela usuária antes da implementação (v0.2, 2026-09-29)
+- [x] Wireframe do formulário atualizado e aprovado pelo usuário antes da implementação (v0.2, 2026-09-29)
 - [x] Criar empresa só com a razão social, e editar todos os campos
 - [x] CNPJ/CPF/e-mail/CEP inválidos mostram erro no campo. CNPJ duplicado mostra erro claro
 - [x] Módulos ligados/desligados no formulário refletem no detalhe (só os habilitados aparecem)

@@ -89,7 +89,7 @@ void main() {
     expect(find.text('Alertas a partir de 03/05/2026'), findsOneWidget);
   });
 
-  testWidgets('trocar categoria repõe os lembretes até a usuária mexer', (
+  testWidgets('trocar categoria repõe os lembretes até o usuário mexer', (
     tester,
   ) async {
     await openNew(tester);

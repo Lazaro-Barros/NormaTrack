@@ -10,7 +10,7 @@
 
 ## Objetivo
 
-A usuária abre um módulo habilitado a partir do detalhe da empresa, vê os prazos em aberto daquele módulo agrupados por categoria e cadastra ou edita um prazo com categoria, título, órgão, vencimento e lembretes.
+O usuário abre um módulo habilitado a partir do detalhe da empresa, vê os prazos em aberto daquele módulo agrupados por categoria e cadastra ou edita um prazo com categoria, título, órgão, vencimento e lembretes.
 
 ## Escopo
 
@@ -22,7 +22,7 @@ A usuária abre um módulo habilitado a partir do detalhe da empresa, vê os pra
 - **Formulário de novo prazo e edição**: categoria, título, órgão (opcional), vencimento e **lista livre de lembretes**.
   - A lista vem com o padrão da categoria; cada lembrete pode ser removido; "Adicionar lembrete" abre um **bottom sheet** com campo de dias e atalhos (60, 30, 15, 7, 1, No dia).
   - Mostra a data calculada do primeiro alerta ("Alertas a partir de …").
-  - Trocar a categoria num prazo novo repõe os lembretes padrão, se a usuária ainda não mexeu neles.
+  - Trocar a categoria num prazo novo repõe os lembretes padrão, se o usuário ainda não mexeu neles.
 - **Componente `DeadlineCard`** em `lib/app/widgets/` (genérico, com teste): bloco de data na cor forte da situação, título, linha de contexto e texto relativo.
 - **`EmptyState` dentro de card** (resolve a pendência da task 005: o botão tonal some sobre o fundo tingido). Vale para todas as telas que usam o componente.
 - **Pendências no detalhe da empresa** (RF-EMP-03): a linha de cada módulo mostra a pior situação dos prazos em aberto com a contagem (ex.: "1 vencido") em `StatusText`; nada quando tudo está vigente.

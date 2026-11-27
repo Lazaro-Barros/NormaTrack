@@ -35,7 +35,7 @@ Criar a base genérica de **parâmetros e medições** ([domínio](../../docs/03
 - [x] Repositório cobre criar/editar/ordenar/arquivar/excluir parâmetro, salvar período (parcial, edição, apagar, justificativa, futuro recusado) e pendências, com testes de banco em memória.
 - [x] Excluir empresa exclui logicamente parâmetros e medições dela (teste).
 - [x] Backup: `_tablesByVersion` tem a v3; teste de backup v2 restaurado e migrado para v3 com os dados intactos; backup v3 com medições faz ida e volta.
-- [x] Conferido no emulador: banco da usuária migrado para v3 sem perda (tabelas antigas iguais linha a linha à cópia de antes) e backup v2 feito pelo app restaurável depois da atualização.
+- [x] Conferido no emulador: banco de teste migrado para v3 sem perda (tabelas antigas iguais linha a linha à cópia de antes) e backup v2 feito pelo app restaurável depois da atualização.
 - [x] Docs atualizados; `dart format .`, `flutter analyze` e `flutter test` sem erros.
 
 ## Links

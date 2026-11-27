@@ -5,12 +5,12 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 ## 2026-09-24 — Task criada
 
 **Feito**
-- Task criada a partir do pedido da usuária: cadastro de empresa com dados cadastrais, módulos ativos e órgãos (setores) em que a empresa tem ou precisa ter registro, estruturado para reuso em fluxos, relatórios e telas condicionais.
+- Task criada a partir do pedido do usuário: cadastro de empresa com dados cadastrais, módulos ativos e órgãos (setores) em que a empresa tem ou precisa ter registro, estruturado para reuso em fluxos, relatórios e telas condicionais.
 - Escopo dividido em duas tasks: esta (domínio + dados) e a [003](../003-empresas-telas/) (telas). Juntas passariam de uma tela grande e três tabelas, acima do limite de um PR revisável.
 - Plano técnico escrito (status `planejada`).
 - Requisitos RF-EMP-04 e RF-EMP-05 adicionados; domínio, perguntas em aberto, roadmap e decisões atualizados.
 
-**Decidido** (respostas da usuária)
+**Decidido** (respostas do usuário)
 - Por órgão: situação (possui registro / precisa obter) + nº do registro + validade. "Não se aplica" = sem registro.
 - Lista de órgãos fixa no código (enum com os 9). Incluir outro exige nova versão → [D007](../../docs/decisoes.md#d007--órgãos-e-módulos-como-enums-de-domínio).
 - Só a razão social é obrigatória. Isso responde C5 em parte.

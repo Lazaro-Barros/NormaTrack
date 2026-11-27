@@ -19,3 +19,19 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Pendente / dúvidas**
 - Mostrar o plano ao usuário antes de implementar.
+
+## 2026-11-27 — Respostas da cliente (C7, C8) e ajuste do plano
+
+**Feito**
+- Respostas da cliente por WhatsApp (perguntas enviadas pelo usuário em 2026-11-26) registradas em `docs/06-perguntas-em-aberto.md` (C7, C8) e na quebra da Fase 2 (`tasks/README.md`, tasks 016 e 017).
+- `plan.md` ajustado: frequências `daily` e `biweekly` além de `weekly` e `monthly`, com testes de período e de pendência para as duas.
+
+**Decidido**
+- ETA diária e ETE semanal, quinzenal ou mensal entram já na base (só enum e cálculo de período; sem impacto no banco).
+- Quinzena = dias 1–15 e 16–fim do mês **[suposição]** (C8).
+- Mais de uma ETE/ETA por empresa: a tabela de estações fica para a 017 (migração própria), para a 013 não passar de duas tabelas. A base mantém os contextos `effluent`/`water`.
+- Faixa de pH 6–8 da ETE já cabe em `limitMin`/`limitMax`.
+- Resíduos: tipos por classe, kg, semanal (perigosos = Classe I). A 016 decide se reaproveita esta base.
+
+**Pendente / dúvidas**
+- Aprovação do plano ajustado pelo usuário.

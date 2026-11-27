@@ -29,8 +29,8 @@ Quebra do item "Fase 2 — Automonitoramento ambiental" do [roadmap](../docs/05-
 | 013 | Medições: domínio e dados (parâmetros, medições, períodos e pendências; migração v2 → v3) | RF-AMB-02/07 (base) | 006, 012 | Base genérica `MeasurementParameter` + `Measurement`, sem tela |
 | 014 | Ruídos: pontos de medição e lançamento semanal | RF-AMB-02 | 013 | Cadastro dos pontos, tela "Lançamento periódico" e aba Lançamentos do módulo Ambiental |
 | 015 | Painel: lançamentos pendentes | RF-AMB-02, RF-PRZ-05 | 014 | `PendingRow` e a seção de pendências no Painel (genérica para qualquer contexto de medição) |
-| 016 | Resíduos sólidos e perigosos | RF-AMB-03/04 | 013, 015 | Tabela própria de resíduos (migração v3 → v4), lançamento por período e pendências |
-| 017 | Controle da ETE/ETA | RF-AMB-07 | 014, 015 | Parâmetros por estação (pH, insumo…) reaproveitando a tela de lançamento da 014 |
+| 016 | Resíduos sólidos e perigosos | RF-AMB-03/04 | 013, 015 | Tipos de resíduo por classe (I, II-A, II-B; perigosos = Classe I), em kg, lançamento semanal (C7). Reavaliar no refinamento se cabe na base genérica (tipo = parâmetro) ou se precisa de tabela própria pela quantidade armazenada |
+| 017 | Controle da ETE/ETA | RF-AMB-07 | 014, 015 | Estações por empresa (pode haver mais de uma, C8: tabela de estações e migração), parâmetros por estação (ETE semanal/quinzenal/mensal, pH 6–8; ETA diária) reaproveitando a tela de lançamento da 014 |
 | 018 | Exportação `.xlsx` e compartilhamento | RF-REL-01/03 | 014, 016, 017 | Tela "Gerar relatório" (período e conteúdo), planilha e folha de compartilhamento |
 | 019 | Prova de conceito de `.docx` a partir de modelo | RF-REL-02 | 018 | Spike em `prototypes/`, sem tela; decide o pacote para a Fase 3 |
 

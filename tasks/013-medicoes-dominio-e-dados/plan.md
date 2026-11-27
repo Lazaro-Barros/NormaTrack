@@ -4,7 +4,7 @@
 
 ## Abordagem
 
-Uma estrutura genérica **parâmetro + medição por período** (D005, `docs/03-dominio.md`). Um parâmetro é um ponto de ruído ou um parâmetro de estação (pH, insumo…) de uma empresa, com contexto, unidade, frequência, data de início e limites opcionais. Uma medição é o valor (ou a justificativa de "sem medição") de um parâmetro num período, identificado pela data de início do período (segunda-feira da semana ISO ou dia 1 do mês). Pendências são **calculadas** no domínio a partir dos parâmetros e das medições; nada derivado vai para o banco. Banco v2 → v3 com duas tabelas novas.
+Uma estrutura genérica **parâmetro + medição por período** (D005, `docs/03-dominio.md`). Um parâmetro é um ponto de ruído ou um parâmetro de estação (pH, insumo…) de uma empresa, com contexto, unidade, frequência, data de início e limites opcionais. Uma medição é o valor (ou a justificativa de "sem medição") de um parâmetro num período, identificado pela data de início do período (o próprio dia, a segunda-feira da semana ISO, o dia 1 ou 16 da quinzena, ou o dia 1 do mês). Pendências são **calculadas** no domínio a partir dos parâmetros e das medições; nada derivado vai para o banco. Banco v2 → v3 com duas tabelas novas.
 
 ## Contexto do repositório (em 2026-11-26)
 
@@ -65,7 +65,16 @@ dart run drift_dev make-migrations
 | `effluent` | `effluent` | Controle da ETE | `ModuleType.environmental` | `null` |
 | `water` | `water` | Controle da ETA | `ModuleType.environmental` | `null` |
 
-`MeasurementFrequency`: `weekly` / `weekly` / "Semanal"; `monthly` / `monthly` / "Mensal". **[suposição]** sem diária até a resposta de C8 (`// TODO(RF-AMB-07):`). Ambos com `fromCode` que lança `ArgumentError` para código desconhecido (como `DeadlineCategory`).
+`MeasurementFrequency` (C8, cliente em 2026-11-27: ETA diária; ETE semanal, quinzenal ou mensal; ruídos semanal):
+
+| Valor | `code` | Rótulo | Período |
+|---|---|---|---|
+| `daily` | `daily` | Diária | o dia |
+| `weekly` | `weekly` | Semanal | semana ISO, segunda a domingo |
+| `biweekly` | `biweekly` | Quinzenal | dias 1 a 15 e 16 ao último dia do mês **[suposição]** (`// TODO(RF-AMB-07):`, C8) |
+| `monthly` | `monthly` | Mensal | dia 1 ao último dia do mês |
+
+`fromCode` lança `ArgumentError` para código desconhecido (como `DeadlineCategory`).
 
 `PendingKind`: `toLaunch` ("A lançar", período corrente) e `overdue` ("Atrasado", período passado). Rótulos ficam na apresentação (task 015); aqui só o enum.
 
@@ -77,12 +86,12 @@ Tudo `@immutable`, com `==`/`hashCode`/`toString` como em `Deadline`. Datas "só
 
 ```dart
 /// Período de lançamento. Só se cria por [containing], então [start] é
-/// sempre segunda-feira (semanal) ou dia 1 (mensal).
+/// sempre o início do período da frequência (tabela acima).
 class MeasurementPeriod implements Comparable<MeasurementPeriod> {
   factory MeasurementPeriod.containing(MeasurementFrequency f, DateTime date);
   final MeasurementFrequency frequency;
   final DateTime start;          // inclusivo
-  DateTime get end;              // inclusivo: domingo / último dia do mês
+  DateTime get end;              // inclusivo: o dia / domingo / dia 15 ou último / último dia do mês
   MeasurementPeriod get next;
   MeasurementPeriod get previous;
   bool contains(DateTime date);  // ignora a hora
@@ -272,10 +281,10 @@ Nenhuma nesta task.
 | Arquivo | Cobre |
 |---|---|
 | `test/features/measurements/domain/enums_test.dart` | `code` únicos e estáveis, `fromCode` ida e volta e erro |
-| `test/features/measurements/domain/measurement_period_test.dart` | `containing` semanal: 2026-09-23 → 21/09 a 27/09, semana 39; 2026-12-28 e 2027-01-03 → semana 53 de 2026; 2027-01-04 → semana 1 de 2027; 2024-12-30 → semana 1 de 2025. Mensal: 2028-02-10 → 01/02 a 29/02; 2026-02-10 → até 28/02; `next`/`previous` na virada de ano; `contains` ignora hora; `isoWeek` em mensal → `StateError` |
+| `test/features/measurements/domain/measurement_period_test.dart` | diária: `start == end`, hora ignorada, `next` de 2026-12-31 → 2027-01-01. Quinzenal: 2026-11-15 → 01 a 15/11; 2026-11-16 → 16 a 30/11; 2028-02-20 → 16 a 29/02; `next` de 16/12/2026 → 01/01/2027; `previous` de 01/03/2026 → 16 a 28/02. `containing` semanal: 2026-09-23 → 21/09 a 27/09, semana 39; 2026-12-28 e 2027-01-03 → semana 53 de 2026; 2027-01-04 → semana 1 de 2027; 2024-12-30 → semana 1 de 2025. Mensal: 2028-02-10 → 01/02 a 29/02; 2026-02-10 → até 28/02; `next`/`previous` na virada de ano; `contains` ignora hora; `isoWeek` em mensal → `StateError` |
 | `test/features/measurements/domain/measurement_parameter_test.dart` | `check`: sem limites, só máximo 70 (70 dentro, 70,1 acima), mín/máx 6–9 (5,9 abaixo); `firstPeriod` |
 | `test/features/measurements/domain/measurement_validation_test.dart` | normalização (espaços, unidade vazia → null, hora removida); nome vazio; limites invertidos e iguais; `NaN`/`∞`; entrada sem valor e sem nota → `note/required`; com nota só de espaços → `required`; valor 0 válido |
-| `test/features/measurements/domain/pending_launch_test.dart` | `today` = 2026-11-26 (qui, semana 48, início 23/11). P1 e P2 de ruído com início 2026-11-04 (semana 45, 02/11). Medições: semana 45 P1+P2; 46 só P1; 47 P1 justificada + P2 valor. Esperado: 46 `overdue` 1/2 e 48 `toLaunch` 0/2. P3 com início 2026-11-18 → semana 47 vira `overdue` 2/3. Arquivado não cobra. Início futuro não cobra. Mensal com início 2026-09-15 e medição de outubro → setembro `overdue`, novembro `toLaunch`. Duas empresas e dois contextos ordenados. Medição de parâmetro desconhecido ignorada |
+| `test/features/measurements/domain/pending_launch_test.dart` | `today` = 2026-11-26 (qui, semana 48, início 23/11). P1 e P2 de ruído com início 2026-11-04 (semana 45, 02/11). Medições: semana 45 P1+P2; 46 só P1; 47 P1 justificada + P2 valor. Esperado: 46 `overdue` 1/2 e 48 `toLaunch` 0/2. P3 com início 2026-11-18 → semana 47 vira `overdue` 2/3. Arquivado não cobra. Início futuro não cobra. Mensal com início 2026-09-15 e medição de outubro → setembro `overdue`, novembro `toLaunch`. Diária com início 2026-11-24 e medição em 25/11 → 24/11 `overdue`, 26/11 `toLaunch`. Quinzenal com início 2026-11-03 → 01–15/11 `overdue`, 16–30/11 `toLaunch`. Duas empresas e dois contextos ordenados. Medição de parâmetro desconhecido ignorada |
 | `test/features/measurements/data/local_measurement_repository_test.dart` | banco em memória: criar (posição no fim, normalização, duplicado com acento/caixa diferente, empresa inexistente/excluída, módulo desabilitado); editar (sem mudança não toca `updatedAt`; frequência travada com medição; liberada sem); ordenar (ok e ids errados → `ArgumentError`); arquivar/desarquivar idempotentes e `includeArchived`; excluir em cascata; `savePeriod` (insere, parcial, edita, `null` apaga, justificativa, futuro → `FuturePeriodException`, período atual aceito, inválido não grava nada, id excluído → not found, frequência errada → `ArgumentError`); `watchMeasurements` com `from`/`to`; `watchPendingLaunches` (empresa arquivada e módulo desabilitado somem; stream emite de novo depois de `savePeriod`) |
 | `test/features/companies/data/local_company_repository_test.dart` | novo caso: excluir empresa exclui parâmetros e medições |
 | `test/core/database/app/migration_test.dart` | migrações simples (geradas) + "v2 → v3 não corrompe dados": empresa, módulo, registro, prazo e lembrete da v2 iguais na v3; tabelas novas vazias |
@@ -303,8 +312,8 @@ Emulador `Medium_Phone_API_37.0` (adb em `~/Library/Android/sdk/platform-tools/a
 - **[suposição]** C26: pendência a partir do período de início, parcial continua pendente, justificativa tira da pendência, futuro recusado, passado editável, semana ISO. Respostas do usuário em 2026-11-26; falta a cliente.
 - **[suposição]** C6: limite máximo opcional por ponto de ruído (a base aceita mínimo e máximo para servir ao pH da ETE/ETA).
 - **[suposição]** arquivar um parâmetro tira as pendências dele inclusive do passado.
-- **[suposição]** uma ETE e uma ETA por empresa (contextos `effluent`/`water`, sem tabela de estação). Se C8 disser que há várias, a 017 acrescenta `station_id` (migração).
-- **[suposição]** sem frequência diária por enquanto (C8); um código novo no enum não exige migração.
-- Resíduos não usam esta estrutura (gerado + armazenado por tipo, classes fixas): tabela própria na 016, como em `docs/03-dominio.md`.
+- Várias ETE/ETA por empresa (C8, cliente em 2026-11-27): esta task **não** cria a tabela de estações. Os contextos `effluent`/`water` ficam, e a 017 acrescenta `treatment_stations` e `station_id` em `measurement_parameters` (migração própria), com as pendências agrupadas também por estação. *Descartado agora:* criar estações já na 013, que passaria a ter três tabelas com regras próprias (critério de quebra da skill) sem tela para usá-las.
+- **[suposição]** quinzena = 1–15 e 16–fim do mês (C8). Frequência é por parâmetro, então "ETE por tratamento: mensal, quinzenal ou semanal" se resolve escolhendo a frequência de cada parâmetro.
+- Resíduos (C7, cliente em 2026-11-27): tipos por classe, kg, semanal. A 016 decide se usa esta base (tipo = parâmetro com a classe) ou tabela própria por causa da quantidade armazenada.
 - `REAL` pode guardar 0,1 como 0,1000000000000000055…; a apresentação formata com casas fixas. *Descartado:* decimal em texto ou inteiro escalado (mais código para um ganho que só aparece em somas longas).
 - *Descartado:* gravar a situação "pendente" (valor derivado, regra do `CLAUDE.md`); período como `AAAA-Www`/`AAAA-MM` em texto (uma coluna de data serve às duas frequências e ordena bem); reaproveitar a linha excluída da medição (D011 não se aplica: não há lista editável).

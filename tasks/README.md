@@ -19,6 +19,7 @@ Status: `rascunho` · `planejada` · `em andamento` · `concluída` · `bloquead
 | 011 | [Bloco de data com a fonte do sistema grande](011-date-block-fonte-grande/) | RNF-06 | 1 | concluída |
 | 012 | [Backup e restauração manual do banco](012-backup-restauracao/) | RNF-04 | 1 | concluída |
 | 013 | [Medições: domínio e dados](013-medicoes-dominio-e-dados/) | RF-AMB-02/07, RNF-04 | 2 | concluída |
+| 014 | [Ruídos: pontos de medição e lançamento semanal](014-ruidos-pontos-e-lancamento/) | RF-AMB-02 | 2 | planejada |
 
 ## Fase 2 — quebra em tasks (2026-11-26)
 
@@ -27,7 +28,7 @@ Quebra do item "Fase 2 — Automonitoramento ambiental" do [roadmap](../docs/05-
 | # | Task prevista | Requisitos | Depende de | Entrega |
 |---|---|---|---|---|
 | 013 | Medições: domínio e dados (parâmetros, medições, períodos e pendências; migração v2 → v3) | RF-AMB-02/07 (base) | 006, 012 | Base genérica `MeasurementParameter` + `Measurement`, sem tela |
-| 014 | Ruídos: pontos de medição e lançamento semanal | RF-AMB-02 | 013 | Cadastro dos pontos, tela "Lançamento periódico" e aba Lançamentos do módulo Ambiental |
+| 014 | Ruídos: pontos de medição e lançamento semanal | RF-AMB-02 | 013 | Cadastro dos pontos, tela "Lançamento periódico" e seção "Automonitoramento" no módulo Ambiental |
 | 015 | Painel: lançamentos pendentes | RF-AMB-02, RF-PRZ-05 | 014 | `PendingRow` e a seção de pendências no Painel (genérica para qualquer contexto de medição) |
 | 016 | Resíduos sólidos e perigosos | RF-AMB-03/04 | 013, 015 | Tipos de resíduo por classe (I, II-A, II-B; perigosos = Classe I), em kg, com quantidade gerada **e** armazenada em todas as classes, frequência por tipo com padrão semanal (C7). Reavaliar no refinamento se cabe na base genérica (dois valores por medição) ou se precisa de tabela própria |
 | 017 | Controle da ETE/ETA | RF-AMB-07 | 014, 015 | Estações por empresa (pode haver mais de uma, C8: tabela de estações e migração), parâmetros por estação (ETE semanal/quinzenal/mensal, pH 6–8; ETA diária) reaproveitando a tela de lançamento da 014 |

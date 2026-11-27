@@ -32,6 +32,7 @@ Entrega o padrão "prazo com alerta" para **todos** os módulos de uma vez.
 
 - [x] Parâmetros e medições (estrutura genérica do [domínio](03-dominio.md)) — task 013 (domínio, dados, migração v3 e backup; telas nas tasks 014, 015 e 017)
 - [x] Ruídos: pontos e lançamento semanal (RF-AMB-02) — task 014 (pendências no Painel na 015)
+- [x] Lançamentos pendentes no Painel, de todas as empresas (RF-AMB-02, RF-PRZ-05) — task 015 (com a virada do dia em todas as telas)
 - [ ] Resíduos sólidos e perigosos (RF-AMB-03/04)
 - [ ] Controle de ETE/ETA (RF-AMB-07)
 - [ ] Exportação `.xlsx` e compartilhamento (RF-REL-01/03)

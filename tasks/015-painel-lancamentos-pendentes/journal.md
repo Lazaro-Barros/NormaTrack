@@ -50,3 +50,30 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Decidido**
 - No Painel, grupos do mesmo período ficam em ordem alfabética do nome da empresa (o domínio desempata pelo id).
 - Na virada do dia a família do provider muda de chave e o Painel mostra o indicador de carregamento por um instante; aceitável (acontece uma vez por dia).
+
+## 2026-11-27 — Verificação no emulador
+
+**Feito** (emulador `Medium_Phone_API_37.0`; cópia do banco antes em `antes.sqlite` no scratchpad da sessão; `flutter build apk --debug` + `adb install -r`, sem `pm clear` nem desinstalar)
+- Na abertura, o Painel sem a seção: a semana 48 da Indústria Alfa estava completa (72,5 em "Divisa norte" e "sem medição" em "Galpao B").
+- Apagado o 72,5 na tela de Ruídos e salvo ("1 de 2"): o Painel mostra "Lançamentos pendentes 1" com "Ruídos · Indústria Alfa Ltda", "Semana 48 · 23 a 29/11/2026", "A lançar" e "Lançar", igual ao protótipo. Tile "Vencidos" selecionado esconde a seção; tocar de novo volta.
+- "Lançar" abre a semana 48 da Alfa; digitado 72.5 (vira "72,5"), "Semana 48 salva", voltar leva ao Painel já sem a seção.
+- Fonte do sistema 2,0: título e período quebram a linha, o botão desce para baixo dos textos, sem corte; fonte voltou a 1,0.
+- Depois: `quick_check` ok; `companies`, `company_modules`, `company_authorities`, `deadlines`, `deadline_reminders` e `measurement_parameters` iguais à cópia de antes. Em `measurements`, o 72,5 da semana 48 voltou como linha nova (as duas anteriores ficaram excluídas logicamente, pelos dois ciclos de apagar e lançar).
+- A virada do dia não foi observada no emulador (exigiria mudar o relógio do aparelho); fica coberta pelos testes do passo 1.
+
+## 2026-11-27 — Fechamento
+
+**Feito**
+- Todos os critérios de aceite marcados. Status → `concluída` aqui e no índice.
+- Docs: `docs/07-design-system.md` (`PendingRow` e tela Painel, passos 2 e 3), wireframe `Main` (passo 3), `docs/05-roadmap.md` (item novo da Fase 2), `docs/06-perguntas-em-aberto.md` (C28 com as escolhas desta task).
+
+**Como verificar**
+```bash
+dart format . && flutter analyze && flutter test
+```
+Emulador: Painel com uma empresa com ruído pendente → seção "Lançamentos pendentes" → "Lançar".
+
+**Pendente / dúvidas**
+- C28 a confirmar com a cliente; `// TODO(RF-AMB-02)` em `groupPendingLaunches`.
+- ETE/ETA (017): `launchRouteFor` abre o módulo Ambiental até existir a tela de lançamento (`// TODO(RF-AMB-07)`); a 017 também agrupa por estação.
+- As notificações não são replanejadas na virada do dia (fora de escopo; continuam refeitas na abertura e a cada mudança).

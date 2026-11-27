@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| **Status** | em andamento |
+| **Status** | concluída |
 | **Fase** | 2 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-AMB-02, RF-PRZ-05 |
 | **Depende de** | 013 (pendências calculadas), 014 (Ruídos e a tela de lançamento) |
-| **Wireframe** | [Main.dc.html](../../docs/design/wireframes/Main.dc.html) (a atualizar com o [protótipo](prototypes/Main.dc.html)) e `PendingRow` em [DS-Componentes](../../docs/design/wireframes/DS-Componentes.dc.html) |
+| **Wireframe** | [Main.dc.html](../../docs/design/wireframes/Main.dc.html) (atualizado com o [protótipo](prototypes/Main.dc.html)) e `PendingRow` em [DS-Componentes](../../docs/design/wireframes/DS-Componentes.dc.html) |
 
 ## Objetivo
 
@@ -31,14 +31,14 @@ Ao abrir o app, o usuário vê no Painel, acima dos próximos vencimentos, os la
 
 ## Critérios de aceite
 
-- [ ] `PendingRow` em `lib/app/widgets/` com teste (textos, tom com ícone, "Lançar" chama a ação, semântica) e sem estouro com fonte 1,3×, 2× e não linear; no design system.
-- [ ] Domínio: `groupPendingLaunches` agrupa por empresa, contexto e frequência, com a mais antiga e a contagem de atrasadas, em ordem da mais antiga; testes de domínio.
-- [ ] Painel mostra "Lançamentos pendentes" com a contagem, acima de "Próximos vencimentos", com "Ruídos · empresa", "Semana n · intervalo" e "A lançar" / "n semanas atrasadas"; empresa arquivada, excluída ou com Ambiental desligado não aparece; reage a lançamentos.
-- [ ] "Lançar" abre a semana pendente mais antiga da empresa; voltar retorna ao Painel.
-- [ ] Com um tile selecionado a seção some; sem prazos mas com pendências, a seção aparece e o vazio de prazos fica abaixo dela; sem nada, o vazio atual.
-- [ ] `todayProvider` vira o dia à meia-noite e ao voltar o app para a frente (teste); Painel, módulo, detalhe da empresa, detalhe do prazo e lançamento de ruídos usam ele.
-- [ ] Conferido no emulador sem perder os dados de teste (Indústria Alfa com as semanas de ruído pendentes).
-- [ ] Docs atualizados; `dart format .`, `flutter analyze` e `flutter test` sem erros.
+- [x] `PendingRow` em `lib/app/widgets/` com teste (textos, tom com ícone, "Lançar" chama a ação, semântica) e sem estouro com fonte 1,3×, 2× e não linear; no design system.
+- [x] Domínio: `groupPendingLaunches` agrupa por empresa, contexto e frequência, com a mais antiga e a contagem de atrasadas, em ordem da mais antiga; testes de domínio.
+- [x] Painel mostra "Lançamentos pendentes" com a contagem, acima de "Próximos vencimentos", com "Ruídos · empresa", "Semana n · intervalo" e "A lançar" / "n semanas atrasadas"; empresa arquivada, excluída ou com Ambiental desligado não aparece; reage a lançamentos.
+- [x] "Lançar" abre a semana pendente mais antiga da empresa; voltar retorna ao Painel.
+- [x] Com um tile selecionado a seção some; sem prazos mas com pendências, a seção aparece e o vazio de prazos fica abaixo dela; sem nada, o vazio atual.
+- [x] `todayProvider` vira o dia à meia-noite e ao voltar o app para a frente (teste); Painel, módulo, detalhe da empresa, detalhe do prazo e lançamento de ruídos usam ele.
+- [x] Conferido no emulador sem perder os dados de teste (Indústria Alfa com as semanas de ruído pendentes).
+- [x] Docs atualizados; `dart format .`, `flutter analyze` e `flutter test` sem erros.
 
 ## Links
 

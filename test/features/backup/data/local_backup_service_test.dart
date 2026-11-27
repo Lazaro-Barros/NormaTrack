@@ -14,6 +14,12 @@ import 'package:normatrack/features/companies/domain/module_type.dart';
 import 'package:normatrack/features/deadlines/data/local_deadline_repository.dart';
 import 'package:normatrack/features/deadlines/domain/deadline.dart';
 import 'package:normatrack/features/deadlines/domain/deadline_category.dart';
+import 'package:normatrack/features/measurements/data/local_measurement_repository.dart';
+import 'package:normatrack/features/measurements/domain/measurement.dart';
+import 'package:normatrack/features/measurements/domain/measurement_context.dart';
+import 'package:normatrack/features/measurements/domain/measurement_frequency.dart';
+import 'package:normatrack/features/measurements/domain/measurement_parameter.dart';
+import 'package:normatrack/features/measurements/domain/measurement_period.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 import '../../../core/database/app/generated/schema.dart';
@@ -213,6 +219,19 @@ void main() {
       );
     });
 
+    test('v3 sem as tabelas de medições', () async {
+      final schema = await SchemaVerifier(GeneratedHelper()).schemaAt(2);
+      final path = await service.stagingPath();
+      schema.rawDatabase
+        ..execute('PRAGMA user_version = 3')
+        ..execute('VACUUM INTO ?', [path])
+        ..close();
+      expect(
+        await failureOf(() => service.inspect(path)),
+        BackupFailure.notABackup,
+      );
+    });
+
     test('versão mais nova que a do app', () async {
       final path = await otherBackup('Futuro');
       sqlite3.open(path)
@@ -289,6 +308,113 @@ void main() {
         AppDatabase.currentSchemaVersion,
       );
       await current.validateDatabaseSchema();
+    });
+
+    test('backup v2 com prazo é migrado para v3', () async {
+      await company('Alfa');
+      const at = '2026-11-20T10:00:00.000Z';
+      final schema = await SchemaVerifier(GeneratedHelper()).schemaAt(2);
+      schema.rawDatabase
+        ..execute(
+          "INSERT INTO companies (id, created_at, updated_at, legal_name) "
+          "VALUES ('v2', '$at', '$at', 'Alfa To To To To')",
+        )
+        ..execute(
+          "INSERT INTO company_modules (id, created_at, updated_at, "
+          "company_id, module_type, enabled) "
+          "VALUES ('m2', '$at', '$at', 'v2', 'environmental', 1)",
+        )
+        ..execute(
+          "INSERT INTO deadlines (id, created_at, updated_at, company_id, "
+          "module, category, title, due_date, status) VALUES ('d2', '$at', "
+          "'$at', 'v2', 'environmental', 'license', 'Licença de operação', "
+          "'2027-03-31', 'active')",
+        )
+        ..execute(
+          "INSERT INTO deadline_reminders (id, created_at, updated_at, "
+          "deadline_id, days_before) VALUES ('r2', '$at', '$at', 'd2', 150)",
+        )
+        ..execute('PRAGMA user_version = 2');
+      final staging = await service.stagingPath();
+      schema.rawDatabase.execute('VACUUM INTO ?', [staging]);
+      schema.rawDatabase.close();
+
+      expect(
+        await service.inspect(staging),
+        BackupSummary(
+          schemaVersion: 2,
+          companyCount: 1,
+          deadlineCount: 1,
+          lastChangeAt: DateTime.utc(2026, 11, 20, 10),
+        ),
+      );
+      await service.restore(staging);
+
+      expect(await names(), ['Alfa To To To To']);
+      final version = await current
+          .customSelect('PRAGMA user_version')
+          .getSingle();
+      expect(version.read<int>('user_version'), 3);
+      await current.validateDatabaseSchema();
+      final restored = await deadlines().findById('d2');
+      expect(restored!.title, 'Licença de operação');
+      expect(restored.dueDate, DateTime(2027, 3, 31));
+      expect(restored.reminderDays, [150]);
+      expect(
+        await current.select(current.measurementParameters).get(),
+        isEmpty,
+      );
+    });
+
+    test('backup v3 com medições faz ida e volta', () async {
+      final alfa = await company('Alfa');
+      final repo = LocalMeasurementRepository(
+        current,
+        clock: () => now,
+        newId: () => 'id-${++nextId}',
+      );
+      final ponto = await repo.createParameter(
+        alfa,
+        MeasurementContext.noise,
+        MeasurementParameterInput(
+          name: 'Portão principal',
+          frequency: MeasurementFrequency.weekly,
+          startDate: DateTime(2026, 11, 2),
+          limitMax: 70,
+        ),
+      );
+      now = DateTime.utc(2026, 11, 26, 18);
+      await repo.savePeriod(
+        MeasurementPeriod.containing(
+          MeasurementFrequency.weekly,
+          DateTime(2026, 11, 23),
+        ),
+        {ponto.id: const MeasurementEntry(value: 61.8, note: 'chuva')},
+        today: DateTime(2026, 11, 26),
+      );
+      final file = await service.create();
+      // A medição é a alteração mais recente.
+      expect(
+        (await service.inspect(file.path)).lastChangeAt,
+        DateTime.utc(2026, 11, 26, 18),
+      );
+
+      final saved = File(file.path).copySync('${dir.path}/alfa.ntbackup');
+      await service.restore(await otherBackup('Beta'));
+      expect(await names(), ['Beta']);
+      final staging = await service.stagingPath();
+      saved.copySync(staging);
+      await service.restore(staging);
+
+      expect(await names(), ['Alfa']);
+      final restored = await LocalMeasurementRepository(
+        current,
+        clock: () => now,
+        newId: () => 'id-${++nextId}',
+      ).watchMeasurements(alfa, MeasurementContext.noise).first;
+      expect(restored.single.value, 61.8);
+      expect(restored.single.note, 'chuva');
+      expect(restored.single.periodStart, DateTime(2026, 11, 23));
     });
 
     test('falha ao reabrir volta aos dados atuais', () async {

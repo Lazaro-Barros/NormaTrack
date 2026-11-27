@@ -28,6 +28,7 @@ final backupServiceProvider = Provider<BackupService>(
 const _tablesByVersion = {
   1: ['companies', 'company_modules', 'company_authorities'],
   2: ['deadlines', 'deadline_reminders'],
+  3: ['measurement_parameters', 'measurements'],
 };
 
 /// Backup e restauração do banco SQLite local (RNF-04): o backup é uma cópia
@@ -131,13 +132,18 @@ class LocalBackupService implements BackupService {
         throw const BackupException(BackupFailure.corrupted);
       }
       final hasDeadlines = version >= 2;
+      // Tabelas cuja `updated_at` conta como "última alteração".
+      final changeTables = [
+        'companies',
+        if (hasDeadlines) 'deadlines',
+        if (version >= 3) ...['measurement_parameters', 'measurements'],
+      ];
       int count(String sql) => db.select(sql).first.columnAt(0) as int;
       final last =
           db
                   .select(
                     'SELECT MAX(at) FROM ('
-                    'SELECT MAX(updated_at) AS at FROM companies'
-                    '${hasDeadlines ? ' UNION ALL SELECT MAX(updated_at) FROM deadlines' : ''}'
+                    '${changeTables.map((t) => 'SELECT MAX(updated_at) AS at FROM $t').join(' UNION ALL ')}'
                     ')',
                   )
                   .first

@@ -72,3 +72,9 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Desligar o módulo tira as pendências da empresa (como os prazos do Painel, C20), mas não apaga parâmetros nem medições.
+
+## 2026-11-27 — Passo 4: backup v3
+
+**Feito**
+- `_tablesByVersion[3] = ['measurement_parameters', 'measurements']` (D014). A "última alteração" do resumo passa a considerar as duas tabelas (consulta montada a partir de uma lista de tabelas por versão, em vez de condicionais no SQL).
+- Testes novos em `local_backup_service_test.dart`: backup v2 com empresa, módulo, prazo e lembrete é aceito (resumo v2), restaurado e migrado para v3 (`validateDatabaseSchema`, prazo e lembrete intactos); backup v3 com ponto e medição faz ida e volta (restaurar outro e depois ele de novo traz a medição) e a medição conta como última alteração; arquivo marcado v3 sem as tabelas de medições é recusado. Conferido que este último falha sem a linha nova em `_tablesByVersion`.

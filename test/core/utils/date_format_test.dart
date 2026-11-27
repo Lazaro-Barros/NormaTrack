@@ -16,4 +16,12 @@ void main() {
       ],
     );
   });
+
+  test('isoDate e parseIsoDate', () {
+    expect(isoDate(DateTime(2026, 9, 21, 15)), '2026-09-21');
+    expect(parseIsoDate('2026-09-21'), DateTime(2026, 9, 21));
+    expect(parseIsoDate('2026-02-30'), isNull);
+    expect(parseIsoDate('21/09/2026'), isNull);
+    expect(parseIsoDate(''), isNull);
+  });
 }

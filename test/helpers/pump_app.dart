@@ -9,11 +9,13 @@ import 'package:normatrack/features/backup/data/platform_backup_files.dart';
 import 'package:normatrack/features/backup/data/shared_prefs_backup_settings.dart';
 import 'package:normatrack/features/companies/data/local_company_repository.dart';
 import 'package:normatrack/features/deadlines/data/local_deadline_repository.dart';
+import 'package:normatrack/features/measurements/data/local_measurement_repository.dart';
 import 'package:normatrack/main.dart';
 
 import 'fake_backup.dart';
 import 'fake_company_repository.dart';
 import 'fake_deadline_repository.dart';
+import 'fake_measurement_repository.dart';
 import 'fake_notification_scheduler.dart';
 import 'fake_notification_settings.dart';
 
@@ -26,6 +28,7 @@ Future<FakeCompanyRepository> pumpApp(
   WidgetTester tester, {
   FakeCompanyRepository? repository,
   FakeDeadlineRepository? deadlineRepository,
+  FakeMeasurementRepository? measurementRepository,
   FakeNotificationScheduler? notificationScheduler,
   FakeNotificationSettings? notificationSettings,
   FakeBackupService? backupService,
@@ -45,6 +48,10 @@ Future<FakeCompanyRepository> pumpApp(
       overrides: [
         companyRepositoryProvider.overrideWithValue(repo),
         deadlineRepositoryProvider.overrideWithValue(deadlines),
+        measurementRepositoryProvider.overrideWithValue(
+          measurementRepository ??
+              FakeMeasurementRepository(now: testNow, companies: repo),
+        ),
         clockProvider.overrideWithValue(() => testNow),
         notificationSchedulerProvider.overrideWithValue(
           notificationScheduler ?? FakeNotificationScheduler(),

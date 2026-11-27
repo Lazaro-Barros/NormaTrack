@@ -34,3 +34,9 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 **Decidido**
 - Desvio do protótipo, achado pelos testes de fonte grande: na linha sem medição, o texto vira "Sem medição: motivo" abaixo do nome e à direita fica só "Desfazer" (o par "Sem medição" + "Desfazer" estourava a linha). Acima de 1,3× de fonte, o campo desce para baixo do nome. Wireframe `Lancamento` ajustado.
 - `StatusText` passa a quebrar a linha em vez de estourar (`Flexible`), o que vale para todo o app; os testes existentes seguem verdes.
+
+## 2026-11-27 — Passo 3: rótulos, providers e fake
+
+**Feito**
+- `measurement_labels.dart` (período, intervalo, anterior, limite, situação do módulo, subtítulos), `measurement_providers.dart`, `isoDate`/`parseIsoDate` em `date_format.dart`.
+- `test/helpers/fake_measurement_repository.dart` (pendências pelo mesmo `pendingLaunches` do domínio; `saved` guarda o que a tela enviou) e override no `pumpApp`.

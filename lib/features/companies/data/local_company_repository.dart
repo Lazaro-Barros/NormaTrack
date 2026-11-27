@@ -218,6 +218,7 @@ class LocalCompanyRepository implements CompanyRepository {
       CompanyAuthoritiesCompanion(deletedAt: Value(now), updatedAt: Value(now)),
     );
     await _deleteDeadlines(id, now);
+    await _deleteMeasurements(id, now);
   });
 
   /// Prazos da empresa e os lembretes deles (task 006).
@@ -236,6 +237,28 @@ class LocalCompanyRepository implements CompanyRepository {
           ..where((d) => d.companyId.equals(companyId) & d.deletedAt.isNull()))
         .write(
           DeadlinesCompanion(deletedAt: Value(now), updatedAt: Value(now)),
+        );
+  }
+
+  /// Parâmetros de medição da empresa e as medições deles (task 013).
+  Future<void> _deleteMeasurements(String companyId, DateTime now) async {
+    final parameters = _db.measurementParameters;
+    final measurements = _db.measurements;
+    final ids = _db.selectOnly(parameters)
+      ..addColumns([parameters.id])
+      ..where(parameters.companyId.equals(companyId));
+    await (_db.update(
+      measurements,
+    )..where((m) => m.parameterId.isInQuery(ids) & m.deletedAt.isNull())).write(
+      MeasurementsCompanion(deletedAt: Value(now), updatedAt: Value(now)),
+    );
+    await (_db.update(parameters)
+          ..where((p) => p.companyId.equals(companyId) & p.deletedAt.isNull()))
+        .write(
+          MeasurementParametersCompanion(
+            deletedAt: Value(now),
+            updatedAt: Value(now),
+          ),
         );
   }
 

@@ -62,3 +62,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Nota de processo: na checagem do `from2To3` vazio, um `git checkout` do arquivo desfez também as mudanças ainda não commitadas; o arquivo foi restaurado da cópia feita antes. Para checagens assim, restaurar sempre da cópia, nunca do git.
+
+## 2026-11-27 — Passo 3: repositório e cascata
+
+**Feito**
+- `measurement_mapper.dart`, `LocalMeasurementRepository` e `measurementRepositoryProvider`, conforme o contrato do plano. Consulta-gatilho própria (`SELECT 1 AS measurements_changed`, D008).
+- `LocalCompanyRepository.delete` exclui logicamente os parâmetros e as medições da empresa na mesma transação; teste novo em `local_company_repository_test.dart`.
+- 20 testes de banco em memória para o repositório: criar (normalização, posição, duplicado sem acento/caixa, empresa inexistente/excluída/sem módulo, arquivada pode), editar (sem mudança não grava, duplicado, frequência travada e liberada), ordenar, arquivar, excluir em cascata, `savePeriod` (parcial, edição, apagar, justificativa, linha nova depois de apagar, passado/atual/arquivado aceitos, futuro recusado, inválido não grava nada, excluído e frequência errada), `watchMeasurements` com `from`/`to` e `watchPendingLaunches` (stream reage ao `savePeriod`; empresa arquivada, excluída ou com módulo desligado some).
+
+**Decidido**
+- Desligar o módulo tira as pendências da empresa (como os prazos do Painel, C20), mas não apaga parâmetros nem medições.

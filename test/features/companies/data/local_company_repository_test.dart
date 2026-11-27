@@ -11,6 +11,12 @@ import 'package:normatrack/features/companies/domain/module_type.dart';
 import 'package:normatrack/features/deadlines/data/local_deadline_repository.dart';
 import 'package:normatrack/features/deadlines/domain/deadline.dart';
 import 'package:normatrack/features/deadlines/domain/deadline_category.dart';
+import 'package:normatrack/features/measurements/data/local_measurement_repository.dart';
+import 'package:normatrack/features/measurements/domain/measurement.dart';
+import 'package:normatrack/features/measurements/domain/measurement_context.dart';
+import 'package:normatrack/features/measurements/domain/measurement_frequency.dart';
+import 'package:normatrack/features/measurements/domain/measurement_parameter.dart';
+import 'package:normatrack/features/measurements/domain/measurement_period.dart';
 
 void main() {
   late AppDatabase db;
@@ -546,6 +552,58 @@ void main() {
         r.deletedAt,
         r.deadlineId == byCompany[a]!.id ? now : isNull,
         reason: r.deadlineId,
+      );
+    }
+  });
+
+  test('delete exclui os parâmetros e medições só da empresa', () async {
+    final measurements = LocalMeasurementRepository(
+      db,
+      clock: () => now,
+      newId: () => 'id-${++nextId}',
+    );
+    final period = MeasurementPeriod.containing(
+      MeasurementFrequency.weekly,
+      DateTime(2026, 1, 1),
+    );
+    Future<String> withMeasurement(String name) async {
+      final c = await repo.create(
+        CompanyInput(
+          legalName: name,
+          enabledModules: {ModuleType.environmental},
+        ),
+      );
+      final p = await measurements.createParameter(
+        c.id,
+        MeasurementContext.noise,
+        MeasurementParameterInput(
+          name: 'Ponto 1',
+          frequency: MeasurementFrequency.weekly,
+          startDate: DateTime(2026, 1, 1),
+        ),
+      );
+      await measurements.savePeriod(period, {
+        p.id: const MeasurementEntry(value: 60),
+      }, today: DateTime(2026, 1, 1));
+      return c.id;
+    }
+
+    final a = await withMeasurement('A');
+    final b = await withMeasurement('B');
+    tick();
+    await repo.delete(a);
+
+    final parameters = {
+      for (final r in await db.select(db.measurementParameters).get())
+        r.companyId: r,
+    };
+    expect(parameters[a]!.deletedAt, now);
+    expect(parameters[b]!.deletedAt, isNull);
+    for (final m in await db.select(db.measurements).get()) {
+      expect(
+        m.deletedAt,
+        m.parameterId == parameters[a]!.id ? now : isNull,
+        reason: m.parameterId,
       );
     }
   });

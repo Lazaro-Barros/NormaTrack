@@ -25,3 +25,12 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - `ModuloAmbiental` passa a mostrar a faixa como está no app ("Em aberto | Encerrados"), sem as abas e sem o botão de relatório (que entra na 018).
+
+## 2026-11-27 — Passo 2: componentes
+
+**Feito**
+- `PeriodNavigator`, `MeasurementInputRow` (`lib/app/widgets/`) e `DecimalInputFormatter` com `parseDecimal`/`formatDecimal` (`lib/app/formatters/`), com testes (fonte 1,3×, 2× e não linear sem estouro). `docs/07-design-system.md` atualizado.
+
+**Decidido**
+- Desvio do protótipo, achado pelos testes de fonte grande: na linha sem medição, o texto vira "Sem medição: motivo" abaixo do nome e à direita fica só "Desfazer" (o par "Sem medição" + "Desfazer" estourava a linha). Acima de 1,3× de fonte, o campo desce para baixo do nome. Wireframe `Lancamento` ajustado.
+- `StatusText` passa a quebrar a linha em vez de estourar (`Flexible`), o que vale para todo o app; os testes existentes seguem verdes.

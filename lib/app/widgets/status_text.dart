@@ -32,10 +32,13 @@ class StatusText extends StatelessWidget {
         children: [
           Icon(StatusChip.iconFor(tone), size: 16, color: color),
           const SizedBox(width: AppSpacing.xs),
-          Text(
-            label,
-            style: AppTypography.tabular(theme.textTheme.labelMedium)
-                .copyWith(color: color),
+          // Quebra a linha em vez de estourar com a fonte do sistema grande.
+          Flexible(
+            child: Text(
+              label,
+              style: AppTypography.tabular(theme.textTheme.labelMedium)
+                  .copyWith(color: color),
+            ),
           ),
         ],
       ),

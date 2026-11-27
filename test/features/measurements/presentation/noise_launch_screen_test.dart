@@ -318,4 +318,18 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Ativos'), findsOneWidget);
   });
+
+  testWidgets('semana antes do início dos pontos: sem campos e sem cadastro', (
+    tester,
+  ) async {
+    measurements.seedPoint(
+      companyId,
+      'Portão',
+      startDate: DateTime(2026, 9, 28),
+    );
+    await pumpLaunch(tester, week: w39);
+    expect(find.text('Nenhum ponto nesta semana'), findsOneWidget);
+    expect(find.text('Cadastrar ponto'), findsNothing);
+    expect(find.text('Salvar'), findsNothing);
+  });
 }

@@ -119,9 +119,12 @@ class _PointSheetState extends State<_PointSheet> {
             inputFormatters: [DecimalInputFormatter()],
             helperText:
                 'Opcional. Valores acima aparecem como "Acima do limite".',
-            suffixIcon: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-              child: Text(widget.unit, style: text.bodyMedium),
+            suffixIcon: Center(
+              widthFactor: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                child: Text(widget.unit, style: text.bodyMedium),
+              ),
             ),
           ),
           if (current != null) ...[

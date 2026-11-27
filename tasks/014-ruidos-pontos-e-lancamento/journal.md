@@ -69,3 +69,18 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Tentativa descartada: tornar flexível o conteúdo à direita de todo `NavRow` (para a situação longa quebrar linha) quebrou outras telas que põem uma linha inteira à direita (formulário de prazo, Ajustes). Ficou só na seção: a situação tem largura máxima de 40% da tela e quebra a linha.
+
+## 2026-11-27 — Verificação no emulador e correções
+
+**Feito** (emulador `Medium_Phone_API_37.0`; cópia do banco antes; `adb install -r`)
+- Empresas → Indústria Alfa Ltda → Ambiental: seção "Automonitoramento › Ruídos" com "Nenhum ponto cadastrado". Ruídos abre na semana 48 (23 a 29/11/2026), próxima desabilitada, estado vazio com "Cadastrar ponto".
+- Ponto "Divisa norte" com limite 70 → 72,5 (digitado "72.5", vira vírgula) mostra "Acima do limite (70,0)"; "Semana 48 salva". Banco: `Divisa norte | dB(A) | weekly | 2026-11-27 | 70.0` e `2026-11-23 | 72.5`. Módulo passa a "Em dia" com "1 ponto · semanal".
+- Segundo ponto pela ação da faixa; "Sem medição neste ponto" pelo menu (a sheet do motivo fica aberta) → "Sem medição: Obra no galpao" com "Desfazer", contador "2 de 2"; trocar de semana com alteração pede "Descartar alterações?"; Cancelar e Salvar gravam a justificativa (`value` nulo, `note` com o motivo).
+- Fonte do sistema 2,0: campos descem para baixo do nome, sem corte; fonte voltou a 1,0.
+- Depois de tudo, as 5 tabelas antigas iguais à cópia de antes; os dois pontos e as medições ficam como dados de teste da Indústria Alfa Ltda.
+
+**Decidido** (achados corrigidos nesta entrada)
+- "0,0" colado em "dB(A)" no campo: `suffix` com espaço em vez de `suffixText`.
+- "dB(A)" no alto do campo de limite da sheet: sufixo centralizado.
+- Semana anterior ao cadastro dos pontos mostrava "Nenhum ponto de medição · Cadastrar ponto"; agora mostra "Nenhum ponto nesta semana" sem ação quando já existem pontos ativos (teste novo).
+- Teclado de letras no campo decimal: o campo pede `inputType=0x2002` (número com decimal, conferido com `dumpsys input_method`); é o Gboard deste emulador que mostra letras. Não é defeito do app.

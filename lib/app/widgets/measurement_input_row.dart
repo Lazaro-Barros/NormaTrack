@@ -118,7 +118,15 @@ class MeasurementInputRow extends StatelessWidget {
               style: AppTypography.tabular(text.labelLarge),
               decoration: InputDecoration(
                 hintText: decimals > 0 ? '0,${'0' * decimals}' : '0',
-                suffixText: unit,
+                suffix: Padding(
+                  padding: const EdgeInsets.only(left: AppSpacing.xs),
+                  child: Text(
+                    unit,
+                    style: text.bodyMedium?.copyWith(
+                      color: colors.onSurfaceVariant,
+                    ),
+                  ),
+                ),
                 // Borda de erro sem texto: a mensagem vai abaixo da linha,
                 // que tem largura para ela.
                 error: errorText == null ? null : const SizedBox.shrink(),

@@ -332,6 +332,14 @@ class _NoiseLaunchState extends ConsumerState<_NoiseLaunch> {
           ),
         ),
         body: switch ((points, measurements)) {
+          _ when ready && rows.isEmpty && pointList.any((p) => !p.isArchived) =>
+            const EmptyState(
+              icon: Icons.event_busy_outlined,
+              title: 'Nenhum ponto nesta semana',
+              message:
+                  'Os pontos de medição foram cadastrados depois desta '
+                  'semana.',
+            ),
           _ when ready && rows.isEmpty => EmptyState(
             icon: Icons.graphic_eq,
             title: 'Nenhum ponto de medição',

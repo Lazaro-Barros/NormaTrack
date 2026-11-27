@@ -147,7 +147,7 @@ void main() {
         expect(
           summary,
           BackupSummary(
-            schemaVersion: 2,
+            schemaVersion: AppDatabase.currentSchemaVersion,
             companyCount: 2,
             deadlineCount: 1, // o renovado fica só no histórico
             lastChangeAt: DateTime.utc(2026, 11, 26, 18),
@@ -160,8 +160,8 @@ void main() {
       final file = await service.create();
       expect(
         await service.inspect(file.path),
-        const BackupSummary(
-          schemaVersion: 2,
+        BackupSummary(
+          schemaVersion: AppDatabase.currentSchemaVersion,
           companyCount: 0,
           deadlineCount: 0,
         ),
@@ -284,7 +284,10 @@ void main() {
       final version = await current
           .customSelect('PRAGMA user_version')
           .getSingle();
-      expect(version.read<int>('user_version'), 2);
+      expect(
+        version.read<int>('user_version'),
+        AppDatabase.currentSchemaVersion,
+      );
       await current.validateDatabaseSchema();
     });
 

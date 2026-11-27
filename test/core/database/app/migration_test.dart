@@ -9,6 +9,7 @@ import 'generated/schema.dart';
 
 import 'generated/schema_v1.dart' as v1;
 import 'generated/schema_v2.dart' as v2;
+import 'generated/schema_v3.dart' as v3;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -129,6 +130,112 @@ void main() {
           expectedNewCompanyAuthoritiesData,
           await newDb.select(newDb.companyAuthorities).get(),
         );
+      },
+    );
+  });
+
+  // A v3 só cria as tabelas de medições (task 013): tudo o que a v2 tinha
+  // continua igual, coluna a coluna.
+  test('migration from v2 to v3 does not corrupt data', () async {
+    const at = '2026-11-26T12:00:00.000Z';
+    const company = v2.CompaniesData(
+      id: 'c1',
+      createdAt: at,
+      updatedAt: at,
+      legalName: 'Alfa To To To To',
+      cnpj: '11222333000181',
+      archivedAt: at,
+    );
+    const module = v2.CompanyModulesData(
+      id: 'm1',
+      createdAt: at,
+      updatedAt: at,
+      companyId: 'c1',
+      moduleType: 'environmental',
+      enabled: 1,
+    );
+    const authority = v2.CompanyAuthoritiesData(
+      id: 'a1',
+      createdAt: at,
+      updatedAt: at,
+      companyId: 'c1',
+      authority: 'semace',
+      status: 'registered',
+      validUntil: '2027-03-31',
+    );
+    const previous = v2.DeadlinesData(
+      id: 'd1',
+      createdAt: at,
+      updatedAt: at,
+      companyId: 'c1',
+      module: 'environmental',
+      category: 'license',
+      authority: 'semace',
+      title: 'Licença de operação',
+      dueDate: '2026-12-01',
+      status: 'renewed',
+    );
+    const current = v2.DeadlinesData(
+      id: 'd2',
+      createdAt: at,
+      updatedAt: at,
+      companyId: 'c1',
+      module: 'environmental',
+      category: 'license',
+      title: 'Licença de operação',
+      dueDate: '2027-12-01',
+      status: 'active',
+      previousDeadlineId: 'd1',
+    );
+    const reminder = v2.DeadlineRemindersData(
+      id: 'r1',
+      createdAt: at,
+      updatedAt: at,
+      deletedAt: at,
+      deadlineId: 'd2',
+      daysBefore: 150,
+    );
+
+    List<Map<String, dynamic>> json(Iterable<dynamic> rows) => [
+      for (final r in rows) (r as dynamic).toJson() as Map<String, dynamic>,
+    ];
+
+    await verifier.testWithDataIntegrity(
+      oldVersion: 2,
+      newVersion: 3,
+      createOld: v2.DatabaseAtV2.new,
+      createNew: v3.DatabaseAtV3.new,
+      openTestedDatabase: AppDatabase.new,
+      createItems: (batch, oldDb) {
+        batch.insert(oldDb.companies, company);
+        batch.insert(oldDb.companyModules, module);
+        batch.insert(oldDb.companyAuthorities, authority);
+        batch.insertAll(oldDb.deadlines, [previous, current]);
+        batch.insert(oldDb.deadlineReminders, reminder);
+      },
+      validateItems: (newDb) async {
+        expect(
+          json(await newDb.select(newDb.companies).get()),
+          json([company]),
+        );
+        expect(
+          json(await newDb.select(newDb.companyModules).get()),
+          json([module]),
+        );
+        expect(
+          json(await newDb.select(newDb.companyAuthorities).get()),
+          json([authority]),
+        );
+        expect(
+          json(await newDb.select(newDb.deadlines).get()),
+          json([previous, current]),
+        );
+        expect(
+          json(await newDb.select(newDb.deadlineReminders).get()),
+          json([reminder]),
+        );
+        expect(await newDb.select(newDb.measurementParameters).get(), isEmpty);
+        expect(await newDb.select(newDb.measurements).get(), isEmpty);
       },
     );
   });

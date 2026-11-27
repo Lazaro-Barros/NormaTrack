@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../features/companies/data/company_tables.dart';
 import '../../features/deadlines/data/deadline_tables.dart';
+import '../../features/measurements/data/measurement_tables.dart';
 import 'app_database.steps.dart';
 import 'converters.dart';
 
@@ -18,13 +19,15 @@ part 'app_database.g.dart';
     CompanyAuthorities,
     Deadlines,
     DeadlineReminders,
+    MeasurementParameters,
+    Measurements,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   /// Versão do schema deste app. Backups com versão maior são recusados.
-  static const currentSchemaVersion = 2;
+  static const currentSchemaVersion = 3;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -46,6 +49,13 @@ class AppDatabase extends _$AppDatabase {
         await m.createIndex(schema.deadlinesCompanyDue);
         await m.createIndex(schema.deadlinesStatusDue);
         await m.createIndex(schema.deadlinesPreviousLive);
+      },
+      // Task 013: parâmetros e medições.
+      from2To3: (m, schema) async {
+        await m.createTable(schema.measurementParameters);
+        await m.createTable(schema.measurements);
+        await m.createIndex(schema.measurementParametersCompanyContext);
+        await m.createIndex(schema.measurementsParameterPeriodLive);
       },
     ),
     beforeOpen: (details) async {

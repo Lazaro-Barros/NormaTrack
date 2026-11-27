@@ -27,6 +27,8 @@ void main() {
       'deadlines_company_due',
       'deadlines_status_due',
       'deadlines_previous_live',
+      'measurement_parameters_company_context',
+      'measurements_parameter_period_live',
     ]) {
       final index = await db
           .customSelect(

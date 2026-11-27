@@ -51,3 +51,14 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Desempate extra na ordem das pendências: depois de período, contexto e empresa, a frequência (dois grupos do mesmo contexto podem começar no mesmo dia, ex.: quinzenal e mensal em 01/11).
+
+## 2026-11-27 — Passo 2: tabelas e migração v3
+
+**Feito**
+- `measurement_parameters` e `measurements` (`lib/features/measurements/data/measurement_tables.dart`) com os índices parciais do plano; `AppDatabase` v3 com `from2To3`.
+- `make-migrations` gerou `drift_schemas/app/drift_schema_v3.json`, `schema_v3.dart` e o passo no `app_database.steps.dart`; rodado de novo sem diff.
+- Teste "v2 → v3 não corrompe dados" escrito à mão (empresa arquivada, módulo, registro, prazo renovado + atual e lembrete excluído iguais coluna a coluna; tabelas novas vazias). Conferido que falha com o `from2To3` vazio. `schema_test.dart` checa os dois índices novos.
+- Testes de backup passam a esperar `AppDatabase.currentSchemaVersion` em vez de 2, para a suíte seguir verde neste passo (as tabelas novas entram no backup no passo 4).
+
+**Decidido**
+- Nota de processo: na checagem do `from2To3` vazio, um `git checkout` do arquivo desfez também as mudanças ainda não commitadas; o arquivo foi restaurado da cópia feita antes. Para checagens assim, restaurar sempre da cópia, nunca do git.

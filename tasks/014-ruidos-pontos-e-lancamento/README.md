@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | planejada |
+| **Status** | em andamento |
 | **Fase** | 2 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-AMB-02 |
 | **Depende de** | 013 (parâmetros e medições) |

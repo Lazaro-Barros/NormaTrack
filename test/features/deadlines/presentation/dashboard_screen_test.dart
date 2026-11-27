@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:normatrack/app/theme/app_theme.dart';
 import 'package:normatrack/app/widgets/band_title.dart';
 import 'package:normatrack/app/widgets/deadline_card.dart';
+import 'package:normatrack/app/widgets/pending_row.dart';
 import 'package:normatrack/app/widgets/stat_tile.dart';
 import 'package:normatrack/app/widgets/status_banner.dart';
+import 'package:normatrack/app/widgets/status_text.dart';
 import 'package:normatrack/features/companies/domain/company.dart';
 import 'package:normatrack/features/companies/domain/module_type.dart';
 import 'package:normatrack/features/deadlines/domain/deadline.dart';
@@ -11,6 +14,7 @@ import 'package:normatrack/features/deadlines/domain/deadline_category.dart';
 
 import '../../../helpers/fake_company_repository.dart';
 import '../../../helpers/fake_deadline_repository.dart';
+import '../../../helpers/fake_measurement_repository.dart';
 import '../../../helpers/pump_app.dart';
 
 void main() {
@@ -343,5 +347,153 @@ void main() {
     await tester.pump(const Duration(days: 1));
     await tester.pumpAndSettle();
     expect(status(), 'Venceu há 5 dias');
+  });
+
+  group('lançamentos pendentes', () {
+    late FakeMeasurementRepository measurements;
+    late List<String> alfaPoints;
+
+    // Hoje = terça 29/09/2026, semana 40. Alfa: pontos desde a semana 38
+    // (14 a 20/09) → 38 e 39 atrasadas e 40 a lançar. Beta: desde a 40.
+    setUp(() {
+      measurements = FakeMeasurementRepository(
+        now: testNow,
+        companies: companies,
+      );
+      measurements.seedPoint(beta, 'Divisa', startDate: DateTime(2026, 9, 28));
+      alfaPoints = [
+        for (final name in ['Portaria', 'Caldeira'])
+          measurements
+              .seedPoint(alfa, name, startDate: DateTime(2026, 9, 14))
+              .id,
+      ];
+    });
+
+    Future<void> pumpWithPending(WidgetTester tester) => pumpApp(
+      tester,
+      repository: companies,
+      deadlineRepository: deadlines,
+      measurementRepository: measurements,
+    );
+
+    List<(String, String?, String)> rows(WidgetTester tester) => [
+      for (final r in tester.widgetList<PendingRow>(find.byType(PendingRow)))
+        (r.title, r.subtitle, r.statusLabel),
+    ];
+
+    testWidgets('uma linha por empresa, acima dos vencimentos', (tester) async {
+      await seedAll();
+      await pumpWithPending(tester);
+
+      expect(find.text('Lançamentos pendentes'), findsOneWidget);
+      // Contagem ao lado do título (fora dos tiles da faixa).
+      expect(
+        find.descendant(of: find.byType(ListView), matching: find.text('2')),
+        findsOneWidget,
+      );
+      expect(rows(tester), [
+        (
+          'Ruídos · Indústria Alfa Ltda',
+          'Semana 38 · 14 a 20/09/2026',
+          '2 semanas atrasadas',
+        ),
+        (
+          'Ruídos · Beta Alimentos',
+          'Semana 40 · 28/09 a 04/10/2026',
+          'A lançar',
+        ),
+      ]);
+      final tones = [
+        for (final s in tester.widgetList<StatusText>(
+          find.descendant(
+            of: find.byType(PendingRow),
+            matching: find.byType(StatusText),
+          ),
+        ))
+          s.tone,
+      ];
+      expect(tones, [StatusTone.overdue, StatusTone.dueSoon]);
+      // Seção antes dos vencimentos; tiles só com prazos.
+      expect(
+        tester.getTopLeft(find.text('Lançamentos pendentes')).dy,
+        lessThan(tester.getTopLeft(find.text('Próximos vencimentos')).dy),
+      );
+      expectCounts(tester, 1, 2, 1);
+    });
+
+    testWidgets('"Lançar" abre a semana mais antiga; voltar ao Painel', (
+      tester,
+    ) async {
+      await pumpWithPending(tester);
+
+      await tester.tap(find.widgetWithText(FilledButton, 'Lançar').first);
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(BandTitle, 'Ruídos'), findsOne);
+      expect(find.text('Semana 38'), findsOneWidget);
+      expect(find.text('14 a 20/09/2026'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Voltar'));
+      await tester.pumpAndSettle();
+      expect(find.widgetWithText(BandTitle, 'Painel'), findsOne);
+    });
+
+    testWidgets('lançar a mais antiga passa a linha para a seguinte', (
+      tester,
+    ) async {
+      await pumpWithPending(tester);
+
+      final week38 = DateTime(2026, 9, 14);
+      await tester.runAsync(() async {
+        for (final id in alfaPoints) {
+          measurements.seedMeasurement(id, week38, value: 60);
+        }
+      });
+      await tester.pumpAndSettle();
+      expect(rows(tester).first, (
+        'Ruídos · Indústria Alfa Ltda',
+        'Semana 39 · 21 a 27/09/2026',
+        '1 semana atrasada',
+      ));
+    });
+
+    testWidgets('tile selecionado esconde a seção', (tester) async {
+      await seedAll();
+      await pumpWithPending(tester);
+
+      await tester.tap(tile('A vencer'));
+      await tester.pumpAndSettle();
+      expect(find.text('Lançamentos pendentes'), findsNothing);
+      expect(find.byType(PendingRow), findsNothing);
+
+      await tester.tap(tile('A vencer'));
+      await tester.pumpAndSettle();
+      expect(find.byType(PendingRow), findsNWidgets(2));
+    });
+
+    testWidgets('sem prazos: seção e o vazio dos prazos abaixo', (
+      tester,
+    ) async {
+      await pumpWithPending(tester);
+
+      expect(find.byType(PendingRow), findsNWidgets(2));
+      expect(find.text('Próximos vencimentos'), findsOneWidget);
+      expect(find.text('Nenhum prazo em aberto'), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.text('Nenhum prazo em aberto')).dy,
+        greaterThan(tester.getTopLeft(find.byType(PendingRow).last).dy),
+      );
+    });
+
+    testWidgets('arquivada e Ambiental desligado não aparecem', (tester) async {
+      await companies.archive(beta);
+      await companies.update(
+        alfa,
+        const CompanyInput(legalName: 'Indústria Alfa Ltda'),
+      );
+      await pumpWithPending(tester);
+
+      expect(find.text('Lançamentos pendentes'), findsNothing);
+      expect(find.text('Nenhum prazo em aberto'), findsOneWidget);
+    });
   });
 }

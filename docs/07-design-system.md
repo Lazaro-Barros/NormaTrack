@@ -146,7 +146,7 @@ A navegação inferior tem 3 destinos: **Painel**, **Empresas** e **Ajustes**. N
 
 | Tela | Requisitos | Conteúdo |
 |---|---|---|
-| Painel | RF-PRZ-05 | Contagem por situação (`StatTile` que filtra a lista) e próximos vencimentos de todas as empresas, com o nome da empresa no card (task 009). Lançamentos pendentes entram na Fase 2 |
+| Painel | RF-PRZ-05, RF-AMB-02 | Contagem por situação (`StatTile` que filtra a lista; conta só prazos) e próximos vencimentos de todas as empresas, com o nome da empresa no card (task 009). Acima dos vencimentos, "Lançamentos pendentes" com a contagem à direita do título e uma `PendingRow` por empresa e contexto (semana mais antiga e "n semanas atrasadas" ou "A lançar"); "Lançar" abre essa semana. Com um tile selecionado a seção some; sem prazos, o vazio dos prazos fica `inline` abaixo dela (task 015) |
 | Empresas | RF-EMP-01 | Busca na faixa, segmentado ativas/arquivadas; por empresa só nome, cidade/UF e pior situação |
 | Empresa | RF-EMP-03/05 | Resumo de situação na faixa; módulos habilitados; órgãos que se aplicam com situação do registro; dados cadastrais; gerar relatório e arquivar |
 | Nova/editar empresa | RF-EMP-01/02/04/05 | Tela rolável em seções: Identificação · Endereço · Contato · Responsável legal · Módulos · Órgãos. Só a razão social é obrigatória |

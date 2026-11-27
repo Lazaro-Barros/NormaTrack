@@ -10,14 +10,18 @@ import '../../../app/widgets/empty_state.dart';
 import '../../../app/widgets/stat_tile.dart';
 import '../../../app/widgets/status_chip.dart';
 import '../../../core/today.dart';
+import '../../measurements/domain/pending_launch.dart';
+import '../../measurements/presentation/measurement_providers.dart';
+import '../../measurements/presentation/pending_section.dart';
 import '../domain/deadline.dart';
 import '../domain/deadline_status.dart';
 import '../domain/deadline_summary.dart';
 import 'deadline_labels.dart';
 import 'deadline_providers.dart';
 
-/// Painel (aba inicial): contagem por situação e próximos vencimentos de todas
-/// as empresas (RF-PRZ-05). Tocar num tile filtra a lista; tocar de novo limpa.
+/// Painel (aba inicial): contagem por situação, lançamentos pendentes e
+/// próximos vencimentos de todas as empresas (RF-PRZ-05, RF-AMB-02). Tocar num
+/// tile filtra os prazos e esconde as pendências; tocar de novo limpa.
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
@@ -42,6 +46,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final today = ref.watch(todayProvider);
     final deadlines = ref.watch(upcomingDeadlinesProvider);
     final names = ref.watch(companyNamesProvider);
+    final pending = ref.watch(pendingLaunchesProvider(today));
     final all = deadlines.value;
     final counts = all == null
         ? const SituationCounts()
@@ -80,31 +85,51 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
         ),
       ),
-      body: switch ((deadlines, names)) {
-        (AsyncValue(hasError: true), _) ||
-        (_, AsyncValue(hasError: true)) => const EmptyState(
+      body: switch ((deadlines, names, pending)) {
+        (AsyncValue(hasError: true), _, _) ||
+        (_, AsyncValue(hasError: true), _) ||
+        (_, _, AsyncValue(hasError: true)) => const EmptyState(
           icon: Icons.error_outline,
-          title: 'Não foi possível carregar os prazos',
+          title: 'Não foi possível carregar o Painel',
           message: 'Tente abrir a tela de novo.',
         ),
         (
           AsyncValue(value: final List<Deadline> list),
           AsyncValue(value: final Map<String, String> names),
+          AsyncValue(value: final List<PendingLaunch> pending),
         ) =>
-          _body(context, list, names, today),
+          _body(context, list, _groups(pending, names), names, today),
         _ => const Center(child: CircularProgressIndicator()),
       },
     );
   }
 
-  Widget _body(
-    BuildContext context,
-    List<Deadline> all,
+  /// Grupos de empresas conhecidas, da pendência mais antiga para a mais nova;
+  /// no mesmo período, pelo nome da empresa.
+  static List<PendingGroup> _groups(
+    List<PendingLaunch> pending,
     Map<String, String> names,
-    DateTime today,
   ) {
-    if (all.isEmpty) {
-      return EmptyState(
+    final groups = [
+      for (final g in groupPendingLaunches(pending))
+        if (names.containsKey(g.companyId)) g,
+    ];
+    // `sort` não é estável: desempata pelo contexto depois do nome.
+    groups.sort((a, b) {
+      final byStart = a.oldest.period.start.compareTo(b.oldest.period.start);
+      if (byStart != 0) return byStart;
+      final byName = names[a.companyId]!.compareTo(names[b.companyId]!);
+      if (byName != 0) return byName;
+      final byContext = a.context.index.compareTo(b.context.index);
+      return byContext != 0
+          ? byContext
+          : a.frequency.index.compareTo(b.frequency.index);
+    });
+    return groups;
+  }
+
+  EmptyState _noDeadlines(BuildContext context, {bool inline = false}) =>
+      EmptyState(
         icon: Icons.space_dashboard_outlined,
         title: 'Nenhum prazo em aberto',
         message:
@@ -112,9 +137,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             'vencimentos aqui.',
         actionLabel: 'Ver empresas',
         onAction: () => context.go(AppRoutes.companies),
+        inline: inline,
       );
-    }
+
+  Widget _body(
+    BuildContext context,
+    List<Deadline> all,
+    List<PendingGroup> groups,
+    Map<String, String> names,
+    DateTime today,
+  ) {
     final filter = _filter;
+    if (all.isEmpty && (groups.isEmpty || filter != null)) {
+      return _noDeadlines(context);
+    }
     final list = filterBySituation(all, today, filter);
     if (list.isEmpty && filter != null) {
       return EmptyState(
@@ -130,10 +166,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         bottom: AppSpacing.xl,
       ),
       children: [
+        if (filter == null && groups.isNotEmpty) ...[
+          ...pendingSection(context, groups, names),
+          const SizedBox(height: AppSpacing.lg),
+        ],
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
           child: Text('Próximos vencimentos', style: text.titleMedium),
         ),
+        if (list.isEmpty) ...[
+          const SizedBox(height: AppSpacing.sm),
+          _noDeadlines(context, inline: true),
+        ],
         for (final d in list) ...[
           const SizedBox(height: AppSpacing.sm),
           _card(context, d, names, today),

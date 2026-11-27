@@ -38,3 +38,15 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - Sem espaço extra entre as três linhas de texto do `PendingRow` (a altura de linha do tema basta; evita um `AppSpacing.xs / 2` solto).
+
+## 2026-11-27 — Passo 3: pendências no Painel
+
+**Feito**
+- `pendingLaunchesProvider` (todas as empresas, por `today`) e `pending_section.dart` (`launchRouteFor`, `pendingSection`: título "Lançamentos pendentes" com a contagem e uma `PendingRow` por grupo; "Lançar" faz `push` para a semana mais antiga).
+- Painel: seção acima de "Próximos vencimentos", escondida com tile selecionado; sem prazos e com pendências, o vazio dos prazos vai `inline` abaixo da seção; sem nada (ou com filtro e sem prazos), o vazio de antes. Erro em prazos, nomes ou pendências → "Não foi possível carregar o Painel".
+- 6 testes novos no `dashboard_screen_test.dart` (linhas, ordem, tons, contagem, posição; "Lançar" abre a semana 38 e voltar retorna; lançar a 38 passa a linha para a 39; filtro esconde; sem prazos; arquivada e Ambiental desligado).
+- Wireframe `Main` substituído pelo protótipo aprovado; `docs/07-design-system.md` (tela Painel).
+
+**Decidido**
+- No Painel, grupos do mesmo período ficam em ordem alfabética do nome da empresa (o domínio desempata pelo id).
+- Na virada do dia a família do provider muda de chave e o Painel mostra o indicador de carregamento por um instante; aceitável (acontece uma vez por dia).

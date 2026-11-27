@@ -34,3 +34,12 @@ final companyPendingLaunchesProvider = StreamProvider.autoDispose
           .watch(measurementRepositoryProvider)
           .watchPendingLaunches(today: key.today, companyId: key.companyId),
     );
+
+/// Pendências de lançamento de todas as empresas em [today] (data local, sem
+/// hora), para o Painel.
+final pendingLaunchesProvider = StreamProvider.autoDispose
+    .family<List<PendingLaunch>, DateTime>(
+      (ref, today) => ref
+          .watch(measurementRepositoryProvider)
+          .watchPendingLaunches(today: today),
+    );

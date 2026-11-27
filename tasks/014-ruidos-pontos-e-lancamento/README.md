@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | em andamento |
+| **Status** | concluída |
 | **Fase** | 2 ([roadmap](../../docs/05-roadmap.md)) |
 | **Requisitos** | RF-AMB-02 |
 | **Depende de** | 013 (parâmetros e medições) |
@@ -30,14 +30,14 @@ O usuário cadastra os pontos de medição de ruído de uma empresa e lança, se
 
 ## Critérios de aceite
 
-- [ ] Módulo Ambiental mostra "Automonitoramento › Ruídos" com subtítulo (pontos) e situação ("Em dia", "A lançar", "n semanas atrasadas" ou "Nenhum ponto cadastrado"); tocar abre a semana pendente mais antiga, ou a atual.
-- [ ] Pontos: cadastrar (nome obrigatório, sem repetir; limite máximo opcional), editar, desativar/reativar e excluir com confirmação; desativado não aparece no lançamento nem cobra.
-- [ ] Lançamento: semana ISO na faixa ("Semana 48", "23 a 29/11/2026"), anterior/próxima, sem avançar além da semana atual; valor anterior por ponto; contador "n de m".
-- [ ] Valor com vírgula e uma casa decimal; acima do limite mostra ícone e "Acima do limite (70,0)" enquanto digita.
-- [ ] "Sem medição" por ponto e "Sem medição nesta semana" (só nos pontos vazios), com motivo obrigatório e "Desfazer" antes de salvar.
-- [ ] "Salvar" grava o que mudou (parcial permitido; campo apagado remove a medição); trocar de semana ou sair com alterações pede confirmação.
-- [ ] Componentes novos com teste e no design system; sem cor, fonte ou espaço solto.
-- [ ] Conferido no emulador (sem perder os dados de teste); `dart format .`, `flutter analyze` e `flutter test` sem erros.
+- [x] Módulo Ambiental mostra "Automonitoramento › Ruídos" com subtítulo (pontos) e situação ("Em dia", "A lançar", "n semanas atrasadas" ou "Nenhum ponto cadastrado"); tocar abre a semana pendente mais antiga, ou a atual.
+- [x] Pontos: cadastrar (nome obrigatório, sem repetir; limite máximo opcional), editar, desativar/reativar e excluir com confirmação; desativado não aparece no lançamento nem cobra.
+- [x] Lançamento: semana ISO na faixa ("Semana 48", "23 a 29/11/2026"), anterior/próxima, sem avançar além da semana atual; valor anterior por ponto; contador "n de m".
+- [x] Valor com vírgula e uma casa decimal; acima do limite mostra ícone e "Acima do limite (70,0)" enquanto digita.
+- [x] "Sem medição" por ponto e "Sem medição nesta semana" (só nos pontos vazios), com motivo obrigatório e "Desfazer" antes de salvar.
+- [x] "Salvar" grava o que mudou (parcial permitido; campo apagado remove a medição); trocar de semana ou sair com alterações pede confirmação.
+- [x] Componentes novos com teste e no design system; sem cor, fonte ou espaço solto.
+- [x] Conferido no emulador (sem perder os dados de teste); `dart format .`, `flutter analyze` e `flutter test` sem erros.
 
 ## Links
 

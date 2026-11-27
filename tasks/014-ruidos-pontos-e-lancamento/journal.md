@@ -84,3 +84,19 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 - "dB(A)" no alto do campo de limite da sheet: sufixo centralizado.
 - Semana anterior ao cadastro dos pontos mostrava "Nenhum ponto de medição · Cadastrar ponto"; agora mostra "Nenhum ponto nesta semana" sem ação quando já existem pontos ativos (teste novo).
 - Teclado de letras no campo decimal: o campo pede `inputType=0x2002` (número com decimal, conferido com `dumpsys input_method`); é o Gboard deste emulador que mostra letras. Não é defeito do app.
+
+## 2026-11-27 — Fechamento
+
+**Feito**
+- Todos os critérios de aceite marcados. Status → `concluída` aqui e no índice.
+- Docs: `docs/07-design-system.md` (componentes e telas, passos 2 e 6), wireframes `Lancamento`, `PontosMedicao`, `PontoSheet` e `ModuloAmbiental` (passo 1), `docs/05-roadmap.md` (item Ruídos), `docs/06-perguntas-em-aberto.md` (C27 com as suposições desta task).
+
+**Como verificar**
+```bash
+dart format . && flutter analyze && flutter test
+```
+Emulador: Empresas → empresa com Ambiental → Ambiental → Ruídos.
+
+**Pendente / dúvidas**
+- C27 (suposições) a confirmar com a cliente; `// TODO(RF-AMB-02)` no cadastro do ponto.
+- Próxima: 015 (Painel com lançamentos pendentes de todas as empresas, `PendingRow`, e o Painel virando o dia sozinho, observado na 013).

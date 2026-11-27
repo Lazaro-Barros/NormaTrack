@@ -126,11 +126,14 @@ class MeasurementInputRow extends StatelessWidget {
             ),
           ),
         ),
-        PopupMenuButton<void>(
+        // `onSelected` roda depois de o menu fechar: quem abre uma sheet em
+        // [onSkip] não a vê fechada junto com o menu.
+        PopupMenuButton<int>(
           tooltip: 'Mais opções',
           icon: Icon(Icons.more_vert, color: colors.onSurfaceVariant),
+          onSelected: (_) => onSkip(),
           itemBuilder: (context) => [
-            PopupMenuItem(onTap: onSkip, child: Text(menuLabel)),
+            PopupMenuItem(value: 0, child: Text(menuLabel)),
           ],
         ),
       ],

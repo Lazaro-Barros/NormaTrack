@@ -50,3 +50,13 @@ Entradas em ordem cronológica, mais recentes no fim. Não apagar entradas antig
 
 **Decidido**
 - O erro de nome repetido vem do repositório e aparece no campo sem fechar a sheet: a sheet recebe `onSave` que devolve a mensagem.
+
+## 2026-11-27 — Passo 5: lançamento semanal
+
+**Feito**
+- `NoiseLaunchScreen` (rota `…/modulos/ambiental/ruidos?semana=AAAA-MM-DD`, com `pontos` como filha) e `skip_reason_sheet.dart`. Rascunho por ponto em memória, comparado com o salvo para saber se há alteração; "Salvar" envia só as linhas alteradas e preserva a observação que já existia junto de um valor.
+- 15 testes de tela: faixa e navegação (próxima desabilitada na semana atual), anterior, aviso de limite ao digitar, salvar parcial, apagar remove, observação preservada, sem medição por ponto (motivo obrigatório, Desfazer) e na semana (só os vazios), confirmação ao trocar de semana e ao voltar, valor inválido, semana pela rota (futura abre a atual), linhas com ponto desativado e início posterior, estado vazio, ação dos pontos.
+
+**Decidido**
+- `MeasurementInputRow` usa `PopupMenuButton.onSelected` em vez de `PopupMenuItem.onTap`: o `onTap` roda antes de o menu fechar, e o fechamento derrubaria a sheet do motivo recém-aberta.
+- Depois de salvar, a tela fica na mesma semana, com SnackBar "Semana 40 salva" **[suposição]**.

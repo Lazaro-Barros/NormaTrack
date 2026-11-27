@@ -11,6 +11,7 @@ import '../features/deadlines/presentation/dashboard_screen.dart';
 import '../features/deadlines/presentation/deadline_detail_screen.dart';
 import '../features/deadlines/presentation/deadline_form_screen.dart';
 import '../features/deadlines/presentation/module_screen.dart';
+import '../features/measurements/presentation/noise_launch_screen.dart';
 import '../features/measurements/presentation/noise_points_screen.dart';
 import '../core/utils/date_format.dart';
 import '../features/settings/presentation/settings_screen.dart';
@@ -103,12 +104,23 @@ GoRouter createAppRouter({String initialLocation = AppRoutes.dashboard}) {
                         // `novo` antes de `:prazo`.
                         routes: [
                           GoRoute(
-                            path: 'ruidos/pontos',
+                            path: 'ruidos',
                             parentNavigatorKey: rootKey,
-                            builder: (context, state) => NoisePointsScreen(
+                            builder: (context, state) => NoiseLaunchScreen(
                               companyId: state.pathParameters['id']!,
                               slug: state.pathParameters['modulo']!,
+                              week: state.uri.queryParameters['semana'],
                             ),
+                            routes: [
+                              GoRoute(
+                                path: 'pontos',
+                                parentNavigatorKey: rootKey,
+                                builder: (context, state) => NoisePointsScreen(
+                                  companyId: state.pathParameters['id']!,
+                                  slug: state.pathParameters['modulo']!,
+                                ),
+                              ),
+                            ],
                           ),
                           GoRoute(
                             path: 'prazos/novo',
